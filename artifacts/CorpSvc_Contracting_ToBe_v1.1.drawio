@@ -1,0 +1,322 @@
+<mxfile host="app.diagrams.net" agent="Accenture">
+  <diagram name="Corp Svc Contracting - To-Be MVP" id="tobe-mvp">
+    <mxGraphModel dx="999" dy="449" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2200" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="pool" parent="1" style="shape=swimlane;html=1;startSize=30;horizontal=1;fontSize=14;fontStyle=1;fillColor=#FFFFFF;strokeColor=#0B3D5C;fontColor=#0B3D5C;childLayout=stackLayout;horizontalStack=1;resizeParent=0;resizeParentMax=0;collapsible=0;swimlaneFillColor=#FFFFFF;" value="Corporate Services Contracting — To-Be MVP Workflow" vertex="1">
+          <mxGeometry height="1000" width="2160" x="20" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="lane1" parent="pool" style="swimlane;html=1;horizontal=0;startSize=30;fillColor=#F3F4F6;strokeColor=#0B3D5C;fontColor=#0B3D5C;fontStyle=1;fontSize=12;" value="Ariba Sourcing" vertex="1">
+          <mxGeometry height="970" width="340" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="N1" parent="lane1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0B3D5C;fontSize=11;" value="Start" vertex="1">
+          <mxGeometry height="40" width="80" x="130" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="N2" parent="lane1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0B3D5C;fontSize=11;" value="Identify Procurement&#xa;Requirement and Value" vertex="1">
+          <mxGeometry height="60" width="160" x="90" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="N3" parent="lane1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0B3D5C;fontSize=10;" value="Value ≥ $250K?" vertex="1">
+          <mxGeometry height="80" width="140" x="100" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="N4" parent="lane1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0B3D5C;fontSize=11;" value="Sourcing Process&#xa;(placeholder)" vertex="1">
+          <mxGeometry height="60" width="160" x="90" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="N5" parent="lane1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0B3D5C;fontSize=11;" value="Award the contract to&#xa;Supplier and initiate&#xa;contracting" vertex="1">
+          <mxGeometry height="70" width="160" x="90" y="880" as="geometry" />
+        </mxCell>
+        <mxCell id="lane2" parent="pool" style="swimlane;html=1;horizontal=0;startSize=30;fillColor=#ECFDF5;strokeColor=#059669;fontColor=#065F46;fontStyle=1;fontSize=12;" value="DocuSign CLM — Authoring, Negotiation &amp; Review" vertex="1">
+          <mxGeometry height="970" width="1160" x="340" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="N6" parent="lane2" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0B3D5C;fontSize=11;" value="🔌 Pull template&#xa;for agreement" vertex="1">
+          <mxGeometry height="70" width="160" x="40" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="N7" parent="lane2" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0B3D5C;fontSize=11;" value="🧠 Draft/update contract&#xa;and send for Supplier&#xa;Negotiation" vertex="1">
+          <mxGeometry height="80" width="160" x="40" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="N8" parent="lane2" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0B3D5C;fontSize=10;" value="Supplier: Download&#xa;agreement and Start&#xa;redlining and Negotiation" vertex="1">
+          <mxGeometry height="80" width="160" x="40" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="N9" parent="lane2" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0B3D5C;fontSize=11;" value="Supplier: Sends the&#xa;redlined and Negotiated&#xa;version" vertex="1">
+          <mxGeometry height="70" width="160" x="40" y="410" as="geometry" />
+        </mxCell>
+        <mxCell id="N10" parent="lane2" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0B3D5C;fontSize=11;" value="⚙ Identify Functional&#xa;team and send it for&#xa;review" vertex="1">
+          <mxGeometry height="80" width="180" x="270" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="N10lbl" parent="lane2" style="text;html=1;strokeColor=none;fillColor=none;fontSize=9;fontStyle=2;fontColor=#059669;" value="Reviewer set = f(contract type)" vertex="1">
+          <mxGeometry height="16" width="180" x="270" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="N11" parent="lane2" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0B3D5C;fontSize=11;" value="Conduct parallel&#xa;reviews" vertex="1">
+          <mxGeometry height="60" width="140" x="290" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="functionalLabel" parent="lane2" style="text;html=1;strokeColor=none;fillColor=none;fontSize=8;fontColor=#4B5563;align=center;" value="(CRM, Law, Insurance, Functional, PFA,&#xa;Cybersecurity, GTC, Tax, Capital,&#xa;Corporation, Communications, EHS,&#xa;GPO, Background Check, Industrial Participation)" vertex="1">
+          <mxGeometry height="50" width="240" x="240" y="255" as="geometry" />
+        </mxCell>
+        <mxCell id="N12" parent="lane2" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0B3D5C;fontSize=10;" value="Redlining&#xa;Accepted?" vertex="1">
+          <mxGeometry height="80" width="120" x="300" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="N13" parent="lane2" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0B3D5C;fontSize=11;" value="Consolidate redlined&#xa;changes and&#xa;approvals" vertex="1">
+          <mxGeometry height="70" width="140" x="290" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="N14" parent="lane2" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ECFDF5;strokeColor=#059669;strokeWidth=2;fontSize=12;fontStyle=1;fontColor=#065F46;verticalAlign=top;dashed=1;dashPattern=6 4;" value="Review the Redlined Version" vertex="1">
+          <mxGeometry height="440" width="260" x="500" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="N14hdr" parent="lane2" style="text;html=1;strokeColor=none;fillColor=none;fontSize=9;fontStyle=2;fontColor=#059669;align=center;" value="MVP #5 — Consolidated Workbench" vertex="1">
+          <mxGeometry height="16" width="260" x="500" y="82" as="geometry" />
+        </mxCell>
+        <mxCell id="N14a" parent="lane2" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#10B981;strokeColor=#059669;fontColor=#FFFFFF;fontStyle=1;fontSize=11;" value="🧠 Redlining the Contract" vertex="1">
+          <mxGeometry height="60" width="220" x="520" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="N14b" parent="lane2" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#10B981;strokeColor=#059669;fontColor=#FFFFFF;fontStyle=1;fontSize=11;" value="🧠 Identify Gaps / Risks" vertex="1">
+          <mxGeometry height="60" width="220" x="520" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="N14c" parent="lane2" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#10B981;strokeColor=#059669;fontColor=#FFFFFF;fontStyle=1;fontSize=11;" value="🧠 Comparison with&#xa;Golden Templates / Playbook" vertex="1">
+          <mxGeometry height="70" width="220" x="520" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="N14d" parent="lane2" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#10B981;strokeColor=#059669;fontColor=#FFFFFF;fontStyle=1;fontSize=11;" value="🧠 Parse Contract Data" vertex="1">
+          <mxGeometry height="60" width="220" x="520" y="370" as="geometry" />
+        </mxCell>
+        <mxCell id="N15" parent="lane2" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0B3D5C;fontSize=11;" value="Approved?" vertex="1">
+          <mxGeometry height="80" width="140" x="560" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="N16" parent="lane2" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0B3D5C;fontSize=11;" value="Consolidate all comments&#xa;and generate approved&#xa;versions (v2.0)" vertex="1">
+          <mxGeometry height="80" width="180" x="540" y="670" as="geometry" />
+        </mxCell>
+        <mxCell id="N17" parent="lane2" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#10B981;strokeColor=#059669;strokeWidth=2;fontColor=#FFFFFF;fontStyle=1;fontSize=11;" value="🔌 Push the final&#xa;contract to Ariba" vertex="1">
+          <mxGeometry height="70" width="200" x="820" y="680" as="geometry" />
+        </mxCell>
+        <mxCell id="N17lbl" parent="lane2" style="text;html=1;strokeColor=none;fillColor=none;fontSize=9;fontStyle=2;fontColor=#059669;align=center;" value="MVP #6 — API push (system-to-system)" vertex="1">
+          <mxGeometry height="16" width="200" x="820" y="755" as="geometry" />
+        </mxCell>
+        <mxCell id="lane3" parent="pool" style="swimlane;html=1;horizontal=0;startSize=30;fillColor=#F3F4F6;strokeColor=#0B3D5C;fontColor=#0B3D5C;fontStyle=1;fontSize=12;" value="Ariba Contracting" vertex="1">
+          <mxGeometry height="970" width="360" x="1500" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="N22" parent="lane3" style="ellipse;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0B3D5C;fontSize=11;" value="Stop" vertex="1">
+          <mxGeometry height="40" width="80" x="140" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="N21" parent="lane3" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0B3D5C;fontSize=11;" value="Publishes ACW for&#xa;downstream process" vertex="1">
+          <mxGeometry height="60" width="160" x="100" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="N20" parent="lane3" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0B3D5C;fontSize=11;" value="Uploads final Executed&#xa;agreement in Ariba" vertex="1">
+          <mxGeometry height="60" width="160" x="100" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="N19" parent="lane3" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0B3D5C;fontSize=11;" value="Send for Signature" vertex="1">
+          <mxGeometry height="60" width="160" x="100" y="580" as="geometry" />
+        </mxCell>
+        <mxCell id="N18" parent="lane3" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0B3D5C;fontSize=11;" value="Auto-Create ACW and&#xa;Upload the final approved&#xa;contract" vertex="1">
+          <mxGeometry height="70" width="160" x="100" y="680" as="geometry" />
+        </mxCell>
+        <mxCell id="lane4" parent="pool" style="swimlane;html=1;horizontal=0;startSize=30;fillColor=#F3F4F6;strokeColor=#0B3D5C;fontColor=#0B3D5C;fontStyle=1;fontSize=12;" value="DocuSign eSignature" vertex="1">
+          <mxGeometry height="970" width="300" x="1860" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="N25" parent="lane4" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0B3D5C;fontSize=11;" value="Receives the&#xa;Executed contract" vertex="1">
+          <mxGeometry height="60" width="160" x="70" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="N23" parent="lane4" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0B3D5C;fontSize=11;" value="PA Signs the Contract" vertex="1">
+          <mxGeometry height="60" width="160" x="70" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="N24" parent="lane4" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0B3D5C;fontSize=11;" value="Supplier Signs the&#xa;Contract" vertex="1">
+          <mxGeometry height="60" width="160" x="70" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="INT1" edge="1" parent="pool" source="N22" style="endArrow=classic;html=1;strokeColor=#059669;strokeWidth=2;dashed=1;dashPattern=6 3;fontColor=#059669;fontStyle=2;fontSize=9;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="N6" value="MVP #7 — Template Pull&#xa;(Ariba API)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1680" y="60" />
+              <mxPoint x="460" y="60" />
+            </Array>
+            <mxPoint x="1650" y="60" as="sourcePoint" />
+            <mxPoint x="516.666666666667" y="40" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="legendBox" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0B3D5C;fontStyle=1;fontSize=11;verticalAlign=top;fontColor=#0B3D5C;" value="Legend" vertex="1">
+          <mxGeometry height="140" width="900" x="420" y="1030" as="geometry" />
+        </mxCell>
+        <mxCell id="lg1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#0B3D5C;" value="" vertex="1">
+          <mxGeometry height="20" width="30" x="440" y="1065" as="geometry" />
+        </mxCell>
+        <mxCell id="lg1t" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=10;align=left;" value="Standard activity (unchanged)" vertex="1">
+          <mxGeometry height="20" width="220" x="480" y="1065" as="geometry" />
+        </mxCell>
+        <mxCell id="lg2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#10B981;strokeColor=#059669;" value="" vertex="1">
+          <mxGeometry height="20" width="30" x="440" y="1095" as="geometry" />
+        </mxCell>
+        <mxCell id="lg2t" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=10;align=left;" value="MVP-scope enhancement (from green box)" vertex="1">
+          <mxGeometry height="20" width="260" x="480" y="1095" as="geometry" />
+        </mxCell>
+        <mxCell id="lg3" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=14;align=center;" value="🔌" vertex="1">
+          <mxGeometry height="20" width="30" x="440" y="1125" as="geometry" />
+        </mxCell>
+        <mxCell id="lg3t" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=10;align=left;" value="System-to-system integration point" vertex="1">
+          <mxGeometry height="20" width="240" x="480" y="1125" as="geometry" />
+        </mxCell>
+        <mxCell id="lg4" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=14;align=center;" value="🧠" vertex="1">
+          <mxGeometry height="20" width="30" x="740" y="1065" as="geometry" />
+        </mxCell>
+        <mxCell id="lg4t" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=10;align=left;" value="AI-assisted step" vertex="1">
+          <mxGeometry height="20" width="180" x="780" y="1065" as="geometry" />
+        </mxCell>
+        <mxCell id="lg5" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=14;align=center;" value="⚙" vertex="1">
+          <mxGeometry height="20" width="30" x="740" y="1095" as="geometry" />
+        </mxCell>
+        <mxCell id="lg5t" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=10;align=left;" value="Configuration-driven step" vertex="1">
+          <mxGeometry height="20" width="200" x="780" y="1095" as="geometry" />
+        </mxCell>
+        <mxCell id="lg6" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=14;align=center;" value="✉" vertex="1">
+          <mxGeometry height="20" width="30" x="740" y="1125" as="geometry" />
+        </mxCell>
+        <mxCell id="lg6t" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=10;align=left;" value="Email transport (retained at MVP)" vertex="1">
+          <mxGeometry height="20" width="240" x="780" y="1125" as="geometry" />
+        </mxCell>
+        <mxCell id="lg7line" edge="1" parent="1" style="endArrow=classic;html=1;strokeColor=#059669;strokeWidth=2;dashed=1;dashPattern=6 3;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1000" y="1075" as="sourcePoint" />
+            <mxPoint x="1060" y="1075" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lg7t" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=10;align=left;" value="Integration flow (Ariba ↔ CLM API)" vertex="1">
+          <mxGeometry height="20" width="240" x="1070" y="1065" as="geometry" />
+        </mxCell>
+        <mxCell id="lg8line" edge="1" parent="1" style="endArrow=classic;html=1;strokeColor=#0B3D5C;strokeWidth=1;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1000" y="1105" as="sourcePoint" />
+            <mxPoint x="1060" y="1105" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lg8t" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=10;align=left;" value="Process flow" vertex="1">
+          <mxGeometry height="20" width="240" x="1070" y="1095" as="geometry" />
+        </mxCell>
+        <mxCell id="lg9line" edge="1" parent="1" style="endArrow=classic;html=1;strokeColor=#0B3D5C;strokeWidth=1;dashed=1;dashPattern=1 2;" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1000" y="1135" as="sourcePoint" />
+            <mxPoint x="1060" y="1135" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lg9t" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=10;align=left;" value="Rework loop" vertex="1">
+          <mxGeometry height="20" width="240" x="1070" y="1125" as="geometry" />
+        </mxCell>
+        <mxCell id="C1" edge="1" parent="1" source="N1" style="endArrow=classic;html=1;strokeColor=#0B3D5C;" target="N2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="C2" edge="1" parent="1" source="N2" style="endArrow=classic;html=1;strokeColor=#0B3D5C;" target="N3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="C3" edge="1" parent="1" source="N3" style="endArrow=classic;html=1;strokeColor=#0B3D5C;fontSize=10;" target="N4" value="Yes">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="C4" edge="1" parent="1" source="N4" style="endArrow=classic;html=1;strokeColor=#0B3D5C;" target="N5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="C5" edge="1" parent="1" source="N3" style="endArrow=classic;html=1;strokeColor=#0B3D5C;fontSize=10;exitX=1;exitY=0.5;" value="No">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="340" y="310" />
+              <mxPoint x="340" y="970" />
+            </Array>
+            <mxPoint x="270" y="970" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="C6" edge="1" parent="1" source="N5" style="endArrow=classic;html=1;strokeColor=#0B3D5C;exitX=1;exitY=0.25;entryX=0;entryY=1;exitDx=0;exitDy=0;" target="N6">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="380" y="947.5" />
+              <mxPoint x="380" y="180" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="C7" edge="1" parent="1" source="N6" style="endArrow=classic;html=1;strokeColor=#0B3D5C;" target="N7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="C8" edge="1" parent="1" source="N7" style="endArrow=classic;html=1;strokeColor=#0B3D5C;fontSize=12;" target="N8" value="✉">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="C9" edge="1" parent="1" source="N8" style="endArrow=classic;html=1;strokeColor=#0B3D5C;" target="N9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="C10" edge="1" parent="1" source="N9" style="endArrow=classic;html=1;strokeColor=#0B3D5C;fontSize=12;exitX=1;exitY=0.5;entryX=0;entryY=0.5;exitDx=0;exitDy=0;" target="N10" value="✉">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="600" y="495" />
+              <mxPoint x="600" y="150" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="C11" edge="1" parent="1" source="N10" style="endArrow=classic;html=1;strokeColor=#0B3D5C;fontSize=12;" target="N11" value="✉">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="C12" edge="1" parent="1" source="N11" style="endArrow=classic;html=1;strokeColor=#0B3D5C;" target="N12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="C13" edge="1" parent="1" source="N12" style="endArrow=classic;html=1;strokeColor=#0B3D5C;dashed=1;dashPattern=1 2;fontSize=10;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" target="N7" value="No">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="630" y="410" />
+              <mxPoint x="630" y="260" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="C14" edge="1" parent="1" source="N12" style="endArrow=classic;html=1;strokeColor=#0B3D5C;fontSize=10;" target="N13" value="Yes">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="C15" edge="1" parent="1" source="N13" style="endArrow=classic;html=1;strokeColor=#0B3D5C;exitX=1;exitY=0.5;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="860" y="515" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="C16" edge="1" parent="1" source="N14" style="endArrow=classic;html=1;strokeColor=#0B3D5C;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" target="N15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="C17" edge="1" parent="1" source="N15" style="endArrow=classic;html=1;strokeColor=#0B3D5C;dashed=1;dashPattern=1 2;fontSize=10;exitX=0;exitY=0.5;entryX=0.663;entryY=1.004;entryDx=0;entryDy=0;entryPerimeter=0;" target="N7" value="No">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="630" y="630" />
+              <mxPoint x="580" y="630" />
+              <mxPoint x="580" y="320" />
+              <mxPoint x="510" y="320" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="C18" edge="1" parent="1" source="N15" style="endArrow=classic;html=1;strokeColor=#0B3D5C;fontSize=10;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" target="N16" value="Yes">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="C19" edge="1" parent="1" style="endArrow=classic;html=1;strokeColor=#0B3D5C;entryX=0;entryY=0.5;" target="N17">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1090" y="765" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="INT2" edge="1" parent="1" source="N17" style="endArrow=classic;html=1;strokeColor=#059669;strokeWidth=3;fontColor=#059669;fontStyle=2;fontSize=9;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="N18" value="System-to-System API">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="C22" edge="1" parent="1" source="N18" style="endArrow=classic;html=1;strokeColor=#0B3D5C;" target="N19">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="C23" edge="1" parent="1" source="N19" style="endArrow=classic;html=1;strokeColor=#0B3D5C;exitX=0.5;exitY=0;entryX=0;entryY=0.5;exitDx=0;exitDy=0;" target="N23">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1700" y="520" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="C24" edge="1" parent="1" source="N23" style="endArrow=classic;html=1;strokeColor=#0B3D5C;" target="N24">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="C25" edge="1" parent="1" source="N24" style="endArrow=classic;html=1;strokeColor=#0B3D5C;exitX=1;exitY=0.5;entryX=1;entryY=0.5;exitDx=0;exitDy=0;entryDx=0;entryDy=0;" target="N25">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2150" y="620" />
+              <mxPoint x="2150" y="310" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="C26" edge="1" parent="1" source="N25" style="endArrow=classic;html=1;strokeColor=#0B3D5C;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" target="N20">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="C27" edge="1" parent="1" source="N20" style="endArrow=classic;html=1;strokeColor=#0B3D5C;exitX=0.5;exitY=0;entryX=0.5;entryY=1;" target="N21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="C28" edge="1" parent="1" source="N21" style="endArrow=classic;html=1;strokeColor=#0B3D5C;exitX=0.5;exitY=0;entryX=0.5;entryY=1;" target="N22">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
