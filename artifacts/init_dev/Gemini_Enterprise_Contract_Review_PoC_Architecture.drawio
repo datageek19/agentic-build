@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-08-14T00:00:00.000Z" agent="ChatGPT Work" version="24.7.17" type="device">
+  <diagram id="gemini-contract-poc" name="Recommended PoC Architecture">
+    <mxGraphModel dx="1920" dy="1700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1700" math="0" shadow="0" background="#FFFFFF">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- Title and subtitle -->
+        <mxCell id="title" value="Gemini Enterprise Contract Review PoC — Recommended Architecture" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=28;fontStyle=1;fontColor=#0B2E59;" vertex="1" parent="1">
+          <mxGeometry x="60" y="30" width="1780" height="42" as="geometry"/>
+        </mxCell>
+        <mxCell id="subtitle" value="One Contract Review Agent, one controlled reference data store, and manual human-review coordination" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=15;fontColor=#5F6B7A;" vertex="1" parent="1">
+          <mxGeometry x="60" y="74" width="1780" height="28" as="geometry"/>
+        </mxCell>
+
+        <!-- Column headers -->
+        <mxCell id="human_header" value="Human interaction" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=16;fontStyle=1;fontColor=#1F2D3D;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="60" y="120" width="330" height="48" as="geometry"/>
+        </mxCell>
+        <mxCell id="gemini_header" value="Gemini Enterprise PoC boundary" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D9EAF7;strokeColor=#4E79A7;fontSize=16;fontStyle=1;fontColor=#0B2E59;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="470" y="120" width="790" height="48" as="geometry"/>
+        </mxCell>
+        <mxCell id="platform_header" value="Knowledge, controls, and evidence" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E9EDF2;strokeColor=#7F8C9A;fontSize=16;fontStyle=1;fontColor=#1F2D3D;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="1340" y="120" width="500" height="48" as="geometry"/>
+        </mxCell>
+
+        <!-- PoC boundary -->
+        <mxCell id="poc_boundary" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#4E79A7;strokeWidth=2;dashed=1;dashPattern=8 4;" vertex="1" parent="1">
+          <mxGeometry x="450" y="185" width="830" height="1245" as="geometry"/>
+        </mxCell>
+
+        <!-- Human interaction nodes -->
+        <mxCell id="pa_start" value="Procurement Agent&lt;br&gt;Submit contract and metadata" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;strokeWidth=2;fontSize=15;fontStyle=1;fontColor=#1F2D3D;align=center;verticalAlign=middle;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="75" y="220" width="300" height="82" as="geometry"/>
+        </mxCell>
+        <mxCell id="pa_validate" value="Procurement Agent validation&lt;br&gt;Accept, reject, modify, or defer AI findings" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;strokeWidth=2;fontSize=14;fontStyle=1;fontColor=#1F2D3D;align=center;verticalAlign=middle;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="75" y="700" width="300" height="92" as="geometry"/>
+        </mxCell>
+        <mxCell id="reviewers" value="Reviewers 1–3&lt;br&gt;Manual parallel review of assigned findings" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;strokeWidth=2;fontSize=14;fontStyle=1;fontColor=#1F2D3D;align=center;verticalAlign=middle;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="75" y="845" width="300" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="approver" value="Necessary Approver&lt;br&gt;Human approval decision" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;strokeWidth=2;fontSize=14;fontStyle=1;fontColor=#1F2D3D;align=center;verticalAlign=middle;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="75" y="985" width="300" height="82" as="geometry"/>
+        </mxCell>
+        <mxCell id="legal" value="Legal review, when required&lt;br&gt;Comments or proposed changes" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;strokeWidth=2;fontSize=14;fontStyle=1;fontColor=#1F2D3D;align=center;verticalAlign=middle;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="75" y="1260" width="300" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="pa_final" value="Procurement Agent final review&lt;br&gt;Resolve or escalate conflicts; determine re-review" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;strokeWidth=2;fontSize=14;fontStyle=1;fontColor=#1F2D3D;align=center;verticalAlign=middle;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="75" y="1455" width="300" height="96" as="geometry"/>
+        </mxCell>
+
+        <!-- Gemini Enterprise nodes -->
+        <mxCell id="app" value="Gemini Enterprise application&lt;br&gt;User experience, contract upload, and agent invocation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D9EAF7;strokeColor=#4E79A7;strokeWidth=2;fontSize=15;fontStyle=1;fontColor=#0B2E59;align=center;verticalAlign=middle;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="630" y="215" width="470" height="88" as="geometry"/>
+        </mxCell>
+        <mxCell id="session_contract" value="Session-scoped contract input&lt;br&gt;Current contract + Contract ID + version + type" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3F5F7;strokeColor=#7F8C9A;strokeWidth=2;fontSize=14;fontStyle=1;fontColor=#1F2D3D;align=center;verticalAlign=middle;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="630" y="340" width="470" height="86" as="geometry"/>
+        </mxCell>
+        <mxCell id="review_agent" value="Single Contract Review Agent — Initial Review Mode&lt;br&gt;&lt;br&gt;Structure → Clause identification → Reference retrieval → Comparison → Deviation → Defined risk → Recommendation → Review package" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#CFE2F3;strokeColor=#2F6690;strokeWidth=3;fontSize=15;fontStyle=1;fontColor=#0B2E59;align=center;verticalAlign=middle;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="550" y="475" width="630" height="145" as="geometry"/>
+        </mxCell>
+        <mxCell id="review_package" value="Evidence-backed review package&lt;br&gt;Clause findings, deviations, risks, recommendations, citations, confidence, and reviewer suggestion" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D9EAD3;strokeColor=#6A994E;strokeWidth=2;fontSize=14;fontStyle=1;fontColor=#1F2D3D;align=center;verticalAlign=middle;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="600" y="660" width="530" height="96" as="geometry"/>
+        </mxCell>
+        <mxCell id="normalized_feedback" value="Normalized reviewer feedback input&lt;br&gt;Contract + clause + Finding ID + reviewer + decision + comment + proposed change + status" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3F5F7;strokeColor=#7F8C9A;strokeWidth=2;fontSize=14;fontStyle=1;fontColor=#1F2D3D;align=center;verticalAlign=middle;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="600" y="990" width="530" height="104" as="geometry"/>
+        </mxCell>
+        <mxCell id="consolidation_agent" value="Same Contract Review Agent — Feedback Consolidation Mode&lt;br&gt;&lt;br&gt;Finding-ID linkage → Attribution preservation → Agreement detection → Conflict flagging → Consolidated package" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#CFE2F3;strokeColor=#2F6690;strokeWidth=3;fontSize=15;fontStyle=1;fontColor=#0B2E59;align=center;verticalAlign=middle;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="550" y="1140" width="630" height="132" as="geometry"/>
+        </mxCell>
+        <mxCell id="consolidated_package" value="Consolidated findings and unresolved conflicts&lt;br&gt;Neutral summary of each reviewer position; no autonomous conflict resolution" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D9EAD3;strokeColor=#6A994E;strokeWidth=2;fontSize=14;fontStyle=1;fontColor=#1F2D3D;align=center;verticalAlign=middle;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="600" y="1320" width="530" height="96" as="geometry"/>
+        </mxCell>
+
+        <!-- Knowledge, controls, and evidence nodes -->
+        <mxCell id="approved_collection" value="Controlled Cloud Storage collection&lt;br&gt;Approved templates, clauses, fallback clauses, playbook, policies, risk rules, and reviewer ownership rules" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;fillColor=#E9EDF2;strokeColor=#7F8C9A;strokeWidth=2;fontSize=14;fontStyle=1;fontColor=#1F2D3D;align=center;verticalAlign=middle;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1390" y="235" width="400" height="115" as="geometry"/>
+        </mxCell>
+        <mxCell id="data_store" value="Gemini Enterprise approved-knowledge data store&lt;br&gt;One-time controlled ingestion; explicit parser and access configuration" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;fillColor=#D9EAF7;strokeColor=#4E79A7;strokeWidth=2;fontSize=14;fontStyle=1;fontColor=#0B2E59;align=center;verticalAlign=middle;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1390" y="410" width="400" height="115" as="geometry"/>
+        </mxCell>
+        <mxCell id="observability" value="Gemini Enterprise observability&lt;br&gt;Metrics, traces, spans, errors, and latency&lt;br&gt;Full prompt/response logging disabled unless approved" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E9EDF2;strokeColor=#7F8C9A;strokeWidth=2;fontSize=14;fontStyle=1;fontColor=#1F2D3D;align=center;verticalAlign=middle;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1390" y="610" width="400" height="112" as="geometry"/>
+        </mxCell>
+        <mxCell id="redline_boundary" value="Redlining boundary&lt;br&gt;Included: textual recommendation, replacement clause proposal, structured before/after comparison&lt;br&gt;Excluded: authoritative document editing and Microsoft Word Track Changes" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF4E5;strokeColor=#F0A54A;strokeWidth=2;fontSize=14;fontColor=#1F2D3D;align=left;verticalAlign=middle;spacing=12;" vertex="1" parent="1">
+          <mxGeometry x="1390" y="790" width="400" height="142" as="geometry"/>
+        </mxCell>
+        <mxCell id="controlled_output" value="Controlled PoC evidence location&lt;br&gt;Manual export of contract, package, run, Finding IDs, reviewer attribution, and final decision" style="shape=folder;tabWidth=60;tabHeight=20;tabPosition=left;html=1;whiteSpace=wrap;fillColor=#E9EDF2;strokeColor=#7F8C9A;strokeWidth=2;fontSize=14;fontStyle=1;fontColor=#1F2D3D;align=center;verticalAlign=middle;spacingTop=16;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1390" y="1330" width="400" height="112" as="geometry"/>
+        </mxCell>
+        <mxCell id="sap_ariba" value="Future Integration — Not Part of PoC&lt;br&gt;SAP Ariba" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#999999;strokeWidth=2;dashed=1;dashPattern=6 4;fontSize=14;fontStyle=1;fontColor=#666666;align=center;verticalAlign=middle;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1390" y="1510" width="400" height="86" as="geometry"/>
+        </mxCell>
+
+        <!-- Architecture notes -->
+        <mxCell id="automation_boundary" value="Automation boundary: AI prepares evidence and recommendations. Reviewers and the Procurement Agent retain authority for substantive decisions, approvals, legal interpretation, conflict resolution, and final contract disposition." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF4EA;strokeColor=#6A994E;strokeWidth=2;fontSize=14;fontStyle=1;fontColor=#1F2D3D;align=left;verticalAlign=middle;spacing=12;" vertex="1" parent="1">
+          <mxGeometry x="450" y="1470" width="830" height="104" as="geometry"/>
+        </mxCell>
+        <mxCell id="requires_validation" value="Requires validation: upload-to-agent handoff, structured-output consistency, selected model/region, scanned-document handling, Workflow Agent availability, and exact tenant access controls." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF4E5;strokeColor=#F0A54A;strokeWidth=2;fontSize=13;fontColor=#1F2D3D;align=left;verticalAlign=middle;spacing=10;" vertex="1" parent="1">
+          <mxGeometry x="450" y="1590" width="830" height="78" as="geometry"/>
+        </mxCell>
+
+        <!-- Primary data and process flow -->
+        <mxCell id="e_pa_app" value="Upload and invoke" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#4E79A7;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#4E79A7;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="pa_start" target="app">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_app_session" value="Current file" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#4E79A7;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#4E79A7;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="app" target="session_contract">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_session_agent" value="Contract + metadata" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#4E79A7;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#4E79A7;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="session_contract" target="review_agent">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_collection_store" value="One-time controlled ingestion" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7F8C9A;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#5F6B7A;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="approved_collection" target="data_store">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_store_agent" value="Retrieve approved evidence" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#4E79A7;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#4E79A7;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="data_store" target="review_agent">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_agent_package" value="Generate findings" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#6A994E;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#4D7A3A;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="review_agent" target="review_package">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_package_validate" value="PA validates package" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#D6B656;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#8A6D1D;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="review_package" target="pa_validate">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_validate_reviewers" value="Manual distribution" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#D6B656;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#8A6D1D;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="pa_validate" target="reviewers">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_reviewers_approver" value="Reviewer decisions" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#D6B656;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#8A6D1D;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="reviewers" target="approver">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_approver_feedback" value="Attributed feedback" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#D6B656;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#8A6D1D;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="approver" target="normalized_feedback">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_feedback_consolidation" value="Upload or paste" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#4E79A7;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#4E79A7;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="normalized_feedback" target="consolidation_agent">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_consolidation_package" value="Consolidate and flag conflicts" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#6A994E;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#4D7A3A;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="consolidation_agent" target="consolidated_package">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_package_legal" value="Legal review, if required" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#D6B656;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#8A6D1D;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="consolidated_package" target="legal">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_legal_feedback" value="Legal comments / changes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#D6B656;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#8A6D1D;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="legal" target="normalized_feedback">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_package_final" value="Unresolved items and change summary" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#D6B656;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#8A6D1D;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="consolidated_package" target="pa_final">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_final_output" value="Manual controlled export" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7F8C9A;strokeWidth=2;endArrow=block;endFill=1;fontSize=12;fontColor=#5F6B7A;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="pa_final" target="controlled_output">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Observability and future-state relationships -->
+        <mxCell id="e_obs_app" value="Metrics / traces" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7F8C9A;strokeWidth=2;dashed=1;dashPattern=4 4;endArrow=open;endFill=0;fontSize=12;fontColor=#5F6B7A;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="app" target="observability">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_obs_agent" value="Agent execution telemetry" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7F8C9A;strokeWidth=2;dashed=1;dashPattern=4 4;endArrow=open;endFill=0;fontSize=12;fontColor=#5F6B7A;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="review_agent" target="observability">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_future_ariba" value="Future only" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#999999;strokeWidth=2;dashed=1;dashPattern=6 4;endArrow=open;endFill=0;fontSize=12;fontColor=#777777;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="pa_final" target="sap_ariba">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Legend -->
+        <mxCell id="legend" value="Legend:  Blue = Gemini Enterprise   |   Gray = data/control   |   Green = generated package   |   Gold = human decision   |   Dashed = observability or future-state relationship" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontColor=#5F6B7A;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="60" y="1668" width="1780" height="24" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
