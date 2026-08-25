@@ -1,0 +1,844 @@
+name: SV_LAND_CONTRACTS_OBLIGATIONS
+description: Contracts and Obligations domain covering contractual terms, compliance deadlines, provision tracking, historical audit trail, and RPA/DSM lease contracts. Central grain is ARRG_KEY from the agreement header. Supports queries about upcoming obligations, provision changes, contract terms, and compliance tracking.
+tables:
+  - name: QUORUM_QLREPORT_COP_RPA_DSM_PLSE_CONTRACTS
+    description: RPA (Revenue Purchase Agreement) and DSM (Demand Side Management) lease contracts table. Contains contract-level details for specialized lease arrangements including contract numbers, property identifiers, agreement types, expenditure limits (with and without AFE approval), and wellhead allocation percentages (Point A and Point B). Use this table to answer questions about specific RPA/DSM contract terms, expenditure thresholds, and property-level contract details.
+    base_table:
+      database: L48_PRD
+      schema: L48_LAND
+      table: QUORUM_QLREPORT_COP_RPA_DSM_PLSE_CONTRACTS
+    dimensions:
+      - name: ACTIVE_FLAG
+        synonyms:
+          - active flag
+          - contract active
+        description: Active flag for the contract record
+        expr: ACTIVE_FLAG
+        data_type: VARCHAR(1)
+        access_modifier: public_access
+      - name: ACTIVE_IND
+        synonyms:
+          - active indicator
+          - is active
+        description: Active indicator flag (Y=Active, N=Inactive)
+        expr: ACTIVE_IND
+        data_type: VARCHAR(1)
+        access_modifier: public_access
+      - name: AGREEMENT_TYPE_CODE
+        synonyms:
+          - agreement type code
+          - contract type code
+        description: Agreement type code for the RPA/DSM contract
+        expr: AGREEMENT_TYPE_CODE
+        data_type: VARCHAR(3)
+        access_modifier: public_access
+      - name: AGREEMENT_TYPE_DESC
+        synonyms:
+          - agreement type
+          - contract type
+        description: Agreement type description for RPA/DSM (e.g., Revenue Purchase Agreement, DSM)
+        expr: AGREEMENT_TYPE_DESC
+        data_type: VARCHAR(30)
+        access_modifier: public_access
+      - name: CONTRACT_NUMBER
+        synonyms:
+          - contract id
+          - contract num
+          - contract number
+        description: Contract number identifier for RPA/DSM
+        expr: CONTRACT_NUMBER
+        data_type: VARCHAR(12)
+        access_modifier: public_access
+      - name: MAX_SINGLE_EXPEND
+        synonyms:
+          - expenditure limit
+          - max single expenditure
+          - spending limit
+        description: Maximum single expenditure limit without AFE requirement
+        expr: MAX_SINGLE_EXPEND
+        data_type: VARCHAR(50)
+        access_modifier: public_access
+      - name: MAX_SINGLE_EXPEND_AFE
+        synonyms:
+          - AFE expenditure limit
+          - max expenditure AFE
+        description: Maximum single expenditure requiring AFE approval
+        expr: MAX_SINGLE_EXPEND_AFE
+        data_type: VARCHAR(50)
+        access_modifier: public_access
+      - name: PERCENT_BEYOND_WELLHEAD_PT_A
+        synonyms:
+          - beyond wellhead percent A
+          - point A beyond wellhead
+        description: Percentage beyond wellhead for Point A allocation
+        expr: PERCENT_BEYOND_WELLHEAD_PT_A
+        data_type: VARCHAR(50)
+        access_modifier: public_access
+      - name: PERCENT_BEYOND_WELLHEAD_PT_B
+        synonyms:
+          - beyond wellhead percent B
+          - point B beyond wellhead
+        description: Percentage beyond wellhead for Point B allocation
+        expr: PERCENT_BEYOND_WELLHEAD_PT_B
+        data_type: VARCHAR(50)
+        access_modifier: public_access
+      - name: PERCENT_TO_WELLHEAD_PT_A
+        synonyms:
+          - point A wellhead percentage
+          - wellhead percent A
+        description: Percentage to wellhead for Point A allocation
+        expr: PERCENT_TO_WELLHEAD_PT_A
+        data_type: VARCHAR(50)
+        access_modifier: public_access
+      - name: PERCENT_TO_WELLHEAD_PT_B
+        synonyms:
+          - point B wellhead percentage
+          - wellhead percent B
+        description: Percentage to wellhead for Point B allocation
+        expr: PERCENT_TO_WELLHEAD_PT_B
+        data_type: VARCHAR(50)
+        access_modifier: public_access
+      - name: PROPERTY_NAME
+        synonyms:
+          - property
+          - property name
+        description: Property name for the RPA/DSM contract
+        expr: PROPERTY_NAME
+        data_type: VARCHAR(25)
+        access_modifier: public_access
+      - name: PROPERTY_NUMBER
+        synonyms:
+          - property id
+          - property num
+          - property number
+        description: Property number identifier for the RPA/DSM contract
+        expr: PROPERTY_NUMBER
+        data_type: VARCHAR(12)
+        access_modifier: public_access
+  - name: QUORUM_QLREPORT_QDV_AGMT_HDR
+    description: Central agreement header table from Quorum Land system. Contains the master record for each land agreement (leases, operating agreements, units, easements) with agreement name, number, type, status, location (state/county), property status, effective and expiration dates. Primary key is ARRG_KEY. This is the hub table that all other Contracts and Obligations tables join to for agreement context.
+    base_table:
+      database: L48_PRD
+      schema: L48_LAND
+      table: QUORUM_QLREPORT_QDV_AGMT_HDR
+    dimensions:
+      - name: ACTIVE_IND
+        synonyms:
+          - active flag
+          - active indicator
+          - is active
+        description: Active indicator flag (Y=Active, N=Inactive)
+        expr: ACTIVE_IND
+        data_type: VARCHAR(1)
+        access_modifier: public_access
+      - name: AGMT_NAME
+        synonyms:
+          - agreement name
+          - contract name
+          - lease name
+        description: Agreement name or title
+        expr: AGMT_NAME
+        data_type: VARCHAR(50)
+        access_modifier: public_access
+      - name: AGMT_NUM
+        synonyms:
+          - agreement number
+          - contract number
+          - lease number
+        description: Agreement number identifier assigned in Quorum
+        expr: AGMT_NUM
+        data_type: VARCHAR(12)
+        access_modifier: public_access
+      - name: ARRG_KEY
+        synonyms:
+          - agreement id
+          - agreement key
+          - arrangement key
+        description: Unique arrangement/agreement identifier key
+        expr: ARRG_KEY
+        data_type: NUMBER(22,0)
+        access_modifier: public_access
+      - name: ARRG_PROP_STAT_CODE
+        synonyms:
+          - property status code
+        description: Arrangement property status code
+        expr: ARRG_PROP_STAT_CODE
+        data_type: VARCHAR(3)
+        access_modifier: public_access
+      - name: ARRG_TYPE_CODE
+        synonyms:
+          - agreement type code
+          - arrangement type code
+        description: Arrangement type code (e.g., LSE, OA, UNT)
+        expr: ARRG_TYPE_CODE
+        data_type: VARCHAR(3)
+        access_modifier: public_access
+      - name: ARRG_TYPE_DESC
+        synonyms:
+          - agreement type
+          - agreement type description
+          - arrangement type
+        description: Arrangement type description (e.g., Lease, Operating Agreement, Unit)
+        expr: ARRG_TYPE_DESC
+        data_type: VARCHAR(50)
+        access_modifier: public_access
+      - name: CNTY_NAME
+        synonyms:
+          - county
+          - county name
+        description: County name for the agreement location
+        expr: CNTY_NAME
+        data_type: VARCHAR(50)
+        access_modifier: public_access
+      - name: GPOL_ST_NAME
+        synonyms:
+          - geopolitical state
+          - state
+          - state name
+        description: Full state name (geopolitical state name)
+        expr: GPOL_ST_NAME
+        data_type: VARCHAR(50)
+        access_modifier: public_access
+      - name: PROP_STAT_DESC
+        synonyms:
+          - property status
+          - property status description
+        description: Property status description (e.g., Producing, Non-Producing, HBP)
+        expr: PROP_STAT_DESC
+        data_type: VARCHAR(30)
+        access_modifier: public_access
+      - name: ST_PSTL_ABBR
+        synonyms:
+          - state abbr
+          - state abbreviation
+          - state postal code
+        description: Two-letter state postal abbreviation (e.g., ND, TX, OK)
+        expr: ST_PSTL_ABBR
+        data_type: VARCHAR(10)
+        access_modifier: public_access
+      - name: SUBJ_CODE
+        synonyms:
+          - agreement subject code
+          - subject code
+        description: Subject classification code for the agreement
+        expr: SUBJ_CODE
+        data_type: VARCHAR(3)
+        access_modifier: public_access
+      - name: SUBJ_DESC
+        synonyms:
+          - agreement subject
+          - subject description
+        description: Subject classification description (e.g., Lease, Permit, Easement)
+        expr: SUBJ_DESC
+        data_type: VARCHAR(30)
+        access_modifier: public_access
+    time_dimensions:
+      - name: EFFTV_DATE
+        synonyms:
+          - effective date
+          - start date
+        description: Effective date when the agreement terms begin
+        expr: EFFTV_DATE
+        data_type: TIMESTAMP_NTZ(0)
+        access_modifier: public_access
+      - name: EXPR_DATE
+        synonyms:
+          - expiration date
+          - expiry date
+          - lease expiration
+        description: Expiration date of the agreement primary term
+        expr: EXPR_DATE
+        data_type: TIMESTAMP_NTZ(0)
+        access_modifier: public_access
+    primary_key:
+      columns:
+        - ARRG_KEY
+  - name: QUORUM_QLREPORT_QDV_HIST_PROVISION
+    description: Historical provision change audit trail table. Records every modification made to agreement provisions over time, capturing the field changed (SCR_LABEL/DB_COLUMN), previous value (FROM_VALU), new value (TO_VALU), who made the change (SEC_USER_NM), and when (UPDT_DATE). Use this table to trace the history of provision changes, audit compliance modifications, or identify who altered a specific contract term.
+    base_table:
+      database: L48_PRD
+      schema: L48_LAND
+      table: QUORUM_QLREPORT_QDV_HIST_PROVISION
+    dimensions:
+      - name: ACTIVE_IND
+        synonyms:
+          - active flag
+          - is active
+        description: Active indicator flag (Y=Active, N=Inactive)
+        expr: ACTIVE_IND
+        data_type: VARCHAR(1)
+        access_modifier: public_access
+      - name: AGMT_NUM
+        synonyms:
+          - agreement number
+          - contract number
+        description: Agreement number for the historical provision change
+        expr: AGMT_NUM
+        data_type: VARCHAR(12)
+        access_modifier: public_access
+      - name: ARRG_KEY
+        synonyms:
+          - agreement key
+          - arrangement key
+        description: Arrangement key linking historical provision change to agreement
+        expr: ARRG_KEY
+        data_type: NUMBER(10,0)
+        access_modifier: public_access
+      - name: DB_COLUMN
+        synonyms:
+          - column name
+          - database column
+        description: Database column name that was modified
+        expr: DB_COLUMN
+        data_type: VARCHAR(30)
+        access_modifier: public_access
+      - name: FROM_VALU
+        synonyms:
+          - from value
+          - old value
+          - previous value
+        description: Previous value before the change was made
+        expr: FROM_VALU
+        data_type: VARCHAR(500)
+        access_modifier: public_access
+      - name: SCR_LABEL
+        synonyms:
+          - changed field
+          - field label
+          - screen label
+        description: Screen label identifying which field was changed
+        expr: SCR_LABEL
+        data_type: VARCHAR(30)
+        access_modifier: public_access
+      - name: SEC_USER_NM
+        synonyms:
+          - changed by
+          - modified by
+          - user name
+        description: Security user name who made the change
+        expr: SEC_USER_NM
+        data_type: VARCHAR(2048)
+        access_modifier: public_access
+      - name: STIP_KEY
+        synonyms:
+          - provision key
+          - stipulation key
+        description: Stipulation key referencing the modified provision
+        expr: STIP_KEY
+        data_type: NUMBER(9,0)
+        access_modifier: public_access
+      - name: SUBS_NUM
+        synonyms:
+          - sub number
+          - subdivision number
+        description: Subdivision number within the agreement
+        expr: SUBS_NUM
+        data_type: VARCHAR(3)
+        access_modifier: public_access
+      - name: TO_VALU
+        synonyms:
+          - current value
+          - new value
+          - to value
+        description: New value after the change was applied
+        expr: TO_VALU
+        data_type: VARCHAR(500)
+        access_modifier: public_access
+    time_dimensions:
+      - name: UPDT_DATE
+        synonyms:
+          - change date
+          - modified date
+          - update date
+        description: Date and time when the provision was changed
+        expr: UPDT_DATE
+        data_type: TIMESTAMP_NTZ(0)
+        access_modifier: public_access
+  - name: QUORUM_QLREPORT_QDV_OBLIGATION
+    description: Obligations and payment schedules table. Contains financial obligations tied to agreements such as delay rentals, shut-in royalties, bonuses, and other periodic payments. Key attributes include payment amount, due date, frequency, responsible unit, currency, hold status, and payment history (last paid). Primary key is STIP_KEY. Use this table to answer questions about upcoming payments, overdue obligations, payment amounts by type, or compliance deadlines.
+    base_table:
+      database: L48_PRD
+      schema: L48_LAND
+      table: QUORUM_QLREPORT_QDV_OBLIGATION
+    dimensions:
+      - name: ACTIVE_IND
+        synonyms:
+          - active flag
+          - is active
+        description: Active indicator flag (Y=Active, N=Inactive)
+        expr: ACTIVE_IND
+        data_type: VARCHAR(1)
+        access_modifier: public_access
+      - name: ARRG_DSCR
+        synonyms:
+          - agreement description
+          - arrangement description
+        description: Arrangement description text for the obligation
+        expr: ARRG_DSCR
+        data_type: VARCHAR(3)
+        access_modifier: public_access
+      - name: ARRG_KEY
+        synonyms:
+          - agreement key
+          - arrangement key
+        description: Arrangement key linking obligation to the agreement
+        expr: ARRG_KEY
+        data_type: NUMBER(10,0)
+        access_modifier: public_access
+      - name: CHECKING_ACCOUNT
+        synonyms:
+          - account number
+          - payment account
+        description: Checking account number for payment processing
+        expr: CHECKING_ACCOUNT
+        data_type: VARCHAR(10)
+        access_modifier: public_access
+      - name: CURRENCY_CODE
+        synonyms:
+          - currency
+          - payment currency
+        description: Currency code for the obligation payment (e.g., USD)
+        expr: CURRENCY_CODE
+        data_type: VARCHAR(3)
+        access_modifier: public_access
+      - name: HOLD_PAY_CODE
+        synonyms:
+          - hold code
+          - payment hold code
+        description: Hold payment code indicating if payment is on hold
+        expr: HOLD_PAY_CODE
+        data_type: VARCHAR(3)
+        access_modifier: public_access
+      - name: HOLD_PAY_DESC
+        synonyms:
+          - hold description
+          - hold reason
+          - payment hold reason
+        description: Hold payment description explaining why payment is held
+        expr: HOLD_PAY_DESC
+        data_type: VARCHAR(30)
+        access_modifier: public_access
+      - name: REFERENCE_NUM_1
+        synonyms:
+          - external reference
+          - reference number
+        description: Reference number for cross-referencing with external systems
+        expr: REFERENCE_NUM_1
+        data_type: VARCHAR(30)
+        access_modifier: public_access
+      - name: RSPN_UNIT_CODE
+        synonyms:
+          - responsible party code
+          - responsible unit code
+        description: Responsible unit code indicating who manages this obligation
+        expr: RSPN_UNIT_CODE
+        data_type: VARCHAR(3)
+        access_modifier: public_access
+      - name: RSPN_UNIT_DESC
+        synonyms:
+          - responsible party
+          - responsible team
+          - responsible unit
+        description: Responsible unit description (team or department responsible)
+        expr: RSPN_UNIT_DESC
+        data_type: VARCHAR(30)
+        access_modifier: public_access
+      - name: STIP_CATG_CODE
+        synonyms:
+          - obligation category code
+          - stipulation category
+        description: Obligation category code for grouping
+        expr: STIP_CATG_CODE
+        data_type: VARCHAR(3)
+        access_modifier: public_access
+      - name: STIP_FREQ_DESC
+        synonyms:
+          - frequency
+          - obligation frequency
+          - payment frequency
+        description: Payment frequency description (e.g., Annual, Monthly, One-Time)
+        expr: STIP_FREQ_DESC
+        data_type: VARCHAR(30)
+        access_modifier: public_access
+      - name: STIP_KEY
+        synonyms:
+          - obligation id
+          - obligation key
+          - stipulation key
+        description: Unique stipulation/obligation record identifier key
+        expr: STIP_KEY
+        data_type: NUMBER(28,8)
+        access_modifier: public_access
+      - name: STIP_TYPE_CODE
+        synonyms:
+          - obligation type code
+          - stipulation type code
+        description: Obligation type code classifying the payment type
+        expr: STIP_TYPE_CODE
+        data_type: VARCHAR(3)
+        access_modifier: public_access
+      - name: STIP_TYPE_DESC
+        synonyms:
+          - obligation type
+          - payment type
+          - stipulation type
+        description: Obligation type description (e.g., Delay Rental, Shut-In Royalty, Bonus)
+        expr: STIP_TYPE_DESC
+        data_type: VARCHAR(40)
+        access_modifier: public_access
+    time_dimensions:
+      - name: DUE_DATE
+        synonyms:
+          - deadline
+          - due date
+          - payment due date
+        description: Obligation payment due date
+        expr: DUE_DATE
+        data_type: DATE
+        access_modifier: public_access
+      - name: END_DATE
+        synonyms:
+          - obligation end date
+          - period end
+        description: End date of the obligation period
+        expr: END_DATE
+        data_type: DATE
+        access_modifier: public_access
+      - name: LAST_PAID
+        synonyms:
+          - last paid date
+          - last payment date
+        description: Date when the obligation was last paid
+        expr: LAST_PAID
+        data_type: DATE
+        access_modifier: public_access
+      - name: START_DATE
+        synonyms:
+          - obligation start date
+          - period start
+        description: Start date of the obligation period
+        expr: START_DATE
+        data_type: DATE
+        access_modifier: public_access
+    facts:
+      - name: PAMT_AMT
+        synonyms:
+          - amount due
+          - obligation amount
+          - payment amount
+        description: Payment amount for the obligation
+        expr: PAMT_AMT
+        data_type: NUMBER(28,8)
+        access_modifier: public_access
+      - name: STIP_FREQ_CODE
+        synonyms:
+          - frequency code
+          - payment frequency code
+        description: Payment frequency code as a numeric value
+        expr: STIP_FREQ_CODE
+        data_type: NUMBER(28,8)
+        access_modifier: public_access
+    metrics:
+      - name: AVG_OBLIGATION_AMOUNT
+        description: Average payment amount for active obligations only (ACTIVE_IND = Y). Use this metric when asked about average obligation size or typical payment amount.
+        expr: AVG(CASE WHEN ACTIVE_IND ILIKE 'Y' THEN PAMT_AMT ELSE NULL END)
+        access_modifier: public_access
+      - name: MAX_OBLIGATION_AMOUNT
+        description: Maximum single obligation payment amount for active records only (ACTIVE_IND = Y). Use this metric when asked about largest obligation, highest payment, or maximum liability.
+        expr: MAX(CASE WHEN ACTIVE_IND ILIKE 'Y' THEN PAMT_AMT ELSE NULL END)
+        access_modifier: public_access
+      - name: OBLIGATION_COUNT
+        description: Count of active obligations (ACTIVE_IND = Y). Use this metric when asked about number of obligations, how many payments, or obligation volume.
+        expr: COUNT(CASE WHEN ACTIVE_IND ILIKE 'Y' THEN STIP_KEY ELSE NULL END)
+        access_modifier: public_access
+      - name: TOTAL_OBLIGATION_AMOUNT
+        description: Total payment amount across all active obligations (ACTIVE_IND = Y). Use this metric when asked about total obligations, total payments due, or aggregate obligation liability.
+        expr: SUM(CASE WHEN ACTIVE_IND ILIKE 'Y' THEN PAMT_AMT ELSE 0 END)
+        access_modifier: public_access
+    primary_key:
+      columns:
+        - STIP_KEY
+  - name: QUORUM_QLREPORT_QDV_PARTICIPATION
+    description: Participation interest records showing who owns what percentage in each agreement. Used to filter agreements that have active participants. Join to AGMT_HDR via ARRG_KEY.
+    base_table:
+      database: L48_PRD
+      schema: L48_LAND
+      table: QUORUM_QLREPORT_QDV_PARTICIPATION
+    dimensions:
+      - name: ACTIVE_IND
+        description: Active indicator flag (Y=Active, N=Inactive)
+        expr: ACTIVE_IND
+        data_type: VARCHAR(1)
+        access_modifier: public_access
+      - name: ARRG_KEY
+        description: Arrangement key linking participation to agreement
+        expr: ARRG_KEY
+        data_type: NUMBER(10,0)
+        access_modifier: public_access
+      - name: PIP_TYPE_DESC
+        description: Participation interest type description
+        expr: PIP_TYPE_DESC
+        data_type: VARCHAR(30)
+        access_modifier: public_access
+      - name: PRTP_NAME_LINE_1
+        description: Participant/partner name
+        expr: PRTP_NAME_LINE_1
+        data_type: VARCHAR(60)
+        access_modifier: public_access
+    facts:
+      - name: PCT_INT
+        description: Participation interest percentage
+        expr: PCT_INT
+        data_type: NUMBER(10,8)
+        access_modifier: public_access
+  - name: QUORUM_QLREPORT_QDV_PROVISIONS
+    description: Provisions and stipulations table. Contains the contractual terms, clauses, and conditions embedded in each agreement such as royalty rates, rental terms, Pugh clauses, shut-in provisions, and extension terms. Key attributes include provision type, category, responsible unit, response required, value, and extended expiration dates. Primary key is STIP_KEY. Use this table to answer questions about lease terms, contractual conditions, provision types by agreement, or compliance requirements.
+    base_table:
+      database: L48_PRD
+      schema: L48_LAND
+      table: QUORUM_QLREPORT_QDV_PROVISIONS
+    dimensions:
+      - name: ACTIVE_IND
+        synonyms:
+          - active flag
+          - is active
+        description: Active indicator flag (Y=Active, N=Inactive)
+        expr: ACTIVE_IND
+        data_type: VARCHAR(1)
+        access_modifier: public_access
+      - name: ADMIN_CATG
+        synonyms:
+          - admin category
+          - administration category
+        description: Administrative category for the provision
+        expr: ADMIN_CATG
+        data_type: VARCHAR(3)
+        access_modifier: public_access
+      - name: ADMIN_DESC
+        synonyms:
+          - admin description
+          - administration description
+        description: Administrative type description for the provision
+        expr: ADMIN_DESC
+        data_type: VARCHAR(30)
+        access_modifier: public_access
+      - name: AGMT_NUM
+        synonyms:
+          - agreement number
+          - contract number
+        description: Agreement number associated with this provision
+        expr: AGMT_NUM
+        data_type: VARCHAR(12)
+        access_modifier: public_access
+      - name: ARRG_DSCR
+        synonyms:
+          - agreement description
+          - arrangement description
+        description: Arrangement description text
+        expr: ARRG_DSCR
+        data_type: VARCHAR(3)
+        access_modifier: public_access
+      - name: ARRG_KEY
+        synonyms:
+          - agreement key
+          - arrangement key
+        description: Arrangement key linking provision to the agreement
+        expr: ARRG_KEY
+        data_type: NUMBER(10,0)
+        access_modifier: public_access
+      - name: PROV_RESPONSE
+        synonyms:
+          - provision response
+          - required response
+        description: Response action required for the provision
+        expr: PROV_RESPONSE
+        data_type: VARCHAR(380)
+        access_modifier: public_access
+      - name: PROVISION_TYPE
+        synonyms:
+          - clause type
+          - provision type
+          - stipulation type
+        description: Provision type description (e.g., Royalty, Rental, Shut-In, Pugh Clause)
+        expr: PROVISION_TYPE
+        data_type: VARCHAR(40)
+        access_modifier: public_access
+      - name: RESP_RESPONSE
+        synonyms:
+          - response description
+        description: Response description for the responsible unit
+        expr: RESP_RESPONSE
+        data_type: VARCHAR(400)
+        access_modifier: public_access
+      - name: RESP_UNIT_CD
+        synonyms:
+          - responsible party code
+          - responsible unit code
+        description: Responsible unit code indicating who manages this provision
+        expr: RESP_UNIT_CD
+        data_type: VARCHAR(3)
+        access_modifier: public_access
+      - name: RESP_VALUE
+        synonyms:
+          - response value
+        description: Response value for the provision
+        expr: RESP_VALUE
+        data_type: VARCHAR(50)
+        access_modifier: public_access
+      - name: STIP_CATG_CODE
+        synonyms:
+          - provision category code
+          - stipulation category
+        description: Stipulation category code for grouping provisions
+        expr: STIP_CATG_CODE
+        data_type: VARCHAR(3)
+        access_modifier: public_access
+      - name: STIP_KEY
+        synonyms:
+          - provision id
+          - provision key
+          - stipulation key
+        description: Unique stipulation/provision record identifier key
+        expr: STIP_KEY
+        data_type: NUMBER(9,0)
+        access_modifier: public_access
+      - name: STIP_TYPE_CODE
+        synonyms:
+          - provision type code
+          - stipulation type code
+        description: Stipulation/provision type code
+        expr: STIP_TYPE_CODE
+        data_type: VARCHAR(3)
+        access_modifier: public_access
+      - name: STIP_UNIT_DESC
+        synonyms:
+          - provision unit
+          - stipulation unit
+          - unit description
+        description: Unit of measure description for the provision value
+        expr: STIP_UNIT_DESC
+        data_type: VARCHAR(30)
+        access_modifier: public_access
+      - name: SUBJECT_TO
+        synonyms:
+          - contingency
+          - subject to
+        description: Subject-to indicator showing what the provision is contingent upon
+        expr: SUBJECT_TO
+        data_type: VARCHAR(3)
+        access_modifier: public_access
+      - name: SUBS_NUM
+        synonyms:
+          - sub number
+          - subdivision number
+        description: Subdivision number within the agreement
+        expr: SUBS_NUM
+        data_type: VARCHAR(3)
+        access_modifier: public_access
+      - name: VALUE1
+        synonyms:
+          - provision value
+          - value
+        description: Primary value field for the provision (e.g., percentage, dollar amount)
+        expr: VALUE1
+        data_type: VARCHAR(50)
+        access_modifier: public_access
+    time_dimensions:
+      - name: EXT_EXPR_DATE
+        synonyms:
+          - extended expiration date
+          - extension date
+          - provision expiry
+        description: Extended expiration date for the provision
+        expr: EXT_EXPR_DATE
+        data_type: DATE
+        access_modifier: public_access
+    primary_key:
+      columns:
+        - STIP_KEY
+  - name: QUORUM_QLREPORT_QDV_RA_PROSPECT
+    description: Prospect and play assignment table mapping agreements to exploration prospects or development plays. Used to filter agreements that have prospect assignments. Join to AGMT_HDR via ARRG_KEY.
+    base_table:
+      database: L48_PRD
+      schema: L48_LAND
+      table: QUORUM_QLREPORT_QDV_RA_PROSPECT
+    dimensions:
+      - name: ACTIVE_IND
+        description: Active indicator flag (Y=Active, N=Inactive)
+        expr: ACTIVE_IND
+        data_type: VARCHAR(1)
+        access_modifier: public_access
+      - name: ARRG_KEY
+        description: Arrangement key linking prospect to agreement
+        expr: ARRG_KEY
+        data_type: NUMBER(10,0)
+        access_modifier: public_access
+      - name: ASSET_AREA_DESCRIPTION
+        description: Asset area name
+        expr: ASSET_AREA_DESCRIPTION
+        data_type: VARCHAR(300)
+        access_modifier: public_access
+      - name: BUSINESS_UNIT_DESCRIPTION
+        description: Business unit name
+        expr: BUSINESS_UNIT_DESCRIPTION
+        data_type: VARCHAR(300)
+        access_modifier: public_access
+      - name: PROSPECT_DESCRIPTION
+        description: Prospect area name/description
+        expr: PROSPECT_DESCRIPTION
+        data_type: VARCHAR(300)
+        access_modifier: public_access
+relationships:
+  - name: CONTRACTS_TO_AGMT
+    left_table: QUORUM_QLREPORT_COP_RPA_DSM_PLSE_CONTRACTS
+    right_table: QUORUM_QLREPORT_QDV_AGMT_HDR
+    relationship_columns:
+      - left_column: FILEKEY
+        right_column: ARRG_KEY
+    join_type: inner
+  - name: HIST_PROVISION_TO_AGMT
+    left_table: QUORUM_QLREPORT_QDV_HIST_PROVISION
+    right_table: QUORUM_QLREPORT_QDV_AGMT_HDR
+    relationship_columns:
+      - left_column: ARRG_KEY
+        right_column: ARRG_KEY
+    join_type: inner
+  - name: OBLIGATION_TO_AGMT
+    left_table: QUORUM_QLREPORT_QDV_OBLIGATION
+    right_table: QUORUM_QLREPORT_QDV_AGMT_HDR
+    relationship_columns:
+      - left_column: ARRG_KEY
+        right_column: ARRG_KEY
+    join_type: inner
+  - name: PARTICIPATION_TO_AGMT
+    left_table: QUORUM_QLREPORT_QDV_PARTICIPATION
+    right_table: QUORUM_QLREPORT_QDV_AGMT_HDR
+    relationship_columns:
+      - left_column: ARRG_KEY
+        right_column: ARRG_KEY
+    join_type: inner
+  - name: PROVISIONS_TO_AGMT
+    left_table: QUORUM_QLREPORT_QDV_PROVISIONS
+    right_table: QUORUM_QLREPORT_QDV_AGMT_HDR
+    relationship_columns:
+      - left_column: ARRG_KEY
+        right_column: ARRG_KEY
+    join_type: inner
+  - name: PROSPECT_TO_AGMT
+    left_table: QUORUM_QLREPORT_QDV_RA_PROSPECT
+    right_table: QUORUM_QLREPORT_QDV_AGMT_HDR
+    relationship_columns:
+      - left_column: ARRG_KEY
+        right_column: ARRG_KEY
+    join_type: inner
+verified_queries:
+  - name: PROVISION_CHANGES_COUNT_BY_AGREEMENT_AND_PROVISION_TYPE
+    sql: WITH header_dedup AS (SELECT "ARRG_KEY", "ARRG_TYPE_DESC", ROW_NUMBER() OVER (PARTITION BY "ARRG_KEY" ORDER BY CASE WHEN "ACTIVE_IND" = 'Y' THEN 0 ELSE 1 END, COALESCE("ROW_EFFECTIVE_DATE", "ROW_CHANGED_DATE", "ROW_CREATED_DATE") DESC, "ROW_CHANGED_DATE" DESC, "ROW_CREATED_DATE" DESC) AS rn FROM "L48_PRD"."L48_LAND"."QUORUM_QLREPORT_QDV_AGMT_HDR") SELECT h."ARRG_TYPE_DESC" AS agreement_type, p."PROVISION_TYPE" AS provision_type, COUNT(*) AS historical_provision_record_count FROM "L48_PRD"."L48_LAND"."QUORUM_QLREPORT_QDV_PROVISIONS" AS p JOIN header_dedup AS h ON p."ARRG_KEY" = h."ARRG_KEY" AND h.rn = 1 GROUP BY h."ARRG_TYPE_DESC", p."PROVISION_TYPE" ORDER BY historical_provision_record_count DESC, agreement_type, provision_type LIMIT 20
+    question: What is the count of provision changes (history) by agreement type and provision type?
+    verified_at: 1784542901
+    verified_by: KUNDAN.B.KUMAR
+    use_as_onboarding_question: false
+module_custom_instructions:
+  sql_generation: |-
+    1. Always use ILIKE instead of LIKE for all string comparisons and pattern matching. 2. Always include ACTIVE_IND = 'Y' filter condition on every table referenced in the query to ensure only active records are returned.
+    3. When filtering by obligation type, provision type, or agreement type descriptions, use ILIKE (e.g., STIP_TYPE_DESC ILIKE '%Delay Rental%') rather than exact match or UPPER(). 4. When joining multiple tables, apply ACTIVE_IND = 'Y' on each table independently.

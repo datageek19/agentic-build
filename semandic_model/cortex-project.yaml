@@ -1,0 +1,54 @@
+version: 1
+artifacts:
+  - path: ZZ_ACN_SV_LAND_PARTICIPATION_INTERESTS_VERSION1.sv.yaml
+    type: semantic_view
+    targets:
+      default:
+        object: DATASCIENCE_DEV.DS_ENT_BI.ZZ_ACN_SV_LAND_PARTICIPATION_INTERESTS_VERSION1
+  - path: participation.sv.yaml
+    type: semantic_view
+    targets: {}
+  - path: contracts_obligations.sv.yaml
+    type: semantic_view
+    targets: {}
+  - path: agreement_acreage.sv.yaml
+    type: semantic_view
+    targets: {}
+  - path: AG_LAND_QUORUM_AGENT.agent.yaml
+    type: cortex_agent
+    targets:
+      default:
+        object: DATASCIENCE_DEV.DS_ENT_EXP.AG_LAND_QUORUM_AGENT
+  - path: AS_OPS_DAILY_PRODUCTION.sv.yaml
+    type: semantic_view
+    targets:
+      default:
+        object: DATASCIENCE_DEV.DS_ENT_BI.AS_OPS_DAILY_PRODUCTION
+  - path: sv_ops_daily_production.sv.yaml
+    type: semantic_view
+    targets:
+      default:
+        object: ENT_DEV.OPS.SV_OPS_DAILY_PRODUCTION
+  - path: SV_OPS_DAILY_PRODUCTION.sv.yaml
+    type: semantic_view
+    targets:
+      default:
+        object: ENT_DEV.OPS.SV_OPS_DAILY_PRODUCTION
+  - path: sv_ops_daily_production_minimal.sv.yaml
+    type: semantic_view
+    targets:
+      default:
+        object: ENT_DEV.OPS.SV_OPS_DAILY_PRODUCTION
+  - path: sv_ops_daily_production_nometrics.sv.yaml
+    type: semantic_view
+    targets:
+      default:
+        object: ENT_DEV.OPS.SV_OPS_DAILY_PRODUCTION
+  - path: SV_OPS_DAILY_PRODUCTION_VOLUMES.sv.yaml
+    type: semantic_view
+    targets:
+      default:
+        object: ENT_DEV.OPS.SV_OPS_DAILY_PRODUCTION_VOLUMES
+  - path: OPS_PRODUCTION_AGENT.agent.yaml
+    type: cortex_agent
+    targets: {}

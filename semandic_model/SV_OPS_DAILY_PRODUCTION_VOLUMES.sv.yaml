@@ -1,0 +1,386 @@
+name: SV_OPS_DAILY_PRODUCTION_VOLUMES
+description: "Operations Daily Production Volumes domain covering daily allocated and measured production, injection, and well-bore readings at the completion level. Central grain is COMPLETION_ID + VOLUME_DATE from the daily production view. API_10 is the cross-domain join key to Global Wells and (indirectly) to Land agreements. Supports queries about oil, gas, and water production by well, area, and business unit over time."
+tables:
+  - name: DAILY_PRODUCTION_VOLUMES
+    description: "Daily production volumes view at the completion-day grain. Contains allocated oil, gas, and water production volumes; injection volumes for gas and water; well-bore pressure and temperature readings; and choke settings. Joins to Global Wells via API_10 and to Land domain via ARRG_KEY through the well-agreement bridge."
+    base_table:
+      database: ENT_DEV
+      schema: OPS
+      table: DAILY_PRODUCTION_VOLUMES
+    primary_key:
+      columns:
+        - COMPLETION_ID
+        - VOLUME_DATE
+    dimensions:
+      - name: BU
+        synonyms:
+          - business unit
+          - BU code
+          - operating unit
+        description: "Business unit code identifying the top-level operating division (e.g., GCR=Great Central Rockies, PERMIAN=Permian Basin)"
+        expr: BU
+        data_type: VARCHAR(16777216)
+      - name: AREA
+        synonyms:
+          - operational area
+          - asset area
+          - production area
+          - field area
+        description: "Operational area within a business unit representing a geographic or organizational grouping of wells (e.g., MIDLAND BASIN, GALAXY, SOUTH-4)"
+        expr: AREA
+        data_type: VARCHAR(16777216)
+      - name: API_10
+        synonyms:
+          - API
+          - API number
+          - well API
+          - API10
+        description: "Standard 10-digit API well number identifying the well at the operator level. Cross-domain join key to Global Wells and (indirectly via well-agreement bridge) to Land ARRG_KEY."
+        expr: API_10
+        data_type: VARCHAR(16777216)
+      - name: WELL_NAME
+        synonyms:
+          - well
+          - well identifier
+          - common well name
+        description: "Common well name as registered in the asset master. Currently identical to COMPLETION_NAME for single-completion wells."
+        expr: WELL_NAME
+        data_type: VARCHAR(16777216)
+      - name: COMPLETION_ID
+        synonyms:
+          - completion identifier
+          - completion code
+          - PDEN ID
+          - wellbore ID
+        description: "Unique completion identifier forming part of the primary grain key. One well (API_10) may have multiple completions, though most have exactly one."
+        expr: COMPLETION_ID
+        data_type: VARCHAR(16777216)
+      - name: COMPLETION_NAME
+        synonyms:
+          - completion
+          - completion label
+          - wellbore name
+        description: "Completion name as registered in the asset master. Currently identical to WELL_NAME but may diverge for multi-lateral wells in the future."
+        expr: COMPLETION_NAME
+        data_type: VARCHAR(16777216)
+    time_dimensions:
+      - name: VOLUME_DATE
+        synonyms:
+          - production date
+          - prod date
+          - date
+          - day
+          - volume day
+        description: "Calendar production day — the 24-hour period when volumes were produced or measured. This is the time grain driver for the fact table. No production-day offset is applied."
+        expr: VOLUME_DATE
+        data_type: DATE
+    facts:
+      - name: OIL_VOLUME
+        synonyms:
+          - oil production
+          - oil
+          - daily oil
+          - oil BBL
+          - oil barrels
+        description: "Daily allocated oil production volume in barrels (BBL). Negative values represent prior-period adjustments. NULL means not measured or not applicable. Zero means shut-in or no production that day."
+        expr: OIL_VOLUME
+        data_type: FLOAT
+        default_aggregation: sum
+        access_modifier: public_access
+      - name: GAS_VOLUME
+        synonyms:
+          - gas production
+          - gas
+          - daily gas
+          - gas MCF
+        description: "Daily allocated gas production volume in MCF (thousand cubic feet). NULL means not measured or not a gas producer. Zero means shut-in. Negative values are prior-period adjustments."
+        expr: GAS_VOLUME
+        data_type: FLOAT
+        default_aggregation: sum
+        access_modifier: public_access
+      - name: WATER_VOLUME
+        synonyms:
+          - water production
+          - water
+          - daily water
+          - produced water
+          - water BBL
+        description: "Daily allocated water production volume in barrels (BBL). NULL means not measured. Zero means shut-in or no water produced that day."
+        expr: WATER_VOLUME
+        data_type: FLOAT
+        default_aggregation: sum
+        access_modifier: public_access
+      - name: GAS_INJ_VOLUME
+        synonyms:
+          - gas injection
+          - injected gas
+          - gas lift volume
+          - injection gas
+        description: "Daily metered gas injection volume in MCF. NULL means this is not an injection well or gas injection is not measured. Zero means no injection that day."
+        expr: GAS_INJ_VOLUME
+        data_type: FLOAT
+        default_aggregation: sum
+        access_modifier: public_access
+      - name: WATER_INJ_VOLUME
+        synonyms:
+          - water injection
+          - injected water
+          - injection water
+          - waterflood volume
+        description: "Daily metered water injection volume in barrels (BBL). NULL means this is not a water injection well. Zero means no injection that day."
+        expr: WATER_INJ_VOLUME
+        data_type: FLOAT
+        default_aggregation: sum
+        access_modifier: public_access
+      - name: TUBING_PRESSURE
+        synonyms:
+          - THP
+          - tubing head pressure
+          - flowing tubing pressure
+        description: "Daily tubing head pressure reading in PSI. Semi-additive — aggregate with AVG across wells or time, not SUM. NULL means not measured (approximately 72% of records)."
+        expr: TUBING_PRESSURE
+        data_type: FLOAT
+        default_aggregation: avg
+        access_modifier: public_access
+      - name: CASING_PRESSURE
+        synonyms:
+          - CHP
+          - casing head pressure
+        description: "Daily casing head pressure reading in PSI. Semi-additive — aggregate with AVG across wells or time, not SUM. NULL means not measured (approximately 72% of records)."
+        expr: CASING_PRESSURE
+        data_type: FLOAT
+        default_aggregation: avg
+        access_modifier: public_access
+      - name: BOTTOM_HOLE_PRESSURE
+        synonyms:
+          - BHP
+          - downhole pressure
+          - reservoir pressure
+        description: "Daily bottom-hole pressure reading in PSI. Sparse (approximately 95% NULL) but valid for subsurface analysis. Semi-additive — aggregate with AVG."
+        expr: BOTTOM_HOLE_PRESSURE
+        data_type: FLOAT
+        default_aggregation: avg
+        access_modifier: public_access
+      - name: BOTTOM_HOLE_TEMPERATURE
+        synonyms:
+          - BHT
+          - downhole temperature
+          - reservoir temperature
+        description: "Daily bottom-hole temperature reading in degrees Fahrenheit. Sparse (approximately 98% NULL) but valid for subsurface analysis. Semi-additive — aggregate with AVG."
+        expr: BOTTOM_HOLE_TEMPERATURE
+        data_type: FLOAT
+        default_aggregation: avg
+        access_modifier: public_access
+      - name: CHOKE_SIZE
+        synonyms:
+          - choke
+          - choke setting
+          - choke diameter
+        description: "Daily choke size setting in 64ths of an inch (mm). Step-change value — aggregate with AVG or use latest value. NULL means not measured or not applicable (approximately 85% of records)."
+        expr: CHOKE_SIZE
+        data_type: FLOAT
+        default_aggregation: avg
+        access_modifier: public_access
+    metrics:
+      - name: TOTAL_OIL_PRODUCTION
+        synonyms:
+          - total oil
+          - sum oil
+          - oil produced
+          - gross oil
+        description: "Total oil production volume in barrels (BBL). Sums all daily allocated oil including prior-period adjustments (negative values). Filter to OIL_VOLUME > 0 for gross positive production only."
+        expr: SUM(OIL_VOLUME)
+        access_modifier: public_access
+      - name: TOTAL_GAS_PRODUCTION
+        synonyms:
+          - total gas
+          - sum gas
+          - gas produced
+          - gross gas
+        description: "Total gas production volume in MCF (thousand cubic feet). Sums all daily allocated gas including prior-period adjustments. NULL rows are excluded by SUM automatically."
+        expr: SUM(GAS_VOLUME)
+        access_modifier: public_access
+      - name: TOTAL_WATER_PRODUCTION
+        synonyms:
+          - total water
+          - sum water
+          - water produced
+          - gross water
+        description: "Total water production volume in barrels (BBL). Sums all daily allocated water. Used with oil to calculate water cut and total liquid."
+        expr: SUM(WATER_VOLUME)
+        access_modifier: public_access
+      - name: TOTAL_GAS_INJECTION
+        synonyms:
+          - total gas injected
+          - sum gas injection
+          - gas lift total
+        description: "Total gas injection volume in MCF. Sums all daily metered gas injection. Use to assess gas lift operations and cycling efficiency."
+        expr: SUM(GAS_INJ_VOLUME)
+        access_modifier: public_access
+      - name: TOTAL_WATER_INJECTION
+        synonyms:
+          - total water injected
+          - sum water injection
+          - waterflood total
+        description: "Total water injection volume in barrels (BBL). Sums all daily metered water injection. Use to assess waterflood and disposal performance."
+        expr: SUM(WATER_INJ_VOLUME)
+        access_modifier: public_access
+      - name: TOTAL_BOE
+        synonyms:
+          - BOE production
+          - barrels of oil equivalent
+          - BOE
+          - total equivalent
+        description: "Total production in barrels of oil equivalent (BOE) using the standard 6:1 MCF-to-BOE conversion. Formula: OIL_VOLUME + (GAS_VOLUME / 6.0). The single most important cross-stream production comparison metric."
+        expr: SUM(OIL_VOLUME) + SUM(GAS_VOLUME) / 6.0
+        access_modifier: public_access
+      - name: TOTAL_LIQUID
+        synonyms:
+          - total liquid production
+          - total fluid
+          - liquid volume
+          - gross liquid
+        description: "Total liquid production in barrels — sum of oil and water volumes. Represents total fluid handled by surface facilities. Used for pump sizing, separator capacity, and facility design."
+        expr: SUM(OIL_VOLUME) + SUM(WATER_VOLUME)
+        access_modifier: public_access
+      - name: WATER_CUT
+        synonyms:
+          - water cut ratio
+          - BSW
+          - water percentage
+        description: "Water cut ratio — fraction of total liquid production that is water (0 to 1). Formula: WATER / (OIL + WATER). Rising water cut indicates reservoir depletion or water breakthrough. Target < 0.90 for economic production."
+        expr: SUM(WATER_VOLUME) / NULLIF(SUM(OIL_VOLUME) + SUM(WATER_VOLUME), 0)
+        access_modifier: public_access
+      - name: GAS_OIL_RATIO
+        synonyms:
+          - GOR
+          - gas oil ratio
+          - producing GOR
+        description: "Gas-Oil Ratio in MCF per barrel of oil. Formula: GAS / OIL. Indicates reservoir drive mechanism and fluid composition. Typical ranges: Permian 8-15, GCR 15-30. Rising GOR may signal gas cap expansion."
+        expr: SUM(GAS_VOLUME) / NULLIF(SUM(OIL_VOLUME), 0)
+        access_modifier: public_access
+      - name: OIL_CUT
+        synonyms:
+          - oil cut ratio
+          - oil fraction
+          - oil percentage of liquid
+        description: "Oil cut ratio — fraction of total liquid production that is oil (0 to 1). Complement of water cut. Formula: OIL / (OIL + WATER). Higher is better for economic performance."
+        expr: SUM(OIL_VOLUME) / NULLIF(SUM(OIL_VOLUME) + SUM(WATER_VOLUME), 0)
+        access_modifier: public_access
+      - name: PRODUCING_WELL_COUNT
+        synonyms:
+          - active well count
+          - producing completions
+          - wells on production
+          - well count
+        description: "Count of distinct completions with positive production (OIL > 0 OR GAS > 0 OR WATER > 0) in the selected period. Use to track portfolio size and operational activity."
+        expr: COUNT(DISTINCT CASE WHEN OIL_VOLUME > 0 OR GAS_VOLUME > 0 OR WATER_VOLUME > 0 THEN COMPLETION_ID END)
+        access_modifier: public_access
+      - name: INJECTION_WELL_COUNT
+        synonyms:
+          - injector count
+          - injection completions
+          - wells on injection
+        description: "Count of distinct completions with positive injection (GAS_INJ > 0 OR WATER_INJ > 0) in the selected period. Use to track waterflood and gas injection program scale."
+        expr: COUNT(DISTINCT CASE WHEN GAS_INJ_VOLUME > 0 OR WATER_INJ_VOLUME > 0 THEN COMPLETION_ID END)
+        access_modifier: public_access
+      - name: AVG_OIL_PER_WELL
+        synonyms:
+          - oil rate per well
+          - per-well oil
+          - oil intensity
+          - BOPD per well
+        description: "Average oil production per producing well in BBL. Formula: Total Oil / Producing Well Count. Use to benchmark well-level productivity and compare areas. Higher values indicate better-performing assets."
+        expr: SUM(OIL_VOLUME) / NULLIF(COUNT(DISTINCT CASE WHEN OIL_VOLUME > 0 OR GAS_VOLUME > 0 OR WATER_VOLUME > 0 THEN COMPLETION_ID END), 0)
+        access_modifier: public_access
+      - name: AVG_BOE_PER_WELL
+        synonyms:
+          - BOE rate per well
+          - per-well BOE
+          - BOE intensity
+          - BOEPD per well
+        description: "Average BOE production per producing well. Formula: Total BOE / Producing Well Count. The primary productivity benchmark across business units and areas regardless of product mix."
+        expr: (SUM(OIL_VOLUME) + SUM(GAS_VOLUME) / 6.0) / NULLIF(COUNT(DISTINCT CASE WHEN OIL_VOLUME > 0 OR GAS_VOLUME > 0 OR WATER_VOLUME > 0 THEN COMPLETION_ID END), 0)
+        access_modifier: public_access
+      - name: NET_GAS_PRODUCTION
+        synonyms:
+          - net gas
+          - gas after injection
+          - gas produced minus injected
+        description: "Net gas production in MCF — gross gas produced minus gas injected. Formula: GAS_VOLUME - GAS_INJ_VOLUME. Represents the net gas available for sales or processing after gas lift and cycling operations are subtracted."
+        expr: SUM(GAS_VOLUME) - SUM(GAS_INJ_VOLUME)
+        access_modifier: public_access
+      - name: NET_BOE
+        synonyms:
+          - net BOE
+          - net equivalent production
+          - BOE after injection
+        description: "Net BOE production after subtracting gas injection volumes. Formula: OIL + (GAS - GAS_INJ) / 6.0. Represents net hydrocarbon extraction accounting for gas cycling and gas lift operations."
+        expr: (SUM(OIL_VOLUME) + (SUM(GAS_VOLUME) - SUM(GAS_INJ_VOLUME)) / 6.0)
+        access_modifier: public_access
+      - name: TOTAL_WELL_COUNT
+        synonyms:
+          - all wells
+          - total completions
+          - completion count
+          - portfolio size
+        description: "Count of all distinct completions with any record (producing, shut-in, or injection) in the selected period. Represents total managed portfolio size including shut-in wells."
+        expr: COUNT(DISTINCT COMPLETION_ID)
+        access_modifier: public_access
+      - name: SHUT_IN_WELL_COUNT
+        synonyms:
+          - shut-in wells
+          - idle wells
+          - zero production wells
+          - inactive count
+        description: "Count of distinct completions that have a record but zero production and zero injection on the selected day(s). Indicates deferred or curtailed production."
+        expr: COUNT(DISTINCT COMPLETION_ID) - COUNT(DISTINCT CASE WHEN OIL_VOLUME > 0 OR GAS_VOLUME > 0 OR WATER_VOLUME > 0 OR GAS_INJ_VOLUME > 0 OR WATER_INJ_VOLUME > 0 THEN COMPLETION_ID END)
+        access_modifier: public_access
+verified_queries:
+  - name: SINGLE_WELL_DAILY_OIL_JAN_2026
+    question: Show me daily oil production for well HARLEY 31-2TFH in January 2026.
+    sql: "SELECT WELL_NAME, VOLUME_DATE, OIL_VOLUME FROM ENT_DEV.OPS.DAILY_PRODUCTION_VOLUMES WHERE WELL_NAME ILIKE 'HARLEY 31-2TFH' AND VOLUME_DATE BETWEEN '2026-01-01' AND '2026-01-31' ORDER BY VOLUME_DATE"
+    verified_at: 1753920000
+    verified_by: CORTEX_CODE
+    use_as_onboarding_question: true
+  - name: MONTHLY_BOE_BY_BU_2026
+    question: What is the monthly oil, gas, and BOE production by business unit for 2026?
+    sql: "SELECT BU, DATE_TRUNC('MONTH', VOLUME_DATE) AS production_month, SUM(OIL_VOLUME) AS total_oil, SUM(GAS_VOLUME) AS total_gas, SUM(OIL_VOLUME) + SUM(GAS_VOLUME) / 6.0 AS total_boe FROM ENT_DEV.OPS.DAILY_PRODUCTION_VOLUMES WHERE VOLUME_DATE >= '2026-01-01' AND VOLUME_DATE < '2026-07-01' GROUP BY BU, DATE_TRUNC('MONTH', VOLUME_DATE) ORDER BY BU, production_month"
+    verified_at: 1753920000
+    verified_by: CORTEX_CODE
+    use_as_onboarding_question: true
+  - name: TOP_10_WELLS_BY_BOE_JAN_2026
+    question: What are the top 10 wells by total BOE production in January 2026?
+    sql: "SELECT WELL_NAME, API_10, BU, AREA, SUM(OIL_VOLUME) AS total_oil, SUM(GAS_VOLUME) AS total_gas, SUM(OIL_VOLUME) + SUM(GAS_VOLUME) / 6.0 AS total_boe FROM ENT_DEV.OPS.DAILY_PRODUCTION_VOLUMES WHERE VOLUME_DATE >= '2026-01-01' AND VOLUME_DATE < '2026-02-01' GROUP BY WELL_NAME, API_10, BU, AREA HAVING total_boe > 0 ORDER BY total_boe DESC LIMIT 10"
+    verified_at: 1753920000
+    verified_by: CORTEX_CODE
+    use_as_onboarding_question: true
+  - name: MONTHLY_WATER_CUT_BY_AREA_PERMIAN
+    question: What is the monthly water cut by area for Permian wells in Q1 2026?
+    sql: "SELECT AREA, DATE_TRUNC('MONTH', VOLUME_DATE) AS production_month, SUM(WATER_VOLUME) / NULLIF(SUM(OIL_VOLUME) + SUM(WATER_VOLUME), 0) AS water_cut, COUNT(DISTINCT CASE WHEN OIL_VOLUME > 0 OR GAS_VOLUME > 0 OR WATER_VOLUME > 0 THEN COMPLETION_ID END) AS producing_wells FROM ENT_DEV.OPS.DAILY_PRODUCTION_VOLUMES WHERE BU ILIKE 'PERMIAN' AND VOLUME_DATE >= '2026-01-01' AND VOLUME_DATE < '2026-04-01' GROUP BY AREA, DATE_TRUNC('MONTH', VOLUME_DATE) ORDER BY AREA, production_month"
+    verified_at: 1753920000
+    verified_by: CORTEX_CODE
+    use_as_onboarding_question: false
+  - name: CROSS_DOMAIN_TOP_PRODUCERS_WITH_WELL_METADATA
+    question: Show the top 10 producing wells by BOE in January 2026 with their county and state from Global Wells.
+    sql: "SELECT dpv.BU, dpv.AREA, dpv.API_10, dpv.WELL_NAME, w.COUNTY, w.PROVINCE_STATE, w.L48DW_FIELD_NAME, SUM(dpv.OIL_VOLUME) AS total_oil, SUM(dpv.GAS_VOLUME) AS total_gas, SUM(dpv.OIL_VOLUME) + SUM(dpv.GAS_VOLUME) / 6.0 AS total_boe FROM ENT_DEV.OPS.DAILY_PRODUCTION_VOLUMES dpv JOIN L48_PRD.L48_WELLS.WELL w ON dpv.API_10 = LEFT(w.WELL_GOVERNMENT_ID, 10) AND w.WELL_LEVEL_TYPE = 'WO' AND w.ACTIVE_IND = 'Y' WHERE dpv.VOLUME_DATE >= '2026-01-01' AND dpv.VOLUME_DATE < '2026-02-01' AND (dpv.OIL_VOLUME > 0 OR dpv.GAS_VOLUME > 0) GROUP BY dpv.BU, dpv.AREA, dpv.API_10, dpv.WELL_NAME, w.COUNTY, w.PROVINCE_STATE, w.L48DW_FIELD_NAME HAVING total_boe IS NOT NULL ORDER BY total_boe DESC LIMIT 10"
+    verified_at: 1753920000
+    verified_by: CORTEX_CODE
+    use_as_onboarding_question: false
+  - name: BOE_PER_WELL_BY_AREA_JAN_2026
+    question: What is the producing well count and average BOE per well by area for January 2026?
+    sql: "SELECT BU, AREA, COUNT(DISTINCT CASE WHEN OIL_VOLUME > 0 OR GAS_VOLUME > 0 OR WATER_VOLUME > 0 THEN COMPLETION_ID END) AS producing_wells, SUM(OIL_VOLUME) + SUM(GAS_VOLUME) / 6.0 AS total_boe, (SUM(OIL_VOLUME) + SUM(GAS_VOLUME) / 6.0) / NULLIF(COUNT(DISTINCT CASE WHEN OIL_VOLUME > 0 OR GAS_VOLUME > 0 OR WATER_VOLUME > 0 THEN COMPLETION_ID END), 0) AS avg_boe_per_well FROM ENT_DEV.OPS.DAILY_PRODUCTION_VOLUMES WHERE VOLUME_DATE >= '2026-01-01' AND VOLUME_DATE < '2026-02-01' GROUP BY BU, AREA ORDER BY total_boe DESC"
+    verified_at: 1753920000
+    verified_by: CORTEX_CODE
+    use_as_onboarding_question: false
+module_custom_instructions:
+  sql_generation: |
+    1. Always use ILIKE (not LIKE) for text comparisons on BU, AREA, WELL_NAME, COMPLETION_NAME, and COMPLETION_ID.
+    2. NULL means 'not measured' and zero means 'no production that day (shut-in)'. Do NOT use COALESCE to replace NULLs with zero — this conflates the two meanings.
+    3. When filtering for 'producing wells' or 'active wells', use OIL_VOLUME > 0 OR GAS_VOLUME > 0 OR WATER_VOLUME > 0. There is no ACTIVE_IND flag in this domain.
+    4. Negative volume values are prior-period adjustments and should be included in SUM aggregations (do not use ABS).
+    5. Pressure and temperature facts are semi-additive — always aggregate with AVG, never SUM.
+    6. For BOE calculations, use the standard 6:1 conversion: BOE = OIL_VOLUME + (GAS_VOLUME / 6.0).
+    7. API_10 is a 10-digit numeric string — always compare as VARCHAR, never cast to NUMBER.
+    8. For monthly production totals, group by DATE_TRUNC('MONTH', VOLUME_DATE). For annual, use DATE_TRUNC('YEAR', VOLUME_DATE).
+    9. Per-well averages should divide by PRODUCING_WELL_COUNT (wells with volume > 0), not TOTAL_WELL_COUNT (which includes shut-in).

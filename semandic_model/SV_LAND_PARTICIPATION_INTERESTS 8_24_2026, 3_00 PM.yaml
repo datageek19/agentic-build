@@ -1,0 +1,1102 @@
+name: SV_LAND_PARTICIPATION_INTERESTS
+description: Participation and Interests domain covering who owns what percentage in each agreement, ConocoPhillips working interests by property/well, well associations, business associate details (names and addresses), participation interest types, and JVA ownership. Supports queries about partner interests, working interest analysis, well-to-agreement linkages, and business associate lookups.
+tables:
+  - name: QUORUM_QLREPORT_COP_RPA_DSM_PLSE_JVA
+    description: Joint Venture Agreement (JVA) ownership table. Contains ConocoPhillips JVA partner ownership details by property including owner names, ownership types (Working, Royalty), oil and gas gross revenue interest (GRI) percentages, and field/property identifiers. Use this table to answer questions about who owns what percentage of revenue interest in a property under a JVA, or to look up partner-level GRI allocations.
+    base_table:
+      database: L48_PRD
+      schema: L48_LAND
+      table: QUORUM_QLREPORT_COP_RPA_DSM_PLSE_JVA
+    dimensions:
+      - name: ACTIVE_FLAG
+        synonyms:
+          - active flag
+          - JVA active
+        description: Active flag for the JVA record
+        expr: ACTIVE_FLAG
+        data_type: VARCHAR(1)
+        access_modifier: public_access
+      - name: ACTIVE_IND
+        synonyms:
+          - active indicator
+          - is active
+        description: Active indicator flag (Y=Active, N=Inactive)
+        expr: ACTIVE_IND
+        data_type: VARCHAR(1)
+        access_modifier: public_access
+      - name: FIELD_CODE
+        synonyms:
+          - field code
+          - field id
+        description: Field code identifier for the JVA
+        expr: FIELD_CODE
+        data_type: VARCHAR(10)
+        access_modifier: public_access
+      - name: FIELD_DESC
+        synonyms:
+          - field
+          - field description
+          - field name
+        description: Field description/name for the JVA
+        expr: FIELD_DESC
+        data_type: VARCHAR(30)
+        access_modifier: public_access
+      - name: OWNER_NAME
+        synonyms:
+          - JVA owner
+          - owner name
+          - partner name
+        description: Owner/partner name in the JVA
+        expr: OWNER_NAME
+        data_type: VARCHAR(40)
+        access_modifier: public_access
+      - name: OWNER_NUMBER
+        synonyms:
+          - owner id
+          - owner number
+          - partner number
+        description: Owner number identifier in the JVA
+        expr: OWNER_NUMBER
+        data_type: VARCHAR(10)
+        access_modifier: public_access
+      - name: OWNERSHIP_TYPE
+        synonyms:
+          - interest ownership type
+          - JVA ownership type
+          - ownership type
+        description: Ownership type classification in the JVA (e.g., Working, Royalty)
+        expr: OWNERSHIP_TYPE
+        data_type: VARCHAR(3)
+        access_modifier: public_access
+      - name: PROPERTY_NAME
+        synonyms:
+          - property
+          - property name
+        description: Property name for the JVA record
+        expr: PROPERTY_NAME
+        data_type: VARCHAR(40)
+        access_modifier: public_access
+      - name: PROPERTY_NUMBER
+        synonyms:
+          - prop number
+          - property id
+          - property number
+        description: Property number identifier for the JVA record
+        expr: PROPERTY_NUMBER
+        data_type: VARCHAR(12)
+        access_modifier: public_access
+    facts:
+      - name: GAS_GRI
+        synonyms:
+          - gas GRI
+          - gas gross revenue interest
+          - gas revenue interest
+        description: Gas gross revenue interest percentage for the owner
+        expr: GAS_GRI
+        data_type: NUMBER(28,8)
+        access_modifier: public_access
+      - name: OIL_GRI
+        synonyms:
+          - oil GRI
+          - oil gross revenue interest
+          - oil revenue interest
+        description: Oil gross revenue interest percentage for the owner
+        expr: OIL_GRI
+        data_type: NUMBER(28,8)
+        access_modifier: public_access
+    metrics:
+      - name: AVG_GAS_GRI
+        description: Average gas gross revenue interest (GRI) for active JVA records only (ACTIVE_IND = Y). Use this metric when asked about average gas revenue interest across properties or partners.
+        expr: AVG(CASE WHEN ACTIVE_IND ILIKE 'Y' THEN GAS_GRI ELSE NULL END)
+        access_modifier: public_access
+      - name: AVG_OIL_GRI
+        description: Average oil gross revenue interest (GRI) for active JVA records only (ACTIVE_IND = Y). Use this metric when asked about average oil revenue interest across properties or partners.
+        expr: AVG(CASE WHEN ACTIVE_IND ILIKE 'Y' THEN OIL_GRI ELSE NULL END)
+        access_modifier: public_access
+  - name: QUORUM_QLREPORT_PIP_TYPES
+    description: Reference/lookup table for participation interest type codes. Maps PIP_TYPE_CODE (WI, ORRI, RI, NRI) to their full descriptions and category groupings. Use this table to decode interest type codes into human-readable names. Primary key is PIP_TYPE_CODE.
+    base_table:
+      database: L48_PRD
+      schema: L48_LAND
+      table: QUORUM_QLREPORT_PIP_TYPES
+    dimensions:
+      - name: ACTIVE_IND
+        synonyms:
+          - active flag
+          - is active
+        description: Active indicator flag (Y=Active, N=Inactive)
+        expr: ACTIVE_IND
+        data_type: VARCHAR(1)
+        access_modifier: public_access
+      - name: PIP_TYPE_CATG
+        synonyms:
+          - interest category code
+          - PIP category code
+        description: Participation interest type category grouping code
+        expr: PIP_TYPE_CATG
+        data_type: VARCHAR(3)
+        access_modifier: public_access
+      - name: PIP_TYPE_CODE
+        synonyms:
+          - interest type code
+          - participation type code
+          - PIP code
+        description: Participation interest type code (e.g., WI, ORRI, RI, NRI)
+        expr: PIP_TYPE_CODE
+        data_type: VARCHAR(3)
+        access_modifier: public_access
+      - name: PIP_TYPE_DESC
+        synonyms:
+          - interest type
+          - participation type
+          - PIP type description
+        description: Participation interest type description (e.g., Working Interest, Override)
+        expr: PIP_TYPE_DESC
+        data_type: VARCHAR(50)
+        access_modifier: public_access
+    primary_key:
+      columns:
+        - PIP_TYPE_CODE
+  - name: QUORUM_QLREPORT_PIP_TYPE_CATG
+    description: Reference/lookup table for participation interest type categories. Provides the higher-level groupings (Revenue, Cost, Ownership) that organize individual PIP types. Joins to PIP_TYPES via PIP_TYPE_CATG. Use this table to aggregate or filter interests by broad category.
+    base_table:
+      database: L48_PRD
+      schema: L48_LAND
+      table: QUORUM_QLREPORT_PIP_TYPE_CATG
+    dimensions:
+      - name: ACTIVE_IND
+        synonyms:
+          - active flag
+          - is active
+        description: Active indicator flag (Y=Active, N=Inactive)
+        expr: ACTIVE_IND
+        data_type: VARCHAR(1)
+        access_modifier: public_access
+      - name: PIP_TYPE_CATG
+        synonyms:
+          - category code
+          - interest category code
+          - PIP category
+        description: Participation interest type category code
+        expr: PIP_TYPE_CATG
+        data_type: VARCHAR(3)
+        access_modifier: public_access
+      - name: PIP_TYPE_CATG_DESC
+        synonyms:
+          - category description
+          - interest category
+          - PIP category description
+        description: Participation interest type category description (e.g., Revenue, Cost, Ownership)
+        expr: PIP_TYPE_CATG_DESC
+        data_type: VARCHAR(50)
+        access_modifier: public_access
+    primary_key:
+      columns:
+        - PIP_TYPE_CATG
+  - name: QUORUM_QLREPORT_QDV_AGMT_HDR
+    description: Central agreement header table from Quorum Land system. Contains the master record for each land agreement (leases, operating agreements, units, easements) with agreement name, number, type, status, location (state/county), and subject classification. Primary key is ARRG_KEY. This is the hub table that participation, well, and working interest records join to for agreement context.
+    base_table:
+      database: L48_PRD
+      schema: L48_LAND
+      table: QUORUM_QLREPORT_QDV_AGMT_HDR
+    dimensions:
+      - name: ACTIVE_IND
+        synonyms:
+          - active flag
+          - active indicator
+          - is active
+        description: Active indicator flag (Y=Active, N=Inactive)
+        expr: ACTIVE_IND
+        data_type: VARCHAR(1)
+        access_modifier: public_access
+      - name: AGMT_NAME
+        synonyms:
+          - agreement name
+          - contract name
+          - lease name
+        description: Agreement name or title
+        expr: AGMT_NAME
+        data_type: VARCHAR(50)
+        access_modifier: public_access
+      - name: AGMT_NUM
+        synonyms:
+          - agreement number
+          - contract number
+          - lease number
+        description: Agreement number identifier assigned in Quorum
+        expr: AGMT_NUM
+        data_type: VARCHAR(12)
+        access_modifier: public_access
+      - name: ARRG_KEY
+        synonyms:
+          - agreement id
+          - agreement key
+          - arrangement key
+        description: Unique arrangement/agreement identifier key
+        expr: ARRG_KEY
+        data_type: NUMBER(22,0)
+        access_modifier: public_access
+      - name: ARRG_TYPE_CODE
+        synonyms:
+          - agreement type code
+          - arrangement type code
+        description: Arrangement type code (e.g., LSE, OA, UNT)
+        expr: ARRG_TYPE_CODE
+        data_type: VARCHAR(3)
+        access_modifier: public_access
+      - name: ARRG_TYPE_DESC
+        synonyms:
+          - agreement type
+          - agreement type description
+          - arrangement type
+        description: Arrangement type description (e.g., Lease, Operating Agreement, Unit)
+        expr: ARRG_TYPE_DESC
+        data_type: VARCHAR(50)
+        access_modifier: public_access
+      - name: CNTY_NAME
+        synonyms:
+          - county
+          - county name
+        description: County name for the agreement location
+        expr: CNTY_NAME
+        data_type: VARCHAR(50)
+        access_modifier: public_access
+      - name: GPOL_ST_NAME
+        synonyms:
+          - geopolitical state
+          - state
+          - state name
+        description: Full state name (geopolitical state name)
+        expr: GPOL_ST_NAME
+        data_type: VARCHAR(50)
+        access_modifier: public_access
+      - name: ST_PSTL_ABBR
+        synonyms:
+          - state abbr
+          - state abbreviation
+          - state postal code
+        description: Two-letter state postal abbreviation (e.g., ND, TX, OK)
+        expr: ST_PSTL_ABBR
+        data_type: VARCHAR(10)
+        access_modifier: public_access
+      - name: SUBJ_CODE
+        synonyms:
+          - agreement subject code
+          - subject code
+        description: Subject classification code for the agreement
+        expr: SUBJ_CODE
+        data_type: VARCHAR(3)
+        access_modifier: public_access
+      - name: SUBJ_DESC
+        synonyms:
+          - agreement subject
+          - subject description
+        description: Subject classification description (e.g., Lease, Permit, Easement)
+        expr: SUBJ_DESC
+        data_type: VARCHAR(30)
+        access_modifier: public_access
+    primary_key:
+      columns:
+        - ARRG_KEY
+  - name: QUORUM_QLREPORT_QDV_BA_ADDRESS
+    description: Business associate address table. Contains mailing, physical, and payment addresses for business associates (partners, lessors, operators). Includes street address, city, state, zip, country, phone, and email. Primary key is PRTP_ADDR_KEY. Joins to BA_NAME via PRTP_KEY.
+    base_table:
+      database: L48_PRD
+      schema: L48_LAND
+      table: QUORUM_QLREPORT_QDV_BA_ADDRESS
+    dimensions:
+      - name: ACTIVE_IND
+        synonyms:
+          - active flag
+          - is active
+        description: Active indicator flag (Y=Active, N=Inactive)
+        expr: ACTIVE_IND
+        data_type: VARCHAR(1)
+        access_modifier: public_access
+      - name: ADDR_LINE_1
+        synonyms:
+          - address
+          - address line 1
+          - street address
+        description: Street address line 1
+        expr: ADDR_LINE_1
+        data_type: VARCHAR(50)
+        access_modifier: public_access
+      - name: ADDR_LINE_2
+        synonyms:
+          - address line 2
+          - suite
+        description: Street address line 2 (suite, floor, etc.)
+        expr: ADDR_LINE_2
+        data_type: VARCHAR(50)
+        access_modifier: public_access
+      - name: CTRY_NAME
+        synonyms:
+          - country
+          - country name
+        description: Country name for the business associate address
+        expr: CTRY_NAME
+        data_type: VARCHAR(50)
+        access_modifier: public_access
+      - name: CTY
+        synonyms:
+          - address city
+          - city
+        description: City for the business associate address
+        expr: CTY
+        data_type: VARCHAR(50)
+        access_modifier: public_access
+      - name: EMAIL
+        synonyms:
+          - e-mail
+          - email
+          - email address
+        description: Email address of the business associate
+        expr: EMAIL
+        data_type: VARCHAR(50)
+        access_modifier: public_access
+      - name: GPOL_ST_NAME
+        synonyms:
+          - state
+          - state name
+        description: State name for the business associate address
+        expr: GPOL_ST_NAME
+        data_type: VARCHAR(50)
+        access_modifier: public_access
+      - name: PRTP_ADDR_KEY
+        synonyms:
+          - address id
+          - address key
+        description: Participant address unique key identifier
+        expr: PRTP_ADDR_KEY
+        data_type: VARCHAR(10)
+        access_modifier: public_access
+      - name: PRTP_KEY
+        synonyms:
+          - business associate key
+          - participant key
+        description: Participant key linking address to business associate
+        expr: PRTP_KEY
+        data_type: NUMBER(10,0)
+        access_modifier: public_access
+      - name: WORK_PHON
+        synonyms:
+          - phone number
+          - telephone
+          - work phone
+        description: Work phone number of the business associate
+        expr: WORK_PHON
+        data_type: VARCHAR(25)
+        access_modifier: public_access
+      - name: ZIP_CODE
+        synonyms:
+          - postal code
+          - zip
+          - zip code
+        description: ZIP/postal code for the address
+        expr: ZIP_CODE
+        data_type: VARCHAR(11)
+        access_modifier: public_access
+    primary_key:
+      columns:
+        - PRTP_ADDR_KEY
+  - name: QUORUM_QLREPORT_QDV_BA_ADDR_USAGES
+    description: Address usage classification table for business associates. Identifies the purpose of each address (Mailing Address, Check Address, Physical Address). Joins to BA_ADDRESS via PRTP_ADDR_KEY.
+    base_table:
+      database: L48_PRD
+      schema: L48_LAND
+      table: QUORUM_QLREPORT_QDV_BA_ADDR_USAGES
+    dimensions:
+      - name: ACTIVE_IND
+        synonyms:
+          - active flag
+          - is active
+        description: Active indicator flag (Y=Active, N=Inactive)
+        expr: ACTIVE_IND
+        data_type: VARCHAR(1)
+        access_modifier: public_access
+      - name: PRTP_ADDR_KEY
+        synonyms:
+          - address id
+          - address key
+        description: Participant address key linking usage to address
+        expr: PRTP_ADDR_KEY
+        data_type: VARCHAR(10)
+        access_modifier: public_access
+      - name: USAGE_DESC
+        synonyms:
+          - address purpose
+          - address usage
+          - usage description
+        description: Address usage description (e.g., Mailing Address, Check Address)
+        expr: USAGE_DESC
+        data_type: VARCHAR(50)
+        access_modifier: public_access
+      - name: USAGE_TYPE
+        synonyms:
+          - address usage type
+          - usage type code
+        description: Address usage type code (e.g., Mailing, Physical, Payment)
+        expr: USAGE_TYPE
+        data_type: VARCHAR(3)
+        access_modifier: public_access
+  - name: QUORUM_QLREPORT_QDV_BA_NAME
+    description: Business associate name and identity table. Contains partner/lessor/operator names, types (Individual, Corporation, Trust), and tax classification. Primary key is PRTP_KEY.
+    base_table:
+      database: L48_PRD
+      schema: L48_LAND
+      table: QUORUM_QLREPORT_QDV_BA_NAME
+    dimensions:
+      - name: ACTIVE_IND
+        synonyms:
+          - active flag
+          - is active
+        description: Active indicator flag (Y=Active, N=Inactive)
+        expr: ACTIVE_IND
+        data_type: VARCHAR(1)
+        access_modifier: public_access
+      - name: PRTP_KEY
+        synonyms:
+          - business associate key
+          - participant key
+          - party key
+        description: Participant/business associate unique key identifier
+        expr: PRTP_KEY
+        data_type: NUMBER(10,0)
+        access_modifier: public_access
+      - name: PRTP_NAME_LINE_1
+        synonyms:
+          - business associate name
+          - name
+          - participant name
+          - partner name
+        description: Business associate primary name line
+        expr: PRTP_NAME_LINE_1
+        data_type: VARCHAR(60)
+        access_modifier: public_access
+      - name: PRTP_NAME_LINE_2
+        synonyms:
+          - DBA name
+          - name line 2
+          - secondary name
+        description: Business associate secondary name line (DBA, attention, etc.)
+        expr: PRTP_NAME_LINE_2
+        data_type: VARCHAR(60)
+        access_modifier: public_access
+      - name: PRTP_TYPE_CODE
+        synonyms:
+          - participant type code
+          - party type code
+        description: Participant type code classifying the business associate
+        expr: PRTP_TYPE_CODE
+        data_type: VARCHAR(3)
+        access_modifier: public_access
+      - name: PRTP_TYPE_DESC
+        synonyms:
+          - business associate type
+          - participant type
+          - party type
+        description: Participant type description (e.g., Individual, Corporation, Trust)
+        expr: PRTP_TYPE_DESC
+        data_type: VARCHAR(50)
+        access_modifier: public_access
+      - name: TAX_TYPE_CODE
+        synonyms:
+          - tax id type
+          - tax type code
+        description: Tax type code for the business associate (EIN, SSN, etc.)
+        expr: TAX_TYPE_CODE
+        data_type: VARCHAR(3)
+        access_modifier: public_access
+      - name: TAX_TYPE_DESC
+        synonyms:
+          - tax type
+          - tax type description
+        description: Tax type description (e.g., Federal EIN, Social Security Number)
+        expr: TAX_TYPE_DESC
+        data_type: VARCHAR(30)
+        access_modifier: public_access
+    primary_key:
+      columns:
+        - PRTP_KEY
+  - name: QUORUM_QLREPORT_QDV_COP_WI
+    description: ConocoPhillips working interest table by property. Contains COP-specific interest percentages including Working Interest (WI), Before Payout (BPO), After Payout (APO), Carried Interest, and Net Cost/Sales Interest (NCI/NSI). Also includes organizational context such as business unit, asset area, prospect, contract area, and property status. Use this table for COP ownership percentages or organizational allocation of working interests. Joins to AGMT_HDR via CONTRACT_ARRG_KEY.
+    base_table:
+      database: L48_PRD
+      schema: L48_LAND
+      table: QUORUM_QLREPORT_QDV_COP_WI
+    dimensions:
+      - name: ACTIVE_IND
+        synonyms:
+          - active flag
+          - is active
+        description: Active indicator flag (Y=Active, N=Inactive)
+        expr: ACTIVE_IND
+        data_type: VARCHAR(1)
+        access_modifier: public_access
+      - name: ASSET_AREA_CODE
+        synonyms:
+          - asset area id
+          - asset code
+        description: Asset area identification code
+        expr: ASSET_AREA_CODE
+        data_type: VARCHAR(20)
+        access_modifier: public_access
+      - name: ASSET_AREA_DESCRIPTION
+        synonyms:
+          - asset area
+          - asset area name
+        description: Asset area name/description
+        expr: ASSET_AREA_DESCRIPTION
+        data_type: VARCHAR(300)
+        access_modifier: public_access
+      - name: BUSINESS_UNIT_CODE
+        synonyms:
+          - BU code
+          - business unit id
+        description: Business unit code managing the property
+        expr: BUSINESS_UNIT_CODE
+        data_type: VARCHAR(20)
+        access_modifier: public_access
+      - name: BUSINESS_UNIT_DESCRIPTION
+        synonyms:
+          - BU name
+          - business unit
+          - business unit name
+        description: Business unit name/description
+        expr: BUSINESS_UNIT_DESCRIPTION
+        data_type: VARCHAR(300)
+        access_modifier: public_access
+      - name: CONTRACT_ARE_NAME
+        synonyms:
+          - area name
+          - contract area
+          - contract area name
+        description: Contract area name identifying the geographic/business area
+        expr: CONTRACT_ARE_NAME
+        data_type: VARCHAR(50)
+        access_modifier: public_access
+      - name: CONTRACT_ARRG_KEY
+        synonyms:
+          - contract agreement key
+          - contract arrangement key
+        description: Contract arrangement key linking COP working interest to agreement
+        expr: CONTRACT_ARRG_KEY
+        data_type: NUMBER(10,0)
+        access_modifier: public_access
+      - name: CONTRACT_NUMBER
+        synonyms:
+          - contract id
+          - contract number
+        description: Contract number for the COP working interest record
+        expr: CONTRACT_NUMBER
+        data_type: VARCHAR(12)
+        access_modifier: public_access
+      - name: COPAS_YEAR
+        synonyms:
+          - accounting standard year
+          - COPAS year
+        description: COPAS (Council of Petroleum Accountants Societies) accounting year version
+        expr: COPAS_YEAR
+        data_type: VARCHAR(50)
+        access_modifier: public_access
+      - name: PROP_STATUS
+        synonyms:
+          - property status
+          - status
+        description: Property status (e.g., Active, Inactive, Suspense)
+        expr: PROP_STATUS
+        data_type: VARCHAR(3)
+        access_modifier: public_access
+      - name: PROPERTY_NAME
+        synonyms:
+          - property
+          - property name
+        description: Property name for the working interest
+        expr: PROPERTY_NAME
+        data_type: VARCHAR(50)
+        access_modifier: public_access
+      - name: PROPERTY_NUM
+        synonyms:
+          - prop number
+          - property id
+          - property number
+        description: Property number identifier for the working interest
+        expr: PROPERTY_NUM
+        data_type: VARCHAR(12)
+        access_modifier: public_access
+      - name: PROSPECT_CODE
+        synonyms:
+          - prospect id
+          - prospect identifier
+        description: Prospect area identification code
+        expr: PROSPECT_CODE
+        data_type: VARCHAR(20)
+        access_modifier: public_access
+      - name: PROSPECT_DESCRIPTION
+        synonyms:
+          - prospect
+          - prospect name
+        description: Prospect area name/description
+        expr: PROSPECT_DESCRIPTION
+        data_type: VARCHAR(300)
+        access_modifier: public_access
+      - name: ST_PSTL_ABBR
+        synonyms:
+          - state
+          - state abbreviation
+        description: Two-letter state postal abbreviation for the property
+        expr: ST_PSTL_ABBR
+        data_type: VARCHAR(10)
+        access_modifier: public_access
+    facts:
+      - name: APO
+        synonyms:
+          - after payout
+          - after payout interest
+          - APO interest
+        description: After payout interest percentage
+        expr: APO
+        data_type: NUMBER(28,6)
+        access_modifier: public_access
+      - name: BPO
+        synonyms:
+          - before payout
+          - before payout interest
+          - BPO interest
+        description: Before payout interest percentage
+        expr: BPO
+        data_type: NUMBER(28,6)
+        access_modifier: public_access
+      - name: CARRIED_INT
+        synonyms:
+          - carried interest
+          - carried interest percent
+        description: Carried interest percentage where costs are borne by another party
+        expr: CARRIED_INT
+        data_type: NUMBER(28,6)
+        access_modifier: public_access
+      - name: COP_NCI_NSI
+        synonyms:
+          - COP NCI NSI
+          - net cost interest
+          - net sales interest
+        description: ConocoPhillips Net Cost Interest / Net Sales Interest
+        expr: COP_NCI_NSI
+        data_type: NUMBER(28,6)
+        access_modifier: public_access
+      - name: WI
+        synonyms:
+          - COP working interest
+          - WI percent
+          - working interest
+        description: Working interest percentage for ConocoPhillips
+        expr: WI
+        data_type: NUMBER(28,6)
+        access_modifier: public_access
+    metrics:
+      - name: AVG_APO_INTEREST
+        description: Average after payout (APO) interest for active records. Use when asked about average APO or after payout interest percentages.
+        expr: AVG(CASE WHEN ACTIVE_IND ILIKE 'Y' AND APO > 0 THEN APO END)
+        access_modifier: public_access
+      - name: AVG_BPO_INTEREST
+        description: Average before payout (BPO) interest for active records. Use when asked about average BPO or before payout interest percentages.
+        expr: AVG(CASE WHEN ACTIVE_IND ILIKE 'Y' AND BPO > 0 THEN BPO END)
+        access_modifier: public_access
+      - name: AVG_COP_NCI_NSI
+        description: Average ConocoPhillips Net Cost Interest / Net Sales Interest for active records only (ACTIVE_IND = Y). Use this metric when asked about average net cost or net sales interest.
+        expr: AVG(CASE WHEN ACTIVE_IND ILIKE 'Y' THEN COP_NCI_NSI ELSE NULL END)
+        access_modifier: public_access
+      - name: AVG_COP_WORKING_INTEREST
+        description: Average ConocoPhillips working interest (WI) percentage for active records only (ACTIVE_IND = Y). Use this metric when asked about average COP working interest across properties or agreements.
+        expr: AVG(CASE WHEN ACTIVE_IND ILIKE 'Y' THEN WI ELSE NULL END)
+        access_modifier: public_access
+  - name: QUORUM_QLREPORT_QDV_PARTICIPATION
+    description: Detailed participation interest records showing who owns what percentage in each agreement. Each row represents a specific interest type (WI, ORRI, RI) held by a specific participant in a specific agreement/subdivision. Key attributes include interest percentage (PCT_INT), operator flag, COP share inclusion flag, and participant details. Primary key is DESG_KEY. This is the core table for partner ownership breakdown by agreement.
+    base_table:
+      database: L48_PRD
+      schema: L48_LAND
+      table: QUORUM_QLREPORT_QDV_PARTICIPATION
+    dimensions:
+      - name: ACTIVE_IND
+        synonyms:
+          - active flag
+          - is active
+        description: Active indicator flag (Y=Active, N=Inactive)
+        expr: ACTIVE_IND
+        data_type: VARCHAR(1)
+        access_modifier: public_access
+      - name: AGMT_NUM
+        synonyms:
+          - agreement number
+          - contract number
+        description: Agreement number for the participation record
+        expr: AGMT_NUM
+        data_type: VARCHAR(12)
+        access_modifier: public_access
+      - name: ARRG_DSCR
+        synonyms:
+          - agreement description
+          - arrangement description
+        description: Arrangement description text for the participation
+        expr: ARRG_DSCR
+        data_type: VARCHAR(3)
+        access_modifier: public_access
+      - name: ARRG_KEY
+        synonyms:
+          - agreement key
+          - arrangement key
+        description: Arrangement key linking participation to the agreement
+        expr: ARRG_KEY
+        data_type: NUMBER(10,0)
+        access_modifier: public_access
+      - name: CTY
+        synonyms:
+          - city
+          - participant city
+        description: City for the participant's address
+        expr: CTY
+        data_type: VARCHAR(50)
+        access_modifier: public_access
+      - name: DESG_KEY
+        synonyms:
+          - designation key
+          - participation id
+          - participation record key
+        description: Designation key uniquely identifying a participation record
+        expr: DESG_KEY
+        data_type: NUMBER(10,0)
+        access_modifier: public_access
+      - name: GPOL_ST_NAME
+        synonyms:
+          - state
+          - state name
+        description: State name for the participant's address
+        expr: GPOL_ST_NAME
+        data_type: VARCHAR(50)
+        access_modifier: public_access
+      - name: INCL_IN_CO_SHARE
+        synonyms:
+          - company share flag
+          - COP share indicator
+          - included in COP share
+        description: Flag indicating if participant is included in ConocoPhillips share calculation
+        expr: INCL_IN_CO_SHARE
+        data_type: VARCHAR(1)
+        access_modifier: public_access
+      - name: OPER_FLAG
+        synonyms:
+          - is operator
+          - operator flag
+          - operator indicator
+        description: Operator flag indicating if participant is the operator (Y/N)
+        expr: OPER_FLAG
+        data_type: VARCHAR(1)
+        access_modifier: public_access
+      - name: PIP_TYPE_CATG
+        synonyms:
+          - interest category code
+          - PIP category
+        description: Participation interest type category code for grouping
+        expr: PIP_TYPE_CATG
+        data_type: VARCHAR(3)
+        access_modifier: public_access
+      - name: PIP_TYPE_CATG_DESC
+        synonyms:
+          - interest category
+          - participation category
+          - PIP category description
+        description: Participation interest type category description
+        expr: PIP_TYPE_CATG_DESC
+        data_type: VARCHAR(30)
+        access_modifier: public_access
+      - name: PIP_TYPE_CODE
+        synonyms:
+          - interest type code
+          - participation type code
+          - PIP code
+        description: Participation interest type code (e.g., WI, ORRI, RI)
+        expr: PIP_TYPE_CODE
+        data_type: VARCHAR(3)
+        access_modifier: public_access
+      - name: PIP_TYPE_DESC
+        synonyms:
+          - interest type
+          - participation type
+          - PIP type description
+        description: Participation interest type description (e.g., Working Interest, Overriding Royalty)
+        expr: PIP_TYPE_DESC
+        data_type: VARCHAR(30)
+        access_modifier: public_access
+      - name: PRTP_ADDR_KEY
+        synonyms:
+          - address key
+          - participant address key
+        description: Participant address key linking to address details
+        expr: PRTP_ADDR_KEY
+        data_type: VARCHAR(10)
+        access_modifier: public_access
+      - name: PRTP_KEY
+        synonyms:
+          - business associate key
+          - participant key
+          - party key
+        description: Participant/business associate key identifier
+        expr: PRTP_KEY
+        data_type: NUMBER(10,0)
+        access_modifier: public_access
+      - name: PRTP_NAME_LINE_1
+        synonyms:
+          - business associate name
+          - owner name
+          - participant name
+          - partner name
+        description: Participant name (first line - primary name)
+        expr: PRTP_NAME_LINE_1
+        data_type: VARCHAR(60)
+        access_modifier: public_access
+      - name: SUBS_NUM
+        synonyms:
+          - sub number
+          - subdivision number
+        description: Subdivision number within the agreement
+        expr: SUBS_NUM
+        data_type: VARCHAR(3)
+        access_modifier: public_access
+    facts:
+      - name: PCT_INT
+        synonyms:
+          - interest percent
+          - interest percentage
+          - ownership percentage
+          - percent interest
+        description: Participation interest percentage owned by the participant
+        expr: PCT_INT
+        data_type: NUMBER(10,8)
+        access_modifier: public_access
+    metrics:
+      - name: AVG_PARTICIPATION_INTEREST
+        description: Average participation interest percentage for active records only (ACTIVE_IND = Y). Use this metric when asked about average ownership percentage or average interest held by participants.
+        expr: AVG(CASE WHEN ACTIVE_IND ILIKE 'Y' THEN PCT_INT ELSE NULL END)
+        access_modifier: public_access
+      - name: TOTAL_PARTICIPATION_INTEREST
+        description: Sum of all participation interest percentages for active records only (ACTIVE_IND = Y). Use this metric when asked about total interest or combined ownership in an agreement.
+        expr: SUM(CASE WHEN ACTIVE_IND ILIKE 'Y' THEN PCT_INT ELSE 0 END)
+        access_modifier: public_access
+    primary_key:
+      columns:
+        - DESG_KEY
+  - name: QUORUM_QLREPORT_QDV_RELATED_WELL_AGMT
+    description: Well-to-agreement association table. Links wells to their parent agreements providing well details including API number, well name/number, production status, operator, geological formations (top/base), basin, county/state, and DOE field. Use this table to find which wells are under a specific agreement or to look up well attributes. Joins to AGMT_HDR via ARRG_KEY.
+    base_table:
+      database: L48_PRD
+      schema: L48_LAND
+      table: QUORUM_QLREPORT_QDV_RELATED_WELL_AGMT
+    dimensions:
+      - name: ACTIVE_IND
+        synonyms:
+          - active flag
+          - is active
+        description: Active indicator flag (Y=Active, N=Inactive)
+        expr: ACTIVE_IND
+        data_type: VARCHAR(1)
+        access_modifier: public_access
+      - name: AGMT_NUM
+        synonyms:
+          - agreement number
+          - contract number
+        description: Agreement number associated with the well
+        expr: AGMT_NUM
+        data_type: VARCHAR(12)
+        access_modifier: public_access
+      - name: API_NUMBER
+        synonyms:
+          - API number
+          - API well number
+        description: API (American Petroleum Institute) well number
+        expr: API_NUMBER
+        data_type: VARCHAR(250)
+        access_modifier: public_access
+      - name: API10
+        synonyms:
+          - API
+        description: API well number (first 10 digits of API_NUMBER, standard API10 format)
+        expr: LEFT(API_NUMBER, 10)
+        data_type: VARCHAR(250)
+        access_modifier: public_access
+      - name: ARRG_KEY
+        synonyms:
+          - agreement key
+          - arrangement key
+        description: Arrangement key linking well to agreement
+        expr: ARRG_KEY
+        data_type: NUMBER(22,0)
+        access_modifier: public_access
+      - name: BASE_FORMATION
+        synonyms:
+          - base formation
+          - bottom formation
+          - lower formation
+        description: Base geological formation for the well completion
+        expr: BASE_FORMATION
+        data_type: VARCHAR(250)
+        access_modifier: public_access
+      - name: BASIN
+        synonyms:
+          - basin
+          - geological basin
+          - well basin
+        description: Basin name where the well is located
+        expr: BASIN
+        data_type: VARCHAR(250)
+        access_modifier: public_access
+      - name: COUNTY
+        synonyms:
+          - county
+          - well county
+        description: County where the well is located
+        expr: COUNTY
+        data_type: VARCHAR(250)
+        access_modifier: public_access
+      - name: DOE_FIELD
+        synonyms:
+          - DOE field
+          - DOE field name
+          - field
+        description: DOE (Department of Energy) field classification
+        expr: DOE_FIELD
+        data_type: VARCHAR(250)
+        access_modifier: public_access
+      - name: OPERATOR
+        synonyms:
+          - operator
+          - operator name
+          - well operator
+        description: Operator name responsible for the well
+        expr: OPERATOR
+        data_type: VARCHAR(250)
+        access_modifier: public_access
+      - name: PRD_STATUS
+        synonyms:
+          - prod status
+          - production status
+          - well status
+        description: Production status of the well (e.g., Producing, Shut-In, P&A)
+        expr: PRD_STATUS
+        data_type: VARCHAR(250)
+        access_modifier: public_access
+      - name: STATE
+        synonyms:
+          - state
+          - well state
+        description: State where the well is located
+        expr: STATE
+        data_type: VARCHAR(250)
+        access_modifier: public_access
+      - name: TOP_FORMATION
+        synonyms:
+          - top formation
+          - upper formation
+        description: Top geological formation for the well completion
+        expr: TOP_FORMATION
+        data_type: VARCHAR(250)
+        access_modifier: public_access
+      - name: WELL_KEY
+        synonyms:
+          - well id
+          - well identifier
+          - well key
+        description: Unique well identifier key
+        expr: WELL_KEY
+        data_type: VARCHAR(32)
+        access_modifier: public_access
+      - name: WELL_NAME
+        synonyms:
+          - well
+          - well name
+        description: Well name
+        expr: WELL_NAME
+        data_type: VARCHAR(250)
+        access_modifier: public_access
+      - name: WELL_NUMBER
+        synonyms:
+          - well num
+          - well number
+        description: Well number identifier
+        expr: WELL_NUMBER
+        data_type: VARCHAR(250)
+        access_modifier: public_access
+relationships:
+  - name: PIP_TYPES_TO_CATG
+    left_table: QUORUM_QLREPORT_PIP_TYPES
+    right_table: QUORUM_QLREPORT_PIP_TYPE_CATG
+    relationship_columns:
+      - left_column: PIP_TYPE_CATG
+        right_column: PIP_TYPE_CATG
+    join_type: left_outer
+  - name: BA_ADDRESS_TO_BA_NAME
+    left_table: QUORUM_QLREPORT_QDV_BA_ADDRESS
+    right_table: QUORUM_QLREPORT_QDV_BA_NAME
+    relationship_columns:
+      - left_column: PRTP_KEY
+        right_column: PRTP_KEY
+    join_type: inner
+  - name: ADDR_USAGES_TO_ADDRESS
+    left_table: QUORUM_QLREPORT_QDV_BA_ADDR_USAGES
+    right_table: QUORUM_QLREPORT_QDV_BA_ADDRESS
+    relationship_columns:
+      - left_column: PRTP_ADDR_KEY
+        right_column: PRTP_ADDR_KEY
+    join_type: inner
+  - name: COP_WI_TO_AGMT
+    left_table: QUORUM_QLREPORT_QDV_COP_WI
+    right_table: QUORUM_QLREPORT_QDV_AGMT_HDR
+    relationship_columns:
+      - left_column: CONTRACT_ARRG_KEY
+        right_column: ARRG_KEY
+    join_type: left_outer
+  - name: PARTICIPATION_TO_AGMT
+    left_table: QUORUM_QLREPORT_QDV_PARTICIPATION
+    right_table: QUORUM_QLREPORT_QDV_AGMT_HDR
+    relationship_columns:
+      - left_column: ARRG_KEY
+        right_column: ARRG_KEY
+    join_type: inner
+  - name: PARTICIPATION_TO_BA_NAME
+    left_table: QUORUM_QLREPORT_QDV_PARTICIPATION
+    right_table: QUORUM_QLREPORT_QDV_BA_NAME
+    relationship_columns:
+      - left_column: PRTP_KEY
+        right_column: PRTP_KEY
+    join_type: left_outer
+  - name: PARTICIPATION_TO_PIP_TYPES
+    left_table: QUORUM_QLREPORT_QDV_PARTICIPATION
+    right_table: QUORUM_QLREPORT_PIP_TYPES
+    relationship_columns:
+      - left_column: PIP_TYPE_CODE
+        right_column: PIP_TYPE_CODE
+    join_type: left_outer
+  - name: WELL_AGMT_TO_AGMT
+    left_table: QUORUM_QLREPORT_QDV_RELATED_WELL_AGMT
+    right_table: QUORUM_QLREPORT_QDV_AGMT_HDR
+    relationship_columns:
+      - left_column: ARRG_KEY
+        right_column: ARRG_KEY
+    join_type: inner
+verified_queries:
+  - name: OPERATING_AGREEMENTS_FOR_PROPERTY_NUMBERS
+    sql: SELECT DISTINCT h.AGMT_NUM AS operating_agreement_number, h.AGMT_NAME AS operating_agreement_name, h.ARRG_TYPE_DESC AS arrg_type_desc, w.PROPERTY_NUM AS property_number, w.PROPERTY_NAME AS property_name FROM L48_PRD.L48_LAND.QUORUM_QLREPORT_QDV_COP_WI AS w JOIN L48_PRD.L48_LAND.QUORUM_QLREPORT_QDV_AGMT_HDR AS h ON w.CONTRACT_ARRG_KEY = h.ARRG_KEY WHERE w.ACTIVE_IND ILIKE 'Y' AND h.ACTIVE_IND ILIKE 'Y' AND w.PROPERTY_NUM IN ('A776589', 'A775008', 'A773771', 'A773774', 'A774304', 'A774234', 'A774804', 'A773944', 'A774544', 'A774058', 'A774661', 'A774746', 'A774119', 'A774390', 'A774512', 'A774486', 'A776834', 'A776855', 'A774842', 'A776754', 'A773813', 'A774251', 'A774358', 'A774179', 'A773800', 'A774754', 'A774970', 'A774064', 'A775984', 'A767848', 'A767093', 'A767823', 'A780799', 'A778332', 'A778333', 'A774395', 'A774671', 'A773983', 'A758397') AND (h.ARRG_TYPE_DESC ILIKE '%OPERATING AGREEMENT%' OR h.ARRG_TYPE_DESC ILIKE '%JOINT OPERATING AGREEMENT%' OR h.SUBJ_DESC ILIKE '%OPERATING AGREEMENT%' OR h.SUBJ_DESC ILIKE '%JOINT OPERATING AGREEMENT%') ORDER BY operating_agreement_number ASC, property_number ASC
+    question: 'List Operating Agreements related to the following Property Numbers: A776589, A775008, A773771, A773774, A774304, A774234, A774804, A773944, A774544, A774058, A774661, A774746, A774119, A774390, A774512, A774486, A776834, A776855, A774842, A776754, A773813, A774251, A774358, A774179, A773800, A774754, A774970, A774064, A775984, A767848, A767093, A767823, A780799, A778332, A778333, A774395, A774671, A773983, A758397.'
+    verified_at: 1752624000
+    verified_by: KUNDAN.B.KUMAR
+    use_as_onboarding_question: false
+  - name: WELL_DETAILS_WITH_OPERATOR_WORKING_INTEREST
+    sql: SELECT w.ARRG_KEY AS agreement_key, w.AGMT_NUM AS agreement_number, w.WELL_KEY AS well_key, w.API_NUMBER AS api_number, w.WELL_NAME AS well_name, w.PRD_STATUS AS production_status, w.OPERATOR AS operator, w.STATE AS state, w.COUNTY AS county, w.BASIN AS basin, w.TOP_FORMATION AS top_formation, w.BASE_FORMATION AS base_formation, c.PROPERTY_NUM AS property_number, c.PROPERTY_NAME AS property_name, c.CONTRACT_NUMBER AS contract_number, c.BUSINESS_UNIT_DESCRIPTION AS business_unit_description, c.ASSET_AREA_DESCRIPTION AS asset_area_description, c.PROSPECT_DESCRIPTION AS prospect_description, c.WI AS operator_working_interest, c.BPO AS bpo, c.APO AS apo FROM L48_PRD.L48_LAND.QUORUM_QLREPORT_QDV_RELATED_WELL_AGMT AS w JOIN L48_PRD.L48_LAND.QUORUM_QLREPORT_QDV_COP_WI AS c ON w.ARRG_KEY = c.CONTRACT_ARRG_KEY WHERE w.ACTIVE_IND ILIKE 'Y' AND c.ACTIVE_IND ILIKE 'Y' ORDER BY w.ARRG_KEY, w.AGMT_NUM, w.WELL_KEY, c.PROPERTY_NUM
+    question: What are the well details linked to agreements with their operator working interest from COP_WI?
+    verified_at: 1784543345
+    verified_by: KUNDAN.B.KUMAR
+    use_as_onboarding_question: false
+module_custom_instructions:
+  sql_generation: |-
+    1. Always use ILIKE instead of LIKE for all string comparisons and pattern matching. 2. Always include ACTIVE_IND = 'Y' filter condition on every table referenced in the query to ensure only active records are returned.
+    3. When filtering by agreement type or subject description, use ILIKE (e.g., ARRG_TYPE_DESC ILIKE '%Operating Agreement%') rather than UPPER() with LIKE. 4. When joining multiple tables, apply ACTIVE_IND = 'Y' on each table independently.

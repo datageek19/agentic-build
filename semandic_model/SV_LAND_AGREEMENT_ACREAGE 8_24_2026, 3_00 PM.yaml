@@ -1,0 +1,85 @@
+name: SV_LAND_AGREEMENT_ACREAGE
+description: Land Agreement and Acreage Management domain covering the core agreement lifecycle, acreage tracking, geographic context (basins and prospects), related agreements, document links, and remarks. Central grain is ARRG_KEY from the agreement header table. Supports queries about agreement types, acreage by state/county, basin geography, prospect areas, and agreement relationships.
+tables:
+  - name: QUORUM_QLREPORT_QDV_ACREAGE_AGM
+    description: Acreage detail table for land agreements. Contains the breakdown of acreage by type (gross, net mineral, net surface, net revenue interest) for each agreement.
+    base_table:
+      database: L48_PRD
+      schema: L48_LAND
+      table: QUORUM_QLREPORT_QDV_ACREAGE_AGM
+    dimensions:
+      - name: ACRE_TYPE_CODE
+        synonyms:
+          - acre type
+          - acreage type code
+        description: Acreage type code (e.g., ACO=CO Net, AGR=Gross, ANT=Net)
+        expr: ACRE_TYPE_CODE
+        data_type: VARCHAR(3)
+        access_modifier: public_access
+      - name: ACRE_UNIT_CODE
+        synonyms:
+          - acre unit code
+          - unit of measure code
+        description: Acreage unit of measure code (e.g., ACR for acres)
+        expr: ACRE_UNIT_CODE
+        data_type: VARCHAR(3)
+        access_modifier: public_access
+      - name: ACTIVE_IND
+        synonyms:
+          - active flag
+          - is active
+        description: Active indicator flag (Y=Active, N=Inactive)
+        expr: ACTIVE_IND
+        data_type: VARCHAR(1)
+        access_modifier: public_access
+      - name: ARRG_KEY
+        synonyms:
+          - agreement key
+          - arrangement key
+        description: Arrangement key linking acreage to the agreement header
+        expr: ARRG_KEY
+        data_type: NUMBER(10,0)
+        access_modifier: public_access
+    facts:
+      - name: ACRE_AMT
+        synonyms:
+          - acre amount
+          - acreage amount
+          - acres
+          - number of acres
+        description: Acreage amount for the specified acre type
+        expr: ACRE_AMT
+        data_type: NUMBER(13,6)
+        access_modifier: public_access
+    metrics:
+      - name: TOTAL_CO_NET_ACREAGE
+        description: Total CO net acreage (ACRE_TYPE_CODE = ACO) for active records only.
+        expr: SUM(CASE WHEN ACRE_TYPE_CODE ILIKE 'ACO' AND ACTIVE_IND ILIKE 'Y' THEN ACRE_AMT ELSE 0 END)
+        access_modifier: public_access
+      - name: TOTAL_GROSS_ACREAGE
+        description: Total gross acreage (ACRE_TYPE_CODE = AGR) for active records only.
+        expr: SUM(CASE WHEN ACRE_TYPE_CODE ILIKE 'AGR' AND ACTIVE_IND ILIKE 'Y' THEN ACRE_AMT ELSE 0 END)
+        access_modifier: public_access
+      - name: TOTAL_NET_ACREAGE
+        description: Total net acreage (ACRE_TYPE_CODE = ANT) for active records only.
+        expr: SUM(CASE WHEN ACRE_TYPE_CODE ILIKE 'ANT' AND ACTIVE_IND ILIKE 'Y' THEN ACRE_AMT ELSE 0 END)
+        access_modifier: public_access
+verified_queries:
+  - name: CO_NET_ACRES_ND_SUSPENSE_LEASES
+    sql: SELECT h.ARRG_TYPE_DESC AS arrg_type_desc, SUM(a.ACRE_AMT) AS co_net_acres FROM L48_PRD.L48_LAND.QUORUM_QLREPORT_QDV_AGMT_HDR AS h JOIN L48_PRD.L48_LAND.QUORUM_QLREPORT_QDV_ACREAGE_AGM AS a ON a.ARRG_KEY = h.ARRG_KEY WHERE h.ACTIVE_IND ILIKE 'Y' AND (h.ST_PSTL_ABBR ILIKE 'ND' OR h.GPOL_ST_NAME ILIKE 'North Dakota') AND h.ARRG_TYPE_DESC ILIKE 'Suspense Lease Only' AND a.ACTIVE_IND ILIKE 'Y' AND a.ACRE_TYPE_CODE ILIKE 'ACO' GROUP BY h.ARRG_TYPE_DESC ORDER BY co_net_acres DESC
+    question: Show co net acres for North Dakota for Suspense Leases Only.
+    verified_at: 1752624000
+    verified_by: KUNDAN.B.KUMAR
+    use_as_onboarding_question: false
+  - name: CO_NET_ACRES_ND_LEASES_BY_ARRG_TYPE
+    sql: SELECT h.ARRG_TYPE_DESC AS arrg_type_desc, SUM(a.ACRE_AMT) AS co_net_acres FROM L48_PRD.L48_LAND.QUORUM_QLREPORT_QDV_AGMT_HDR AS h JOIN L48_PRD.L48_LAND.QUORUM_QLREPORT_QDV_ACREAGE_AGM AS a ON a.ARRG_KEY = h.ARRG_KEY WHERE h.ACTIVE_IND ILIKE 'Y' AND (h.ST_PSTL_ABBR ILIKE 'ND' OR h.GPOL_ST_NAME ILIKE 'North Dakota') AND (h.ARRG_TYPE_DESC ILIKE 'Lease' OR h.SUBJ_DESC ILIKE 'Lease' OR h.ARRG_TYPE_CODE ILIKE 'LSE' OR h.SUBJ_CODE ILIKE 'LSE') AND a.ACTIVE_IND ILIKE 'Y' AND a.ACRE_TYPE_CODE ILIKE 'ACO' GROUP BY h.ARRG_TYPE_DESC ORDER BY co_net_acres DESC
+    question: For North Dakota what is our co net acre breakout by arrg type for leases?
+    verified_at: 1752624000
+    verified_by: KUNDAN.B.KUMAR
+    use_as_onboarding_question: false
+  - name: TOTAL_ACREAGE_BY_AGREEMENT_TYPE_AND_STATE_ACTIVE
+    sql: SELECT h.ST_PSTL_ABBR AS state, h.ARRG_TYPE_DESC AS agreement_type, SUM(a.ACRE_AMT) AS total_acreage FROM L48_PRD.L48_LAND.QUORUM_QLREPORT_QDV_AGMT_HDR AS h JOIN L48_PRD.L48_LAND.QUORUM_QLREPORT_QDV_ACREAGE_AGM AS a ON h.ARRG_KEY = a.ARRG_KEY WHERE h.ACTIVE_IND ILIKE 'Y' AND a.ACTIVE_IND ILIKE 'Y' AND a.ACRE_UNIT_CODE ILIKE 'ACR' GROUP BY h.ST_PSTL_ABBR, h.ARRG_TYPE_DESC ORDER BY state, agreement_type
+    question: What is the total acreage by agreement type and state for active agreements?
+    verified_at: 1784542521
+    verified_by: KUNDAN.B.KUMAR
+    use_as_onboarding_question: false

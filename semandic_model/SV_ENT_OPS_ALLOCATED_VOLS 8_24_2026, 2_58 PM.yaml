@@ -1,0 +1,572 @@
+name: SV_ENT_OPS_ALLOCATED_VOLS
+description: Production volumes semantic model for oil and gas operations. Combines daily production volumes, monthly production volumes, well header data, and asset hierarchy to enable comprehensive analysis of well production performance, geographic distribution, venting/flaring compliance, water management, and operational efficiency across business units, assets, areas, and facilities.
+tables:
+  - name: ASSET_HIERARCHY
+    synonyms:
+      - asset hierarchy
+      - ops hierarchy
+      - organizational hierarchy
+      - well hierarchy
+    description: Asset hierarchy dimension table providing organizational structure for wells. Maps wells (UWI) to business units, assets, areas, pads, facilities, process facilities, and routes. Used as a dimension to slice production data by organizational hierarchy.
+    base_table:
+      database: ENT_PRD
+      schema: OPS
+      table: ASSET_HIERARCHY
+    dimensions:
+      - name: AREA
+        synonyms:
+          - operating area
+          - production area
+        description: Operating area within the asset.
+        expr: AREA
+        data_type: VARCHAR(100)
+        access_modifier: public_access
+      - name: ASSET
+        synonyms:
+          - asset name
+          - production asset
+        description: Asset name within the business unit hierarchy.
+        expr: ASSET
+        data_type: VARCHAR(50)
+        access_modifier: public_access
+      - name: BU
+        synonyms:
+          - business unit
+          - hierarchy bu
+        description: Business unit code from asset hierarchy (e.g., L48, AK, INTL).
+        expr: BU
+        data_type: VARCHAR(7)
+        access_modifier: public_access
+      - name: COMPLETION_ID
+        synonyms:
+          - completion
+        description: Completion identifier from asset hierarchy.
+        expr: COMPLETION_ID
+        data_type: VARCHAR(50)
+        access_modifier: public_access
+      - name: FACILITY
+        synonyms:
+          - facility name
+          - production facility
+        description: Production facility the well is connected to.
+        expr: FACILITY
+        data_type: VARCHAR(134217728)
+        access_modifier: public_access
+      - name: PAD_NAME
+        synonyms:
+          - pad
+          - well pad
+        description: Name of the well pad.
+        expr: PAD_NAME
+        data_type: VARCHAR(134217728)
+        access_modifier: public_access
+      - name: PROCESS_FACILITY
+        synonyms:
+          - processing facility
+        description: Process facility handling the well production.
+        expr: PROCESS_FACILITY
+        data_type: VARCHAR(255)
+        access_modifier: public_access
+      - name: ROUTE
+        synonyms:
+          - pipeline route
+          - production route
+        description: Production route or pipeline route for the well.
+        expr: ROUTE
+        data_type: VARCHAR(134217728)
+        access_modifier: public_access
+      - name: UWI
+        synonyms:
+          - unique well identifier
+          - well uwi
+        description: Unique Well Identifier. Join key to production fact tables via API_10.
+        expr: UWI
+        data_type: VARCHAR(50)
+        access_modifier: public_access
+      - name: WELL_NAME
+        synonyms:
+          - hierarchy well name
+          - well
+        description: Well name from asset hierarchy.
+        expr: WELL_NAME
+        data_type: VARCHAR(255)
+        access_modifier: public_access
+    primary_key:
+      columns:
+        - UWI
+  - name: DAILY_PRODUCTION_VOLUMES
+    synonyms:
+      - daily ops data
+      - daily prod
+      - daily production
+      - daily volumes
+      - daily well production
+    description: 'Daily production and injection volumes by well/completion. Contains daily oil, gas, and water production; gas and water injection; wellhead pressures and temperatures; choke settings; and production hours. Grain: one row per API_10 + COMPLETION_ID + VOLUME_DATE.'
+    base_table:
+      database: ENT_DEV
+      schema: OPS_BI
+      table: DAILY_PRODUCTION_VOLUMES
+    dimensions:
+      - name: API_10
+        synonyms:
+          - api 10
+          - api number
+          - well api
+          - well identifier
+        description: 10-digit API number uniquely identifying the well. Used as the primary join key to the well header dimension.
+        expr: API_10
+        data_type: VARCHAR(134217728)
+        access_modifier: public_access
+      - name: COMPLETION_ID
+        synonyms:
+          - completion identifier
+          - completion number
+        description: Identifier for the specific completion within the well.
+        expr: COMPLETION_ID
+        data_type: VARCHAR(134217728)
+        access_modifier: public_access
+      - name: COMPLETION_NAME
+        synonyms:
+          - completion
+        description: Descriptive name of the completion.
+        expr: COMPLETION_NAME
+        data_type: VARCHAR(16777216)
+        access_modifier: public_access
+      - name: WELL_NAME
+        synonyms:
+          - daily well name
+          - well
+          - well id
+        description: Name of the well as recorded in daily production system.
+        expr: WELL_NAME
+        data_type: VARCHAR(134217728)
+        access_modifier: public_access
+    time_dimensions:
+      - name: VOLUME_DATE
+        synonyms:
+          - date
+          - day
+          - production date
+          - reporting date
+        description: The calendar date of the production measurement. Daily grain.
+        expr: VOLUME_DATE
+        data_type: DATE
+        access_modifier: public_access
+    facts:
+      - name: GAS_VOLUME
+        synonyms:
+          - daily gas
+          - gas mcf
+          - gas prod
+          - gas production
+          - gross gas
+        description: Daily gross gas production volume in MCF (thousand cubic feet).
+        expr: GAS_VOLUME
+        data_type: FLOAT
+        access_modifier: public_access
+      - name: OIL_VOLUME
+        synonyms:
+          - daily oil
+          - gross oil
+          - oil bbls
+          - oil prod
+          - oil production
+        description: Daily gross oil production volume in barrels (BBL).
+        expr: OIL_VOLUME
+        data_type: FLOAT
+        access_modifier: public_access
+      - name: PRODUCTION_HOURS
+        synonyms:
+          - hours on
+          - producing hours
+          - runtime hours
+          - uptime
+        description: Number of hours the well produced during the day (0-24).
+        expr: PRODUCTION_HOURS
+        data_type: FLOAT
+        access_modifier: public_access
+      - name: WATER_VOLUME
+        synonyms:
+          - daily water
+          - produced water
+          - water bbls
+          - water prod
+          - water production
+        description: Daily gross produced water volume in barrels (BBL).
+        expr: WATER_VOLUME
+        data_type: FLOAT
+        access_modifier: public_access
+    metrics:
+      - name: DAILY_BOE
+        description: Total daily barrels of oil equivalent (BOE). Gas converted at 6 MCF = 1 BOE.
+        expr: SUM(OIL_VOLUME) + SUM(GAS_VOLUME) / 6.0
+        access_modifier: public_access
+      - name: TOTAL_DAILY_GAS
+        description: Total daily gas production volume in MCF.
+        expr: SUM(GAS_VOLUME)
+        access_modifier: public_access
+      - name: TOTAL_DAILY_OIL
+        description: Total daily oil production volume in barrels (BBL).
+        expr: SUM(OIL_VOLUME)
+        access_modifier: public_access
+      - name: TOTAL_DAILY_WATER
+        description: Total daily water production volume in barrels (BBL).
+        expr: SUM(WATER_VOLUME)
+        access_modifier: public_access
+  - name: MONTHLY_PRODUCTION_VOLUMES
+    synonyms:
+      - monthly ops data
+      - monthly prod
+      - monthly production
+      - monthly volumes
+      - monthly well production
+    description: 'Monthly production, sales, injection, and disposition volumes by well/completion. Contains monthly oil/gas/water production and sales, gas venting, flaring, lease fuel, water/gas injection, and days produced. Grain: one row per API_10 + COMPLETION_ID + VOLUME_MONTH.'
+    base_table:
+      database: ENT_DEV
+      schema: OPS_BI
+      table: MONTHLY_PRODUCTION_VOLUMES
+    dimensions:
+      - name: API_10
+        synonyms:
+          - api 10
+          - api number
+          - well api
+          - well identifier
+        description: 10-digit API number uniquely identifying the well. Join key to WV_WELLHEADER.
+        expr: API_10
+        data_type: VARCHAR(134217728)
+        access_modifier: public_access
+      - name: COMPLETION_ID
+        synonyms:
+          - completion identifier
+        description: Completion identifier within the well.
+        expr: COMPLETION_ID
+        data_type: VARCHAR(134217728)
+        access_modifier: public_access
+      - name: FACILITY_ID
+        synonyms:
+          - facility code
+          - facility identifier
+        description: Identifier for the production facility handling this well output.
+        expr: FACILITY_ID
+        data_type: VARCHAR(16777216)
+        access_modifier: public_access
+      - name: FIELD_NAME
+        synonyms:
+          - field
+          - oil field
+          - production field
+        description: Name of the oil/gas field where the well is located.
+        expr: FIELD_NAME
+        data_type: VARCHAR(255)
+        access_modifier: public_access
+      - name: WELL_NAME
+        synonyms:
+          - monthly well name
+          - well
+        description: Name of the well.
+        expr: WELL_NAME
+        data_type: VARCHAR(134217728)
+        access_modifier: public_access
+    time_dimensions:
+      - name: VOLUME_MONTH
+        synonyms:
+          - month
+          - production month
+          - reporting month
+        description: First day of the production month. Monthly grain.
+        expr: VOLUME_MONTH
+        data_type: DATE
+        access_modifier: public_access
+    facts:
+      - name: DAYS_PRODUCED
+        synonyms:
+          - days on
+          - days online
+          - producing days
+          - production days
+        description: Number of days the well produced during the month.
+        expr: DAYS_PRODUCED
+        data_type: FLOAT
+        access_modifier: public_access
+      - name: GRS_GAS_PROD
+        synonyms:
+          - gas produced
+          - gross gas production
+          - monthly gas
+          - monthly gas production
+        description: Monthly gross gas production volume in MCF.
+        expr: GRS_GAS_PROD
+        data_type: FLOAT
+        access_modifier: public_access
+      - name: GRS_OIL_PROD
+        synonyms:
+          - gross oil production
+          - monthly oil
+          - monthly oil production
+          - oil produced
+        description: Monthly gross oil production volume in barrels (BBL).
+        expr: GRS_OIL_PROD
+        data_type: FLOAT
+        access_modifier: public_access
+      - name: GRS_WATER_PROD
+        synonyms:
+          - gross water production
+          - monthly water
+          - monthly water production
+          - water produced
+        description: Monthly gross produced water volume in barrels (BBL).
+        expr: GRS_WATER_PROD
+        data_type: FLOAT
+        access_modifier: public_access
+    metrics:
+      - name: AVG_DAYS_PRODUCED
+        description: Average number of days wells produced during the month.
+        expr: AVG(DAYS_PRODUCED)
+        access_modifier: public_access
+      - name: MONTHLY_BOE
+        description: Total monthly barrels of oil equivalent (BOE). Gas converted at 6 MCF = 1 BOE.
+        expr: SUM(GRS_OIL_PROD) + SUM(GRS_GAS_PROD) / 6.0
+        access_modifier: public_access
+      - name: TOTAL_MONTHLY_GAS
+        description: Total monthly gross gas production in MCF.
+        expr: SUM(GRS_GAS_PROD)
+        access_modifier: public_access
+      - name: TOTAL_MONTHLY_OIL
+        description: Total monthly gross oil production in barrels (BBL).
+        expr: SUM(GRS_OIL_PROD)
+        access_modifier: public_access
+      - name: TOTAL_MONTHLY_WATER
+        description: Total monthly gross water production in barrels (BBL).
+        expr: SUM(GRS_WATER_PROD)
+        access_modifier: public_access
+  - name: WV_WELLHEADER
+    synonyms:
+      - well attributes
+      - well dimension
+      - well header
+      - well info
+      - well master
+      - wellheader
+    description: Well header master data (dimension table). Contains well identification, geographic location, classification, operational status, dates, and ownership attributes. One row per well (UWI).
+    base_table:
+      database: ENT_PRD
+      schema: WELLS
+      table: WV_WELLHEADER
+    dimensions:
+      - name: API_10
+        description: 10-digit API number derived from UWI. Primary key and join key to daily and monthly production fact tables.
+        expr: LEFT(UWI, 10)
+        data_type: VARCHAR(50)
+        access_modifier: public_access
+      - name: BASIN
+        synonyms:
+          - geological basin
+          - sedimentary basin
+        description: Geological basin (e.g., Permian, Gulf Coast, Williston).
+        expr: BASIN
+        data_type: VARCHAR(100)
+        access_modifier: public_access
+      - name: BU
+        synonyms:
+          - bu code
+          - business unit
+          - operating unit
+        description: Business unit that owns/operates the well (e.g., LOWER 48 - GCBU, LOWER 48 - HMRO EF).
+        expr: BU
+        data_type: VARCHAR(30)
+        access_modifier: public_access
+      - name: COUNTY
+        synonyms:
+          - parish
+        description: County or parish where the well is located.
+        expr: COUNTY
+        data_type: VARCHAR(50)
+        access_modifier: public_access
+      - name: FIELD_NAME
+        synonyms:
+          - field
+          - gas field
+          - oil field
+        description: Name of the oil/gas field where the well is located.
+        expr: FIELD_NAME
+        data_type: VARCHAR(50)
+        access_modifier: public_access
+      - name: OPERATED_FLAG
+        synonyms:
+          - cop operated
+          - is operated
+          - operated
+        description: Whether ConocoPhillips operates this well. NULL = non-operated.
+        expr: OPERATED_FLAG
+        data_type: VARCHAR(17)
+        access_modifier: public_access
+      - name: REGION
+        synonyms:
+          - operating region
+        description: Operating region classification.
+        expr: REGION
+        data_type: VARCHAR(100)
+        access_modifier: public_access
+      - name: STATE_PROVINCE
+        synonyms:
+          - province
+          - state
+        description: State or province where the well is located.
+        expr: STATE_PROVINCE
+        data_type: VARCHAR(50)
+        access_modifier: public_access
+      - name: UWI
+        synonyms:
+          - api number full
+          - unique well identifier
+          - well uwi
+        description: Unique Well Identifier (full API number). LEFT(UWI, 10) is used as the join key to production fact tables via API_10.
+        expr: UWI
+        data_type: VARCHAR(50)
+        access_modifier: public_access
+      - name: WELL_STATUS
+        synonyms:
+          - current status
+          - status
+          - well state
+        description: Current operational status of the well (e.g., Active, Shut-in, P&A).
+        expr: WELL_STATUS
+        data_type: VARCHAR(50)
+        access_modifier: public_access
+      - name: WELL_TYPE
+        synonyms:
+          - type of well
+          - well classification type
+        description: 'Well type classification: Exploration, Development, Infill, Delineation.'
+        expr: WELL_TYPE
+        data_type: VARCHAR(100)
+        access_modifier: public_access
+    time_dimensions:
+      - name: ON_PRODUCTION_DATE
+        synonyms:
+          - first production date
+          - online date
+          - start producing date
+        description: Date when the well first started producing.
+        expr: ON_PRODUCTION_DATE
+        data_type: TIMESTAMP_NTZ(0)
+        access_modifier: public_access
+      - name: ORIG_SPUD_DATE
+        synonyms:
+          - drill start date
+          - spud date
+        description: Original spud date when drilling began.
+        expr: ORIG_SPUD_DATE
+        data_type: TIMESTAMP_NTZ(0)
+        access_modifier: public_access
+    facts:
+      - name: COP_WORKING_INTEREST
+        synonyms:
+          - cop wi
+          - interest percentage
+          - wi
+          - working interest
+        description: ConocoPhillips working interest percentage in the well.
+        expr: COP_WORKING_INTEREST
+        data_type: NUMBER(24,6)
+        access_modifier: public_access
+      - name: SURFACE_LATITUDE
+        synonyms:
+          - lat
+          - latitude
+        description: Surface latitude of the well (decimal degrees, North positive).
+        expr: SURFACE_LATITUDE
+        data_type: NUMBER(18,6)
+        access_modifier: public_access
+      - name: SURFACE_LONGITUDE
+        synonyms:
+          - lon
+          - long
+          - longitude
+        description: Surface longitude of the well (decimal degrees, East positive).
+        expr: SURFACE_LONGITUDE
+        data_type: NUMBER(18,6)
+        access_modifier: public_access
+    primary_key:
+      columns:
+        - API_10
+relationships:
+  - name: ASSET_HIERARCHY_TO_WELLHEADER
+    left_table: ASSET_HIERARCHY
+    right_table: WV_WELLHEADER
+    relationship_columns:
+      - left_column: UWI
+        right_column: API_10
+    join_type: left_outer
+  - name: DAILY_PROD_TO_ASSET_HIERARCHY
+    left_table: DAILY_PRODUCTION_VOLUMES
+    right_table: ASSET_HIERARCHY
+    relationship_columns:
+      - left_column: API_10
+        right_column: UWI
+    join_type: left_outer
+  - name: DAILY_PROD_TO_WELLHEADER
+    left_table: DAILY_PRODUCTION_VOLUMES
+    right_table: WV_WELLHEADER
+    relationship_columns:
+      - left_column: API_10
+        right_column: API_10
+    join_type: left_outer
+  - name: MONTHLY_PROD_TO_ASSET_HIERARCHY
+    left_table: MONTHLY_PRODUCTION_VOLUMES
+    right_table: ASSET_HIERARCHY
+    relationship_columns:
+      - left_column: API_10
+        right_column: UWI
+    join_type: left_outer
+  - name: MONTHLY_PROD_TO_WELLHEADER
+    left_table: MONTHLY_PRODUCTION_VOLUMES
+    right_table: WV_WELLHEADER
+    relationship_columns:
+      - left_column: API_10
+        right_column: API_10
+    join_type: left_outer
+verified_queries:
+  - name: PRODUCTION_BY_ASSET_AREA
+    sql: SELECT ah.ASSET, ah.AREA, SUM(d.OIL_VOLUME) AS total_oil_bbls, SUM(d.GAS_VOLUME) AS total_gas_mcf, SUM(d.WATER_VOLUME) AS total_water_bbls, COUNT(DISTINCT d.API_10) AS well_count FROM DAILY_PRODUCTION_VOLUMES AS d JOIN ASSET_HIERARCHY AS ah ON d.API_10 = ah.UWI GROUP BY ah.ASSET, ah.AREA ORDER BY total_oil_bbls DESC
+    question: What is the total daily oil, gas, and water production by asset and area?
+    verified_at: 1787123907
+    verified_by: MRINAL.C.SAHA
+    use_as_onboarding_question: true
+  - name: TOTAL_PRODUCTION_BY_BU_BASIN_FIELD
+    sql: SELECT w.BU, w.BASIN, w.FIELD_NAME, SUM(d.OIL_VOLUME) AS total_oil_bbls, SUM(d.GAS_VOLUME) AS total_gas_mcf, SUM(d.WATER_VOLUME) AS total_water_bbls FROM DAILY_PRODUCTION_VOLUMES AS d JOIN WV_WELLHEADER AS w ON d.API_10 = LEFT(w.UWI, 10) GROUP BY w.BU, w.BASIN, w.FIELD_NAME
+    question: What is the total daily oil, gas, and water production by business unit, basin, and field?
+    verified_at: 1785910430
+    verified_by: MRINAL.C.SAHA
+    use_as_onboarding_question: false
+  - name: MONTHLY_PRODUCTION_LAST_12_MONTHS
+    sql: SELECT m.VOLUME_MONTH, SUM(m.GRS_OIL_PROD) AS total_oil_bbls, SUM(m.GRS_GAS_PROD) AS total_gas_mcf, SUM(m.GRS_WATER_PROD) AS total_water_bbls, COUNT(DISTINCT m.API_10) AS well_count FROM MONTHLY_PRODUCTION_VOLUMES AS m WHERE m.VOLUME_MONTH >= DATEADD(MONTH, -12, CURRENT_DATE) GROUP BY m.VOLUME_MONTH ORDER BY m.VOLUME_MONTH DESC
+    question: What is the monthly oil, gas, and water production for the last 12 months?
+    verified_at: 1785910430
+    verified_by: MRINAL.C.SAHA
+    use_as_onboarding_question: false
+  - name: TOP_PRODUCING_WELLS
+    sql: SELECT d.API_10, d.WELL_NAME, SUM(d.OIL_VOLUME) AS total_oil_bbls, SUM(d.GAS_VOLUME) AS total_gas_mcf, SUM(d.WATER_VOLUME) AS total_water_bbls FROM DAILY_PRODUCTION_VOLUMES AS d GROUP BY d.API_10, d.WELL_NAME ORDER BY total_oil_bbls DESC LIMIT 20
+    question: What are the top 20 producing wells by oil volume?
+    verified_at: 1785910430
+    verified_by: MRINAL.C.SAHA
+    use_as_onboarding_question: false
+  - name: PRODUCTION_BY_WELL_TYPE
+    sql: SELECT w.WELL_TYPE, SUM(d.OIL_VOLUME) AS total_oil_bbls, SUM(d.GAS_VOLUME) AS total_gas_mcf, SUM(d.WATER_VOLUME) AS total_water_bbls, COUNT(DISTINCT d.API_10) AS well_count FROM DAILY_PRODUCTION_VOLUMES AS d JOIN WV_WELLHEADER AS w ON d.API_10 = LEFT(w.UWI, 10) GROUP BY w.WELL_TYPE ORDER BY total_oil_bbls DESC
+    question: What is the total production by well type?
+    verified_at: 1785910430
+    verified_by: MRINAL.C.SAHA
+    use_as_onboarding_question: false
+  - name: MONTHLY_PRODUCTION_BY_FACILITY
+    sql: SELECT ah.FACILITY, ah.PROCESS_FACILITY, m.VOLUME_MONTH, SUM(m.GRS_OIL_PROD) AS total_oil_bbls, SUM(m.GRS_GAS_PROD) AS total_gas_mcf, COUNT(DISTINCT m.API_10) AS well_count FROM MONTHLY_PRODUCTION_VOLUMES AS m JOIN ASSET_HIERARCHY AS ah ON m.API_10 = ah.UWI GROUP BY ah.FACILITY, ah.PROCESS_FACILITY, m.VOLUME_MONTH ORDER BY m.VOLUME_MONTH DESC, total_oil_bbls DESC
+    question: What is the monthly oil and gas production by facility and process facility?
+    verified_at: 1787123907
+    verified_by: MRINAL.C.SAHA
+    use_as_onboarding_question: false
+  - name: BOE_BY_ASSET_HIERARCHY
+    sql: SELECT ah.BU, ah.ASSET, SUM(d.OIL_VOLUME) + SUM(d.GAS_VOLUME) / 6.0 AS total_boe, SUM(d.OIL_VOLUME) AS total_oil_bbls, SUM(d.GAS_VOLUME) AS total_gas_mcf FROM DAILY_PRODUCTION_VOLUMES AS d JOIN ASSET_HIERARCHY AS ah ON d.API_10 = ah.UWI GROUP BY ah.BU, ah.ASSET ORDER BY total_boe DESC
+    question: What is the total BOE (barrels of oil equivalent) by business unit and asset from the asset hierarchy?
+    verified_at: 1787123907
+    verified_by: MRINAL.C.SAHA
+    use_as_onboarding_question: false

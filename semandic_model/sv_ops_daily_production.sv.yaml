@@ -1,0 +1,378 @@
+name: SV_OPS_DAILY_PRODUCTION
+description: >-
+  Daily production volume semantic view for oil and gas operations.
+  Grain is one row per completion per production day, covering gross measured volumes,
+  injection volumes, and wellhead/downhole pressure and temperature readings.
+  Business units are PERMIAN and GCR. Standard BOE conversion is 1 bbl oil = 6 mcf gas.
+
+tables:
+  - name: IOT_DAILY_PRODUCTION_PIVOT
+    base_table:
+      database: ENT_DEV
+      schema: OPS
+      table: IOT_DAILY_PRODUCTION_PIVOT
+
+dimensions:
+  - name: BU
+    synonyms:
+      - business unit
+      - operating segment
+    description: >-
+      Business unit that owns the completion. Two values: PERMIAN (Permian Basin)
+      and GCR (Gulf Coast and Rockies).
+    expr: BU
+    data_type: VARCHAR
+    sample_values:
+      - PERMIAN
+      - GCR
+
+  - name: AREA
+    synonyms:
+      - asset area
+      - sub-basin
+      - operating area
+      - field area
+    description: >-
+      Operational area within a business unit. 23 distinct values representing
+      sub-basin or geographic groupings such as Midland Basin, Delaware Basin NM/TX, North-1 through North-4.
+    expr: AREA
+    data_type: VARCHAR
+    sample_values:
+      - MIDLAND BASIN
+      - DELAWARE BASIN NEW MEXICO
+      - DELAWARE BASIN TEXAS
+      - NORTH-3
+      - SOUTH-1
+
+  - name: COMPLETION_ID
+    synonyms:
+      - completion identifier
+      - comp ID
+      - PDEN ID
+      - completion key
+    description: >-
+      Unique identifier for a well completion. Primary entity key defining the grain
+      of daily production records. 14286 distinct completions.
+    expr: COMPLETION_ID
+    data_type: VARCHAR
+    unique: true
+    sample_values:
+      - CX0074020450
+      - CX0183317229
+      - 10045893-000
+
+  - name: COMPLETION_NAME
+    synonyms:
+      - completion name
+      - comp name
+      - well completion label
+    description: >-
+      Human-readable name for the completion, typically matching the well name.
+    expr: COMPLETION_NAME
+    data_type: VARCHAR
+    sample_values:
+      - RATLIFF A 1707
+      - REPOSADO FEDERAL 3H
+      - SCHROEDER 01 9H
+
+  - name: API_10
+    synonyms:
+      - API number
+      - API 10
+      - well API
+      - API identifier
+    description: >-
+      10-digit API well number. Uniquely identifies a wellbore at the state level.
+      14275 distinct values with 0 percent null.
+    expr: API_10
+    data_type: VARCHAR
+    sample_values:
+      - "4213541109"
+      - "3001540652"
+      - "4212334163"
+
+  - name: WELL_NAME
+    synonyms:
+      - well name
+      - common well name
+      - well label
+    description: >-
+      Common name for the well associated with this completion.
+    expr: WELL_NAME
+    data_type: VARCHAR
+    sample_values:
+      - RATLIFF A 1707
+      - MABEE 6 6
+      - NEAL RANCH 42 10
+
+time_dimensions:
+  - name: VOLUME_DATE
+    synonyms:
+      - production date
+      - prod date
+      - date
+      - day
+      - volume date
+    description: >-
+      Calendar date on which production volumes were measured or allocated.
+      Single time grain column. Date range 1970-02-01 through 2026-06-22.
+    expr: VOLUME_DATE
+    data_type: DATE
+
+facts:
+  - name: OIL_VOLUME
+    synonyms:
+      - oil production
+      - oil volume
+      - daily oil
+      - oil bbls
+      - oil rate
+    description: >-
+      Gross daily oil production volume in barrels. NULL means no measurement;
+      zero means shut-in. 99.6 percent populated.
+    expr: OIL_VOLUME
+    data_type: FLOAT
+
+  - name: GAS_VOLUME
+    synonyms:
+      - gas production
+      - gas volume
+      - daily gas
+      - gas mcf
+      - gas rate
+    description: >-
+      Gross daily gas production volume in thousand cubic feet (mcf). 98.8 percent populated.
+    expr: GAS_VOLUME
+    data_type: FLOAT
+
+  - name: WATER_VOLUME
+    synonyms:
+      - water production
+      - water volume
+      - daily water
+      - water bbls
+      - water rate
+      - produced water
+    description: >-
+      Gross daily water production volume in barrels. 99.7 percent populated.
+    expr: WATER_VOLUME
+    data_type: FLOAT
+
+  - name: GAS_INJ_VOLUME
+    synonyms:
+      - gas injection
+      - gas lift volume
+      - injected gas
+    description: >-
+      Daily gas injection volume in mcf. Includes gas lift and injection operations.
+      99.5 percent populated. Zero means no injection that day.
+    expr: GAS_INJ_VOLUME
+    data_type: FLOAT
+
+  - name: WATER_INJ_VOLUME
+    synonyms:
+      - water injection
+      - injected water
+      - waterflood volume
+    description: >-
+      Daily water injection volume in barrels. Only populated for water injection wells.
+      Very sparse at approximately 0.7 percent non-null.
+    expr: WATER_INJ_VOLUME
+    data_type: FLOAT
+
+  - name: TUBING_PRESSURE
+    synonyms:
+      - tubing pressure
+      - THP
+      - tubing head pressure
+    description: >-
+      Average daily tubing pressure in psi. Populated for approximately 45 percent of records.
+    expr: TUBING_PRESSURE
+    data_type: FLOAT
+
+  - name: CASING_PRESSURE
+    synonyms:
+      - casing pressure
+      - CHP
+      - casing head pressure
+    description: >-
+      Average daily casing pressure in psi. Populated for approximately 45 percent of records.
+    expr: CASING_PRESSURE
+    data_type: FLOAT
+
+  - name: STATIC_PRESSURE
+    synonyms:
+      - static pressure
+      - shut-in pressure
+      - SITP
+    description: >-
+      Static pressure reading in psi. Very sparse at approximately 10 percent populated.
+    expr: STATIC_PRESSURE
+    data_type: NUMBER
+
+  - name: CHOKE_SIZE
+    synonyms:
+      - choke size
+      - choke setting
+      - bean size
+    description: >-
+      Choke size in 64ths of an inch. Very sparse at approximately 1 percent populated.
+    expr: CHOKE_SIZE
+    data_type: FLOAT
+
+  - name: BOTTOM_HOLE_PRESSURE
+    synonyms:
+      - BHP
+      - bottom hole pressure
+      - downhole pressure
+    description: >-
+      Average daily bottom-hole pressure in psi from downhole gauges. Approximately 3 percent populated.
+    expr: BOTTOM_HOLE_PRESSURE
+    data_type: FLOAT
+
+  - name: BOTTOM_HOLE_TEMPERATURE
+    synonyms:
+      - BHT
+      - bottom hole temperature
+      - downhole temperature
+    description: >-
+      Average daily bottom-hole temperature in degrees Fahrenheit. Approximately 2 percent populated.
+    expr: BOTTOM_HOLE_TEMPERATURE
+    data_type: FLOAT
+
+metrics:
+  - name: TOTAL_OIL_PRODUCTION
+    synonyms:
+      - total oil
+      - sum oil
+      - aggregate oil volume
+    description: Sum of daily oil volumes in barrels across selected completions and date range.
+    expr: SUM(OIL_VOLUME)
+    data_type: FLOAT
+
+  - name: TOTAL_GAS_PRODUCTION
+    synonyms:
+      - total gas
+      - sum gas
+      - aggregate gas volume
+    description: Sum of daily gas volumes in mcf across selected completions and date range.
+    expr: SUM(GAS_VOLUME)
+    data_type: FLOAT
+
+  - name: TOTAL_WATER_PRODUCTION
+    synonyms:
+      - total water
+      - sum water
+      - aggregate water volume
+    description: Sum of daily water volumes in barrels across selected completions and date range.
+    expr: SUM(WATER_VOLUME)
+    data_type: FLOAT
+
+  - name: TOTAL_GAS_INJECTION
+    synonyms:
+      - total gas injected
+      - sum gas injection
+      - gas lift total
+    description: Sum of daily gas injection volumes in mcf.
+    expr: SUM(GAS_INJ_VOLUME)
+    data_type: FLOAT
+
+  - name: TOTAL_WATER_INJECTION
+    synonyms:
+      - total water injected
+      - sum water injection
+      - waterflood total
+    description: Sum of daily water injection volumes in barrels.
+    expr: SUM(WATER_INJ_VOLUME)
+    data_type: FLOAT
+
+  - name: AVG_OIL_VOLUME
+    synonyms:
+      - average oil
+      - avg daily oil
+      - mean oil production
+    description: Average daily oil production volume in barrels per record.
+    expr: AVG(OIL_VOLUME)
+    data_type: FLOAT
+
+  - name: AVG_GAS_VOLUME
+    synonyms:
+      - average gas
+      - avg daily gas
+      - mean gas production
+    description: Average daily gas production volume in mcf per record.
+    expr: AVG(GAS_VOLUME)
+    data_type: FLOAT
+
+verified_queries:
+  - name: daily_oil_by_well
+    question: What is the daily oil production for a specific well over a date range?
+    sql: |
+      SELECT
+        COMPLETION_ID,
+        WELL_NAME,
+        VOLUME_DATE,
+        OIL_VOLUME
+      FROM ENT_DEV.OPS.IOT_DAILY_PRODUCTION_PIVOT
+      WHERE WELL_NAME = '{{well_name}}'
+        AND VOLUME_DATE BETWEEN '{{start_date}}' AND '{{end_date}}'
+      ORDER BY VOLUME_DATE
+
+  - name: monthly_production_by_area
+    question: What is the monthly oil gas and water production rollup by area?
+    sql: |
+      SELECT
+        AREA,
+        DATE_TRUNC('MONTH', VOLUME_DATE) AS PRODUCTION_MONTH,
+        SUM(OIL_VOLUME) AS TOTAL_OIL_BBLS,
+        SUM(GAS_VOLUME) AS TOTAL_GAS_MCF,
+        SUM(WATER_VOLUME) AS TOTAL_WATER_BBLS
+      FROM ENT_DEV.OPS.IOT_DAILY_PRODUCTION_PIVOT
+      WHERE VOLUME_DATE >= '{{start_date}}'
+      GROUP BY AREA, DATE_TRUNC('MONTH', VOLUME_DATE)
+      ORDER BY AREA, PRODUCTION_MONTH
+
+  - name: top_producing_wells
+    question: Which wells produced the most oil in a given month?
+    sql: |
+      SELECT
+        COMPLETION_ID,
+        WELL_NAME,
+        BU,
+        AREA,
+        SUM(OIL_VOLUME) AS MONTHLY_OIL_BBLS,
+        SUM(GAS_VOLUME) AS MONTHLY_GAS_MCF
+      FROM ENT_DEV.OPS.IOT_DAILY_PRODUCTION_PIVOT
+      WHERE VOLUME_DATE >= DATE_TRUNC('MONTH', '{{target_month}}'::DATE)
+        AND VOLUME_DATE < DATEADD('MONTH', 1, DATE_TRUNC('MONTH', '{{target_month}}'::DATE))
+      GROUP BY COMPLETION_ID, WELL_NAME, BU, AREA
+      ORDER BY MONTHLY_OIL_BBLS DESC
+      LIMIT 20
+
+  - name: daily_production_by_bu
+    question: What is the total daily production by business unit?
+    sql: |
+      SELECT
+        BU,
+        VOLUME_DATE,
+        SUM(OIL_VOLUME) AS DAILY_OIL_BBLS,
+        SUM(GAS_VOLUME) AS DAILY_GAS_MCF,
+        SUM(WATER_VOLUME) AS DAILY_WATER_BBLS
+      FROM ENT_DEV.OPS.IOT_DAILY_PRODUCTION_PIVOT
+      WHERE VOLUME_DATE BETWEEN '{{start_date}}' AND '{{end_date}}'
+      GROUP BY BU, VOLUME_DATE
+      ORDER BY VOLUME_DATE, BU
+
+  - name: water_cut_by_area
+    question: What is the water cut by area for a given month?
+    sql: |
+      SELECT
+        AREA,
+        SUM(WATER_VOLUME) AS TOTAL_WATER_BBLS,
+        SUM(OIL_VOLUME) AS TOTAL_OIL_BBLS,
+        SUM(WATER_VOLUME) / NULLIF(SUM(WATER_VOLUME) + SUM(OIL_VOLUME), 0) AS WATER_CUT
+      FROM ENT_DEV.OPS.IOT_DAILY_PRODUCTION_PIVOT
+      WHERE VOLUME_DATE >= DATE_TRUNC('MONTH', '{{target_month}}'::DATE)
+        AND VOLUME_DATE < DATEADD('MONTH', 1, DATE_TRUNC('MONTH', '{{target_month}}'::DATE))
+      GROUP BY AREA
+      ORDER BY WATER_CUT DESC
