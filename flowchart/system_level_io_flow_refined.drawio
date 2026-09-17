@@ -1,0 +1,606 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" type="device" version="24.0.0">
+  <diagram name="A - System-Level I-O Flow (data pull routing)" id="pg1">
+    <mxGraphModel dx="1400" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3480" pageHeight="2500" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="Ab128" value="Legend" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#6c8ebf;dashed=1;verticalAlign=top;align=left;spacingLeft=10;fontSize=11;fontStyle=1;fontColor=#3d6fa8;" vertex="1" parent="1"><mxGeometry x="30" y="2260" width="300" height="210" as="geometry"/></mxCell>
+        <mxCell id="Ab112" value="OUTPUT  -  DRAFT EMAIL" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#6c8ebf;dashed=1;verticalAlign=top;align=left;spacingLeft=10;fontSize=11;fontStyle=1;fontColor=#3d6fa8;" vertex="1" parent="1"><mxGeometry x="2480" y="290" width="970" height="2180" as="geometry"/></mxCell>
+        <mxCell id="Ab95" value="4.  HELPDESK TEAM ASSIGNED, REVIEW AND OUTPUT   -   nothing leaves the system unapproved (FR14, no exception)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fbfbfb;strokeColor=#999999;dashed=1;verticalAlign=top;align=left;spacingLeft=10;spacingTop=4;fontSize=11;fontStyle=1;fontColor=#555555;" vertex="1" parent="1"><mxGeometry x="350" y="2260" width="2100" height="210" as="geometry"/></mxCell>
+        <mxCell id="Ab73" value="3.  EXCEPTION RESOLUTION AND DRAFT DATA REQUIRED   -   all coexisting IR exceptions returned, none forced (US-04).  All comparison is deterministic (FR21)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fbfbfb;strokeColor=#999999;dashed=1;verticalAlign=top;align=left;spacingLeft=10;spacingTop=4;fontSize=11;fontStyle=1;fontColor=#555555;" vertex="1" parent="1"><mxGeometry x="350" y="1610" width="2100" height="620" as="geometry"/></mxCell>
+        <mxCell id="Ab50" value="2.  INVOICE VALIDATION AND PAYMENT STATUS   -   Ariba is system of record; S/4 is secondary (decision 2).  Classification order fixed by US-05" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fbfbfb;strokeColor=#999999;dashed=1;verticalAlign=top;align=left;spacingLeft=10;spacingTop=4;fontSize=11;fontStyle=1;fontColor=#555555;" vertex="1" parent="1"><mxGeometry x="350" y="960" width="2100" height="620" as="geometry"/></mxCell>
+        <mxCell id="Ab18" value="1.  INTAKE AND IDENTIFICATION   -   resolve the lookup key before any investigation (FR4, FR5, FR8, FR9)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fbfbfb;strokeColor=#999999;dashed=1;verticalAlign=top;align=left;spacingLeft=10;spacingTop=4;fontSize=11;fontStyle=1;fontColor=#555555;" vertex="1" parent="1"><mxGeometry x="350" y="290" width="2100" height="640" as="geometry"/></mxCell>
+        <mxCell id="Ab11" value="INPUT" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#6c8ebf;dashed=1;verticalAlign=top;align=left;spacingLeft=10;fontSize=11;fontStyle=1;fontColor=#3d6fa8;" vertex="1" parent="1"><mxGeometry x="30" y="290" width="300" height="640" as="geometry"/></mxCell>
+        <mxCell id="Ab2" value="ENTERPRISE SOURCE INVENTORY  -  all reads only; no write to any source system (FR3, FR12)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#6c8ebf;dashed=1;verticalAlign=top;align=left;spacingLeft=10;fontSize=11;fontStyle=1;fontColor=#3d6fa8;" vertex="1" parent="1"><mxGeometry x="30" y="110" width="3420" height="150" as="geometry"/></mxCell>
+        <mxCell id="An1" value="SYSTEM-LEVEL I/O FLOW  -  Indirect Supply Chain Helpdesk, Supplier Payment-Status Resolution  (EPIC 3, email channel)
+INPUT: supplier email thread in the Outlook group mailbox        OUTPUT: reviewed draft email        Pn tags = data pulls, listed in full on page B" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=0;fillColor=#3d6fa8;strokeColor=#1f4e79;fontColor=#ffffff;fontSize=10;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="30" y="20" width="3420" height="70" as="geometry"/></mxCell>
+        <mxCell id="An3" value="ARIBA  (system of record)
+Invoice | IR | PO | Receipt | PR
+payment fields | Ariba Network
+P1 P2 P4 P6 P11 P12 P13 P15" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#fde5cd;strokeColor=#d79b00;fontSize=8;" vertex="1" parent="1"><mxGeometry x="50" y="155" width="400" height="95" as="geometry"/></mxCell>
+        <mxCell id="An4" value="SAP S/4HANA (+ BW)
+secondary corroboration
+SAP invoice ID, clearing
+P7" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#fde5cd;strokeColor=#d79b00;fontSize=8;" vertex="1" parent="1"><mxGeometry x="475" y="155" width="400" height="95" as="geometry"/></mxCell>
+        <mxCell id="An5" value="SPVR
+supplier master, block
+reason, email lookup
+P3 P8" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#fde5cd;strokeColor=#d79b00;fontSize=8;" vertex="1" parent="1"><mxGeometry x="900" y="155" width="400" height="95" as="geometry"/></mxCell>
+        <mxCell id="An6" value="BIVS  [internal]
+bank-change indicator
+fields TBC
+P9" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#fde5cd;strokeColor=#d79b00;fontSize=8;" vertex="1" parent="1"><mxGeometry x="1325" y="155" width="400" height="95" as="geometry"/></mxCell>
+        <mxCell id="An7" value="PA ALLOCATION LIST  [internal]
+assigned / substitute PA
+source TBC
+P14" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#fde5cd;strokeColor=#d79b00;fontSize=8;" vertex="1" parent="1"><mxGeometry x="1750" y="155" width="400" height="95" as="geometry"/></mxCell>
+        <mxCell id="An8" value="EXOSTAR / EDI
+NO INTEGRATION
+manual request only
+(US-07)" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=0;fillColor=#ffffff;strokeColor=#b85450;dashed=1;fontColor=#b85450;fontStyle=2;fontSize=8;" vertex="1" parent="1"><mxGeometry x="2175" y="155" width="400" height="95" as="geometry"/></mxCell>
+        <mxCell id="An9" value="RULES &amp; MAPPING STORE
+convention, tolerances, UOM,
+IR codes, templates - ABSENT G-08
+P5 P16" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=0;fillColor=#ffffff;strokeColor=#b85450;dashed=1;fontColor=#b85450;fontStyle=2;fontSize=8;" vertex="1" parent="1"><mxGeometry x="2600" y="155" width="400" height="95" as="geometry"/></mxCell>
+        <mxCell id="An10" value="AURORA CASE STORE
+case, state, evidence,
+drafts, approvals
+P17" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#fde5cd;strokeColor=#d79b00;fontSize=8;" vertex="1" parent="1"><mxGeometry x="3025" y="155" width="400" height="95" as="geometry"/></mxCell>
+        <mxCell id="An12" value="OUTLOOK GROUP MAILBOX
+scheduled poll (FR4)" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=1;fillColor=#3d6fa8;strokeColor=#1f4e79;fontColor=#ffffff;fontSize=10;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="50" y="325" width="260" height="60" as="geometry"/></mxCell>
+        <mxCell id="An13" value="EMAIL / THREAD INPUT  (E)
+
+conversation_id
+message_id
+sender_email
+subject
+body
+prior thread history
+attachments
+received_timestamp" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="50" y="400" width="260" height="200" as="geometry"/></mxCell>
+        <mxCell id="An14" value="EXTRACTED ENTITIES  (E - candidates)
+FR7 intent + FR8 extraction
+
+invoice_id[0..n]
+po_id[0..n]
+supplier name (signature)
+asserted issue type
+asserted date range" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=9;" vertex="1" parent="1"><mxGeometry x="50" y="615" width="260" height="180" as="geometry"/></mxCell>
+        <mxCell id="An15" value="Candidates are not facts.
+FR9: model confidence does not
+prove an identifier exists." style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=0;fillColor=#ffffff;strokeColor=#b85450;dashed=1;fontColor=#b85450;fontStyle=2;fontSize=8;" vertex="1" parent="1"><mxGeometry x="50" y="810" width="260" height="60" as="geometry"/></mxCell>
+        <mxCell id="Ae16" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;" edge="1" parent="1" source="An12" target="An13"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="Ae17" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;" edge="1" parent="1" source="An13" target="An14"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="An19" value="New thread or
+continuation?
+(FR5)" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rhombus;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=9;" vertex="1" parent="1"><mxGeometry x="380" y="400" width="170" height="100" as="geometry"/></mxCell>
+        <mxCell id="An20" value="P17  AURORA CASE STORE
+IN  : conversation_id
+OUT : open case, state, prior evidence
+ROUTE: known -&gt; append to case
+new -&gt; create case + correlation ID" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=8;" vertex="1" parent="1"><mxGeometry x="380" y="530" width="250" height="100" as="geometry"/></mxCell>
+        <mxCell id="Ae21" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;exitX=1;exitY=0.2;exitDx=0;exitDy=0;" edge="1" parent="1" source="An14" target="An19"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="Ae22" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;dashed=1;strokeColor=#d79b00;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="An20" target="An19"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="An23" value="Has invoice ID?" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rhombus;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=9;" vertex="1" parent="1"><mxGeometry x="660" y="400" width="150" height="90" as="geometry"/></mxCell>
+        <mxCell id="An24" value="P1  ARIBA - Invoice object
+IN  : invoice_id
+OUT : exists, status, supplier, lines,
+        currency, totals, tax, comments
+ROUTE: exists -&gt; subject | absent -&gt; P7" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=8;" vertex="1" parent="1"><mxGeometry x="840" y="400" width="330" height="90" as="geometry"/></mxCell>
+        <mxCell id="Ae25" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="An19" target="An23"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="Ae26" value="yes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;dashed=1;strokeColor=#d79b00;" edge="1" parent="1" source="An23" target="An24"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="An27" value="Has PO ID?" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rhombus;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=9;" vertex="1" parent="1"><mxGeometry x="660" y="530" width="150" height="90" as="geometry"/></mxCell>
+        <mxCell id="An28" value="P2  ARIBA - PO object
+IN  : po_id
+OUT : PO exists, status, linked invoice IDs,
+        lines, PA / BP ownership
+ROUTE: derive invoice set (EE-04, EE-11)" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=8;" vertex="1" parent="1"><mxGeometry x="840" y="530" width="330" height="90" as="geometry"/></mxCell>
+        <mxCell id="Ae29" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="An19" target="An27"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="Ae30" value="yes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;dashed=1;strokeColor=#d79b00;" edge="1" parent="1" source="An27" target="An28"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="An31" value="Has supplier
+name?" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rhombus;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=9;" vertex="1" parent="1"><mxGeometry x="660" y="660" width="150" height="90" as="geometry"/></mxCell>
+        <mxCell id="An32" value="P3  SPVR - supplier master
+IN  : sender_email  (name absent)
+OUT : supplier_id, company name, match count
+ROUTE: 1 match -&gt; resolved | &gt;1 -&gt; G4 | 0 -&gt; clarify" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=8;" vertex="1" parent="1"><mxGeometry x="840" y="660" width="330" height="90" as="geometry"/></mxCell>
+        <mxCell id="Ae33" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="An19" target="An31"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="Ae34" value="yes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;dashed=1;strokeColor=#d79b00;" edge="1" parent="1" source="An31" target="An32"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="An35" value="Any resolvable
+key after
+resolution?
+(FR9, FR10)" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rhombus;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=9;" vertex="1" parent="1"><mxGeometry x="1210" y="490" width="170" height="110" as="geometry"/></mxCell>
+        <mxCell id="Ae36" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;" edge="1" parent="1" source="An24" target="An35"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="Ae37" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;" edge="1" parent="1" source="An28" target="An35"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="Ae38" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;" edge="1" parent="1" source="An32" target="An35"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="An39" value="P4  ARIBA - invoice search  (discovery)
+IN  : supplier_id + 3-month window (decision 4)
+OUT : candidate invoice + PO set
+ROUTE: fan out per invoice
+GAP N-15: no result cap or prioritisation" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=8;" vertex="1" parent="1"><mxGeometry x="1420" y="630" width="330" height="110" as="geometry"/></mxCell>
+        <mxCell id="Ae40" value="no key supplied
+(EE-05, EE-12)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;dashed=1;strokeColor=#d79b00;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="An35" target="An39"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="An41" value="investigation_subjects[]  (R+D)
+one per RESOLVED invoice
+
+invoice_id | linked_po_id | supplier_id
+retrieved status | entry category
+
+FAN-OUT POINT: n invoices per email" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1"><mxGeometry x="1800" y="400" width="300" height="150" as="geometry"/></mxCell>
+        <mxCell id="Ae42" value="yes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;" edge="1" parent="1" source="An35" target="An41"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="Ae43" value="resolved" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;" edge="1" parent="1" source="An39" target="An41"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="An44" value="NO USABLE IDENTIFIER
+-&gt; missing-information draft
+(FR10, US-01)   case = Pending
+GAP N-05: no expiry or reminder" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;" vertex="1" parent="1"><mxGeometry x="1800" y="620" width="300" height="100" as="geometry"/></mxCell>
+        <mxCell id="Ae45" value="still none" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;dashed=1;strokeColor=#b85450;" edge="1" parent="1" source="An39" target="An44"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="An46" value="PO / NON-PO ROUTER
+per subject, POST-resolution
+GAP N-02: determining attribute
+NOT SPECIFIED in any artifact" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=0;fillColor=#ffffff;strokeColor=#b85450;dashed=1;fontColor=#b85450;fontStyle=2;fontSize=8;" vertex="1" parent="1"><mxGeometry x="2140" y="420" width="280" height="110" as="geometry"/></mxCell>
+        <mxCell id="Ae47" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;" edge="1" parent="1" source="An41" target="An46"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="An48" value="non-PO / BCMS
+-&gt; OUT OF SCOPE
+helpdesk exit
+(decision 5)" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;" vertex="1" parent="1"><mxGeometry x="2140" y="580" width="280" height="80" as="geometry"/></mxCell>
+        <mxCell id="Ae49" value="non_po_based" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;dashed=1;strokeColor=#b85450;" edge="1" parent="1" source="An46" target="An48"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="An51" value="P5  RULES STORE - invoice ID convention
+IN  : normalized invoice_id
+OUT : convention valid y/n
+ROUTE: invalid -&gt; correction guidance
+GAP G-07: convention rules ABSENT" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=0;fillColor=#ffffff;strokeColor=#b85450;dashed=1;fontColor=#b85450;fontStyle=2;fontSize=8;" vertex="1" parent="1"><mxGeometry x="380" y="1000" width="320" height="100" as="geometry"/></mxCell>
+        <mxCell id="An52" value="ARIBA INVOICE
+STATUS
+(from P1)" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rhombus;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=9;" vertex="1" parent="1"><mxGeometry x="750" y="1000" width="160" height="100" as="geometry"/></mxCell>
+        <mxCell id="Ae53" value="po_based" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="An46" target="An52"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="Ae54" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;dashed=1;strokeColor=#d79b00;" edge="1" parent="1" source="An51" target="An52"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="An55" value="P6  ARIBA - payment fields  (SoR)
+IN  : invoice_id
+OUT : payment status, paid amount, due date,
+        scheduled payment date, transaction ID,
+        remittance reference
+ROUTE: US-05 order  paid &gt; scheduled &gt; not due &gt; overdue" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=8;" vertex="1" parent="1"><mxGeometry x="980" y="1000" width="360" height="110" as="geometry"/></mxCell>
+        <mxCell id="Ae56" value="Reconciled" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;dashed=1;strokeColor=#d79b00;" edge="1" parent="1" source="An52" target="An55"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="An57" value="PAID -&gt; transaction ID
+CLEARING -&gt; remittance / wire
+SCHEDULED -&gt; date + recheck (FR15)
+NOT YET DUE -&gt; due date" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1"><mxGeometry x="1390" y="1000" width="280" height="110" as="geometry"/></mxCell>
+        <mxCell id="Ae58" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;" edge="1" parent="1" source="An55" target="An57"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="An59" value="P7  SAP S/4HANA (+ BW)  secondary
+IN  : invoice_id / SAP invoice ID
+OUT : SAP invoice ID, payment status, clearing date
+ROUTE: corroborate P6; if found ONLY here -&gt;
+non-PO / BCMS determination -&gt; out of scope" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=8;" vertex="1" parent="1"><mxGeometry x="980" y="1140" width="360" height="110" as="geometry"/></mxCell>
+        <mxCell id="Ae60" value="not found in Ariba" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;dashed=1;strokeColor=#d79b00;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="An52" target="An59"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="An61" value="Due date
+passed and
+unpaid?" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rhombus;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=9;" vertex="1" parent="1"><mxGeometry x="1390" y="1150" width="150" height="90" as="geometry"/></mxCell>
+        <mxCell id="Ae62" value="overdue" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="An55" target="An61"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="An63" value="P8  SPVR - supplier block
+IN  : supplier_id
+OUT : block flag, block reason, date
+ROUTE: blocked -&gt; reason + unblock path" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=8;" vertex="1" parent="1"><mxGeometry x="1590" y="1150" width="340" height="100" as="geometry"/></mxCell>
+        <mxCell id="An64" value="P9  BIVS  [internal]
+IN  : supplier_id
+OUT : bank-change indicator + date  [TBC]
+ROUTE: changed -&gt; masked profile guidance" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=8;" vertex="1" parent="1"><mxGeometry x="1590" y="1270" width="340" height="100" as="geometry"/></mxCell>
+        <mxCell id="An65" value="P10  ARIBA NETWORK
+IN  : supplier_id
+OUT : network presence
+ROUTE: absent -&gt; Exostar / EDI escalation" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=8;" vertex="1" parent="1"><mxGeometry x="1590" y="1390" width="340" height="100" as="geometry"/></mxCell>
+        <mxCell id="Ae66" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;dashed=1;strokeColor=#d79b00;" edge="1" parent="1" source="An61" target="An63"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="Ae67" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;dashed=1;strokeColor=#d79b00;" edge="1" parent="1" source="An61" target="An64"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="Ae68" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;dashed=1;strokeColor=#d79b00;" edge="1" parent="1" source="An61" target="An65"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="An69" value="OVERDUE RESULT
+block reason (+ PA view) |
+masked bank guidance |
+Exostar / EDI escalation (manual)
+
+helpdesk-only: past failed payments" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1"><mxGeometry x="1970" y="1250" width="280" height="130" as="geometry"/></mxCell>
+        <mxCell id="Ae70" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;" edge="1" parent="1" source="An63" target="An69"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="Ae71" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;" edge="1" parent="1" source="An64" target="An69"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="Ae72" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;" edge="1" parent="1" source="An65" target="An69"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="An74" value="P11  ARIBA - Invoice Reconciliation
+IN  : invoice_id
+OUT : exception codes, affected lines,
+        reconciliation state
+ROUTE: exception class -&gt; P12 / P13 / P14" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=8;" vertex="1" parent="1"><mxGeometry x="380" y="1650" width="330" height="100" as="geometry"/></mxCell>
+        <mxCell id="Ae75" value="Reconciling" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;dashed=1;strokeColor=#d79b00;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="An52" target="An74"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="An76" value="EXCEPTION
+CLASS" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rhombus;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=9;" vertex="1" parent="1"><mxGeometry x="760" y="1660" width="150" height="90" as="geometry"/></mxCell>
+        <mxCell id="Ae77" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;" edge="1" parent="1" source="An74" target="An76"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="An78" value="P12  ARIBA - PO object  (compare)
+IN  : po_id + line refs
+OUT : line qty, UOM, unit price, line amount,
+        currency, tax and charges
+ROUTE: variance -&gt; supplier correction" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=8;" vertex="1" parent="1"><mxGeometry x="960" y="1650" width="350" height="100" as="geometry"/></mxCell>
+        <mxCell id="An79" value="P13  ARIBA - Receipt object
+IN  : po_id / invoice_id
+OUT : existence, approval status, lines,
+        approver, on-behalf-of
+ROUTE: blocker -&gt; BP / PA (gate G5)" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=8;" vertex="1" parent="1"><mxGeometry x="960" y="1770" width="350" height="100" as="geometry"/></mxCell>
+        <mxCell id="An80" value="P14  PA ALLOCATION LIST  [internal]
+IN  : PA id / PO ownership
+OUT : assigned PA, availability, substitute  [TBC]
+ROUTE: unavailable -&gt; multi-party (US-14)" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=8;" vertex="1" parent="1"><mxGeometry x="960" y="1890" width="350" height="100" as="geometry"/></mxCell>
+        <mxCell id="Ae81" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;dashed=1;strokeColor=#d79b00;" edge="1" parent="1" source="An76" target="An78"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="Ae82" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;dashed=1;strokeColor=#d79b00;" edge="1" parent="1" source="An76" target="An79"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="Ae83" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;dashed=1;strokeColor=#d79b00;" edge="1" parent="1" source="An76" target="An80"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="An84" value="DETERMINISTIC EVALUATION ENGINE
+(FR21, no model inference)
+
+field-level variance arithmetic
+tolerance evaluation (rules absent)
+US-05 / US-03 ordering
+cause &gt; party &gt; action &gt; template" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=9;" vertex="1" parent="1"><mxGeometry x="1360" y="1700" width="300" height="160" as="geometry"/></mxCell>
+        <mxCell id="Ae85" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;" edge="1" parent="1" source="An78" target="An84"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="Ae86" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;" edge="1" parent="1" source="An79" target="An84"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="Ae87" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;" edge="1" parent="1" source="An80" target="An84"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="An88" value="REJECTED - RCA order (US-03)
+ID format &gt; comment &gt; duplicate &gt;
+closed PO &gt; unknown
+uses P1 comments + P2 PO status" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=9;" vertex="1" parent="1"><mxGeometry x="380" y="2020" width="330" height="90" as="geometry"/></mxCell>
+        <mxCell id="Ae89" value="Rejected" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="An52" target="An88"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="Ae90" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;" edge="1" parent="1" source="An88" target="An84"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="An91" value="P15  ARIBA - PR object  (ITAR)
+IN  : invoice_id &gt; po_id &gt; pr_id
+OUT : ITAR indicator, on-behalf-of
+ROUTE: positive -&gt; US helpdesk | negative -&gt; India
+missing / ambiguous -&gt; HOLD at gate G3 (US-02)" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=8;" vertex="1" parent="1"><mxGeometry x="960" y="2020" width="350" height="100" as="geometry"/></mxCell>
+        <mxCell id="An92" value="InvestigationResult  (per subject)
+
+A  facts retrieved from systems
+B  requester assertions - unverified
+C1 deterministic derivation (replayable)
+C2 agentic judgment (non-load-bearing)
+D  human decision required
+
+evidence_sufficiency, NOT confidence" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1"><mxGeometry x="1720" y="1670" width="300" height="220" as="geometry"/></mxCell>
+        <mxCell id="Ae93" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;" edge="1" parent="1" source="An84" target="An92"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="Ae94" value="routing target" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;" edge="1" parent="1" source="An91" target="An92"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="An96" value="P16  RULES STORE - templates and disclosure
+IN  : finding type + audience
+OUT : template, supplier-safe wording,
+        disclosure matrix, masking rules
+GAP G-08 / N-30: library ABSENT" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=0;fillColor=#ffffff;strokeColor=#b85450;dashed=1;fontColor=#b85450;fontStyle=2;fontSize=8;" vertex="1" parent="1"><mxGeometry x="380" y="2295" width="340" height="110" as="geometry"/></mxCell>
+        <mxCell id="An97" value="RESPONSE GENERATION (FR13)
+outbound_draft = supplier-visible ONLY
+review_panel = helpdesk-only + evidence
+claim_map: every claim -&gt; evidence ref
+grounding_state flag" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=9;" vertex="1" parent="1"><mxGeometry x="770" y="2295" width="320" height="110" as="geometry"/></mxCell>
+        <mxCell id="An98" value="ITAR
+FIELD VALUE
+(P15)" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rhombus;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=9;" vertex="1" parent="1"><mxGeometry x="1140" y="2300" width="140" height="100" as="geometry"/></mxCell>
+        <mxCell id="An99" value="US HELPDESK
+confirmed ITAR" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;" vertex="1" parent="1"><mxGeometry x="1330" y="2290" width="180" height="50" as="geometry"/></mxCell>
+        <mxCell id="An100" value="TCS / INDIA HELPDESK
+confirmed non-ITAR" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;" vertex="1" parent="1"><mxGeometry x="1330" y="2355" width="180" height="50" as="geometry"/></mxCell>
+        <mxCell id="An101" value="HELP DESK REVIEW (FR27)
+gates G1 - G5
+approve / edit / reject /
+request more information" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;" vertex="1" parent="1"><mxGeometry x="1560" y="2295" width="250" height="110" as="geometry"/></mxCell>
+        <mxCell id="Ae102" value="CaseInvestigationSummary" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="An92" target="An97"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="Ae103" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;dashed=1;strokeColor=#d79b00;" edge="1" parent="1" source="An96" target="An97"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="Ae104" value="DraftPackage" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;" edge="1" parent="1" source="An97" target="An98"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="Ae105" value="yes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;" edge="1" parent="1" source="An98" target="An99"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="Ae106" value="no" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;" edge="1" parent="1" source="An98" target="An100"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="Ae107" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;" edge="1" parent="1" source="An99" target="An101"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="Ae108" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;" edge="1" parent="1" source="An100" target="An101"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="Ae109" value="missing-info draft
+ALSO needs approval" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;dashed=1;strokeColor=#b85450;" edge="1" parent="1" source="An44" target="An97"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="Ae110" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="An57" target="An97"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="Ae111" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;" edge="1" parent="1" source="An69" target="An97"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="An113" value="FINAL OUTPUT:  APPROVED DRAFT EMAIL
+posted as a reply in the existing Outlook thread (FR14)
+never auto-sent  |  idempotent single send" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=1;fillColor=#3d6fa8;strokeColor=#1f4e79;fontColor=#ffffff;fontSize=10;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="2500" y="330" width="930" height="80" as="geometry"/></mxCell>
+        <mxCell id="Ae114" value="ApprovalDecision" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;strokeColor=#3d6fa8;strokeWidth=2;" edge="1" parent="1" source="An101" target="An113"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="An115" value="D1  SUPPLIER - payment answered
+body: status, transaction ID | remittance /
+wire | scheduled date | due date | days overdue
+evidence: exact source values
+#PO-01..03, DQ-14/15" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#d4e1f5;strokeColor=#3d6fa8;fontSize=8;" vertex="1" parent="1"><mxGeometry x="2500" y="440" width="560" height="115" as="geometry"/></mxCell>
+        <mxCell id="An116" value="D2  SUPPLIER - corrective action required
+body: reason, affected line, expected vs
+submitted, variance, currency, UOM,
+requested action
+PO-10..26, US-03, US-08..17" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#d4e1f5;strokeColor=#3d6fa8;fontSize=8;" vertex="1" parent="1"><mxGeometry x="2500" y="570" width="560" height="115" as="geometry"/></mxCell>
+        <mxCell id="An117" value="D3  SUPPLIER - missing information
+body: missing elements, request a valid
+Invoice/PO ID, where to find it.  Case Pending
+FR10, US-01" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#d4e1f5;strokeColor=#3d6fa8;fontSize=8;" vertex="1" parent="1"><mxGeometry x="2500" y="700" width="560" height="115" as="geometry"/></mxCell>
+        <mxCell id="An118" value="D4  BUSINESS PARTNER - receipt action
+body: receipt status, on-behalf-of / approver,
+required action
+PO-07/08, US-14, FS-21..24" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#d4e1f5;strokeColor=#3d6fa8;fontSize=8;" vertex="1" parent="1"><mxGeometry x="2500" y="830" width="560" height="115" as="geometry"/></mxCell>
+        <mxCell id="An119" value="D5  PA / BP - PO review (internal first)
+body: three-document evidence, suspected PO
+field, closed PO.  PO IS NOT MODIFIED (US-18)
+PO-18/25, US-18" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#d4e1f5;strokeColor=#3d6fa8;fontSize=8;" vertex="1" parent="1"><mxGeometry x="2500" y="960" width="560" height="115" as="geometry"/></mxCell>
+        <mxCell id="An120" value="D6  HELPDESK - escalation
+body: supplier absent from Ariba Network,
+Exostar / EDI verification request, full evidence
+PO-06, US-07, FS-34" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#d4e1f5;strokeColor=#3d6fa8;fontSize=8;" vertex="1" parent="1"><mxGeometry x="2500" y="1090" width="560" height="115" as="geometry"/></mxCell>
+        <mxCell id="An121" value="D7  DEFERRED - no send yet
+recheck scheduled: pending receipt approval,
+scheduled payment, approved-waiting
+FR15" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#d4e1f5;strokeColor=#3d6fa8;fontSize=8;" vertex="1" parent="1"><mxGeometry x="2500" y="1220" width="560" height="115" as="geometry"/></mxCell>
+        <mxCell id="An122" value="D8  OUT OF SCOPE EXIT
+non-PO / BCMS invoice handed to helpdesk
+with reason
+decision 5" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#d4e1f5;strokeColor=#3d6fa8;fontSize=8;" vertex="1" parent="1"><mxGeometry x="2500" y="1350" width="560" height="115" as="geometry"/></mxCell>
+        <mxCell id="Ae123" value="variant selected by
+root cause + audience" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;strokeColor=#3d6fa8;strokeWidth=2;exitX=0.2;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="An113" target="An115"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="An124" value="EVERY DRAFT CARRIES TWO TIERS
+
+outbound_draft
+supplier-visible content only;
+this is what lands in the mailbox
+
+review_panel
+helpdesk-only data + full evidence
+chain; lives in the reviewer
+application, NEVER in the mailbox
+
+Why: a draft stored in the group
+mailbox (FR3) can be sent by anyone
+with access, bypassing review.
+Past failed payments, bank context
+and PA allocation data are
+helpdesk-only per both scenario tabs." style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1"><mxGeometry x="3090" y="440" width="340" height="400" as="geometry"/></mxCell>
+        <mxCell id="An125" value="OPEN DECISIONS AFFECTING OUTPUT
+
+N-13 / N-03  reply policy when one
+email names n invoices and only some
+resolve: one consolidated reply or
+one per invoice?
+
+N-26  which finding leads when
+several coexist (US-04 forbids
+forcing a single cause)
+
+N-21  draft authority: mailbox copy
+or case-store copy?
+
+N-22  reviewer edit governance -
+edited text has not passed FR13
+grounding
+
+N-29  internal outcomes (D5) are
+never observed: no write-back exists" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=0;fillColor=#ffffff;strokeColor=#b85450;dashed=1;fontColor=#b85450;fontStyle=2;fontSize=8;" vertex="1" parent="1"><mxGeometry x="3090" y="870" width="340" height="420" as="geometry"/></mxCell>
+        <mxCell id="An126" value="REQUESTER RETURN PATH
+
+D3 and D2 return to the supplier in
+the SAME thread. A supplier reply is
+correlated by conversation_id (FR5,
+P17) and APPENDS to the open case
+rather than opening a new one.
+
+This is what makes the missing-
+information path a pause, not a
+termination." style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1"><mxGeometry x="3090" y="1320" width="340" height="250" as="geometry"/></mxCell>
+        <mxCell id="Ae127" value="reply to requester in thread; correlated back by conversation_id (FR5)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;fontSize=8;labelBackgroundColor=#ffffff;endArrow=block;endFill=1;strokeColor=#4d4d4d;dashed=1;strokeColor=#82b366;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="An117" target="An12"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="An129" value="Input / interface object" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=0;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1"><mxGeometry x="45" y="2295" width="140" height="36" as="geometry"/></mxCell>
+        <mxCell id="An130" value="Deterministic component" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=9;" vertex="1" parent="1"><mxGeometry x="190" y="2295" width="140" height="36" as="geometry"/></mxCell>
+        <mxCell id="An131" value="Agentic component" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=9;" vertex="1" parent="1"><mxGeometry x="45" y="2337" width="140" height="36" as="geometry"/></mxCell>
+        <mxCell id="An132" value="Data pull  Pn  (read-only)" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;shape=cylinder3;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=8;" vertex="1" parent="1"><mxGeometry x="190" y="2337" width="140" height="36" as="geometry"/></mxCell>
+        <mxCell id="An133" value="Decision / routing point" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rhombus;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=9;" vertex="1" parent="1"><mxGeometry x="45" y="2379" width="140" height="36" as="geometry"/></mxCell>
+        <mxCell id="An134" value="Human gate" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;" vertex="1" parent="1"><mxGeometry x="190" y="2379" width="140" height="36" as="geometry"/></mxCell>
+        <mxCell id="An135" value="Draft email output" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#d4e1f5;strokeColor=#3d6fa8;fontSize=8;" vertex="1" parent="1"><mxGeometry x="45" y="2421" width="140" height="36" as="geometry"/></mxCell>
+        <mxCell id="An136" value="Gap / not specified" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=0;fillColor=#ffffff;strokeColor=#b85450;dashed=1;fontColor=#b85450;fontStyle=2;fontSize=8;" vertex="1" parent="1"><mxGeometry x="190" y="2421" width="140" height="36" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="B - Data Pull and Routing Register" id="pg2">
+    <mxGraphModel dx="1400" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2200" pageHeight="1800" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="Bn1" value="DATA PULL AND ROUTING REGISTER  -  every retrieval in the flow, its trigger, its keys, and what it routes to.
+All pulls are READ-ONLY. The only writes in the whole solution are the Outlook draft / reply and the Aurora case record (FR3)." style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=0;fillColor=#3d6fa8;strokeColor=#1f4e79;fontColor=#ffffff;fontSize=10;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="30" y="20" width="2140" height="60" as="geometry"/></mxCell>
+        <mxCell id="Bn2" value="Pn" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=0;fillColor=#3d6fa8;strokeColor=#1f4e79;fontColor=#ffffff;fontSize=10;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="30" y="95" width="60" height="36" as="geometry"/></mxCell>
+        <mxCell id="Bn3" value="TRIGGER  /  DECISION" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=0;fillColor=#3d6fa8;strokeColor=#1f4e79;fontColor=#ffffff;fontSize=10;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="90" y="95" width="300" height="36" as="geometry"/></mxCell>
+        <mxCell id="Bn4" value="SYSTEM  -  OBJECT" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=0;fillColor=#3d6fa8;strokeColor=#1f4e79;fontColor=#ffffff;fontSize=10;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="390" y="95" width="250" height="36" as="geometry"/></mxCell>
+        <mxCell id="Bn5" value="QUERY KEY  (IN)" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=0;fillColor=#3d6fa8;strokeColor=#1f4e79;fontColor=#ffffff;fontSize=10;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="640" y="95" width="260" height="36" as="geometry"/></mxCell>
+        <mxCell id="Bn6" value="RETURNED DATA  (OUT)" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=0;fillColor=#3d6fa8;strokeColor=#1f4e79;fontColor=#ffffff;fontSize=10;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="900" y="95" width="480" height="36" as="geometry"/></mxCell>
+        <mxCell id="Bn7" value="ROUTING EFFECT" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=0;fillColor=#3d6fa8;strokeColor=#1f4e79;fontColor=#ffffff;fontSize=10;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="1380" y="95" width="700" height="36" as="geometry"/></mxCell>
+        <mxCell id="Bn8" value="P1" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="30" y="131" width="60" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn9" value="Invoice ID present in email (EE-01..03, 07..10)" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="90" y="131" width="300" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn10" value="Ariba - Invoice object" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="390" y="131" width="250" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn11" value="invoice_id" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="640" y="131" width="260" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn12" value="exists, status, supplier, header total, currency, lines, tax and charge lines, comments" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="900" y="131" width="480" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn13" value="Exists -&gt; promote candidate to subject. Absent -&gt; P7 secondary check. Status drives the whole branch choice." style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="1380" y="131" width="700" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn14" value="P2" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#f7f7f7;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="30" y="223" width="60" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn15" value="PO ID present, or invoice ID absent (EE-04, 11)" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#f7f7f7;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="90" y="223" width="300" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn16" value="Ariba - PO object" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#f7f7f7;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="390" y="223" width="250" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn17" value="po_id" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#f7f7f7;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="640" y="223" width="260" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn18" value="PO exists, status incl. closed, linked invoice IDs, lines, PA / BP ownership" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#f7f7f7;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="900" y="223" width="480" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn19" value="Derives the invoice set for a PO-only request. Confirms invoice-PO linkage from source, never from the email pairing (FS-02)." style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#f7f7f7;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="1380" y="223" width="700" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn20" value="P3" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="30" y="315" width="60" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn21" value="Supplier name absent from signature (EE-08, 12)" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="90" y="315" width="300" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn22" value="SPVR - supplier master" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="390" y="315" width="250" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn23" value="sender_email" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="640" y="315" width="260" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn24" value="supplier_id, company name, match count" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="900" y="315" width="480" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn25" value="1 match -&gt; resolved. &gt;1 -&gt; gate G4, no rule specified (N-12). 0 -&gt; supplier clarification." style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="1380" y="315" width="700" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn26" value="P4" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="30" y="407" width="60" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn27" value="No usable identifier supplied (EE-05, 12)" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="90" y="407" width="300" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn28" value="Ariba - invoice search" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="390" y="407" width="250" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn29" value="supplier_id + 3-month window (decision 4)" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="640" y="407" width="260" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn30" value="candidate invoice and PO set within the window" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="900" y="407" width="480" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn31" value="Fan out one subject per invoice. GAP N-15: no result cap or prioritisation, so a high-volume supplier is unbounded." style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="1380" y="407" width="700" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn32" value="P5" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="30" y="499" width="60" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn33" value="First validation in To-Be lane 2" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="90" y="499" width="300" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn34" value="Rules Store - convention" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="390" y="499" width="250" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn35" value="normalized invoice_id" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="640" y="499" width="260" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn36" value="convention valid y/n" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="900" y="499" width="480" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn37" value="Invalid -&gt; correction guidance to supplier and helpdesk note. GAP G-07: the convention itself does not exist in any artifact." style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="1380" y="499" width="700" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn38" value="P6" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#f7f7f7;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="30" y="591" width="60" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn39" value="Invoice status = Reconciled" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#f7f7f7;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="90" y="591" width="300" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn40" value="Ariba - payment fields (SoR)" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#f7f7f7;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="390" y="591" width="250" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn41" value="invoice_id" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#f7f7f7;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="640" y="591" width="260" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn42" value="payment status, paid amount, due date, scheduled payment date, transaction ID, remittance reference" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#f7f7f7;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="900" y="591" width="480" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn43" value="US-05 order: paid &gt; scheduled &gt; not yet due &gt; overdue. Missing financial data -&gt; review, never an assumed delay." style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#f7f7f7;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="1380" y="591" width="700" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn44" value="P7" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="30" y="683" width="60" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn45" value="Invoice absent from Ariba, or corroboration needed" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="90" y="683" width="300" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn46" value="SAP S/4HANA (+ BW)" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="390" y="683" width="250" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn47" value="invoice_id / SAP invoice ID" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="640" y="683" width="260" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn48" value="SAP invoice ID, payment status, paid amount, clearing date, transaction ID" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="900" y="683" width="480" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn49" value="Secondary only - Ariba wins on conflict (decision 2). Found ONLY here -&gt; non-PO / BCMS determination -&gt; out-of-scope exit." style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="1380" y="683" width="700" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn50" value="P8" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#f7f7f7;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="30" y="775" width="60" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn51" value="Reconciled, unpaid, past due (PO-04)" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#f7f7f7;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="90" y="775" width="300" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn52" value="SPVR - block status" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#f7f7f7;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="390" y="775" width="250" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn53" value="supplier_id" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#f7f7f7;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="640" y="775" width="260" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn54" value="block flag, block reason, block date" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#f7f7f7;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="900" y="775" width="480" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn55" value="Blocked -&gt; reason + unblock recommendation. Supplier sees the reason; past failed payments stay helpdesk-only." style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#f7f7f7;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="1380" y="775" width="700" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn56" value="P9" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="30" y="867" width="60" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn57" value="Overdue and not explained by a block (PO-05)" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="90" y="867" width="300" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn58" value="BIVS  [internal]" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="390" y="867" width="250" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn59" value="supplier_id" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="640" y="867" width="260" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn60" value="bank-change indicator and date  [fields TBC]" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="900" y="867" width="480" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn61" value="Changed -&gt; masked profile-update guidance. Masking is listed as an UNMET dependency in US-06." style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="1380" y="867" width="700" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn62" value="P10" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#f7f7f7;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="30" y="959" width="60" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn63" value="Overdue and still unexplained (PO-06)" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#f7f7f7;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="90" y="959" width="300" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn64" value="Ariba Network" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#f7f7f7;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="390" y="959" width="250" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn65" value="supplier_id" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#f7f7f7;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="640" y="959" width="260" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn66" value="supplier network presence" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#f7f7f7;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="900" y="959" width="480" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn67" value="Absent -&gt; internal escalation requesting Exostar / EDI verification. Absence is evidence for escalation, never a conclusion (US-07)." style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#f7f7f7;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="1380" y="959" width="700" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn68" value="P11" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="30" y="1051" width="60" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn69" value="Invoice status = Reconciling" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="90" y="1051" width="300" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn70" value="Ariba - Invoice Reconciliation" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="390" y="1051" width="250" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn71" value="invoice_id" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="640" y="1051" width="260" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn72" value="exception codes, affected lines, reconciliation state" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="900" y="1051" width="480" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn73" value="Exception class selects P12 / P13 / P14. ALL coexisting exceptions are returned - US-04 forbids forcing one cause." style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="1380" y="1051" width="700" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn74" value="P12" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="30" y="1143" width="60" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn75" value="PO-match exception (PO-10..17)" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="90" y="1143" width="300" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn76" value="Ariba - PO object (compare)" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="390" y="1143" width="250" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn77" value="po_id + line references" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="640" y="1143" width="260" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn78" value="line qty, UOM, unit price, line amount, currency, tax and charges" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="900" y="1143" width="480" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn79" value="Deterministic variance -&gt; supplier correction. Needs tolerances and UOM map, both ABSENT (G-08)." style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="1380" y="1143" width="700" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn80" value="P13" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="30" y="1235" width="60" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn81" value="Receipt exception (PO-07..09, 19..21)" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="90" y="1235" width="300" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn82" value="Ariba - Receipt object" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="390" y="1235" width="250" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn83" value="po_id / invoice_id" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="640" y="1235" width="260" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn84" value="existence, receipt ID, approval status, lines, approver, on-behalf-of" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="900" y="1235" width="480" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn85" value="No receipt -&gt; creation blocker (BP). Pending / rejected -&gt; approval blocker. Routes internal-first at gate G5." style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="1380" y="1235" width="700" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn86" value="P14" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="30" y="1327" width="60" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn87" value="Assigned PA unavailable (PO-09, US-14)" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="90" y="1327" width="300" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn88" value="PA Allocation List  [internal]" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="390" y="1327" width="250" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn89" value="PA id / PO ownership" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="640" y="1327" width="260" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn90" value="assigned PA, availability, substitute or newly allocated PA  [TBC]" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="900" y="1327" width="480" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn91" value="Substitute identified only from an approved allocation source. Missing allocation data -&gt; helpdesk review. Multi-party routing permitted." style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="1380" y="1327" width="700" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn92" value="P15" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="30" y="1419" width="60" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn93" value="Before any helpdesk assignment (DQ-13, US-02)" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="90" y="1419" width="300" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn94" value="Ariba - PR object" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="390" y="1419" width="250" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn95" value="invoice_id &gt; po_id &gt; pr_id" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="640" y="1419" width="260" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn96" value="PR ID, ITAR indicator, on-behalf-of" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="900" y="1419" width="480" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn97" value="Positive -&gt; US Helpdesk. Confirmed negative -&gt; India Helpdesk. Missing or ambiguous -&gt; HOLD at gate G3, never defaulted to non-ITAR." style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="1380" y="1419" width="700" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn98" value="P16" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="30" y="1511" width="60" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn99" value="Draft generation (FR13)" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="90" y="1511" width="300" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn100" value="Rules Store - templates" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="390" y="1511" width="250" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn101" value="finding type + audience" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="640" y="1511" width="260" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn102" value="template, supplier-safe wording, disclosure matrix, masking rules" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="900" y="1511" width="480" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn103" value="Selects the draft variant and the two-tier split. GAP N-30: only one sample template exists across all artifacts." style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="1380" y="1511" width="700" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn104" value="P17" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="30" y="1603" width="60" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn105" value="Every polled message (FR5)" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="90" y="1603" width="300" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn106" value="Aurora case store" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="390" y="1603" width="250" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn107" value="conversation_id / case_id" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="640" y="1603" width="260" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn108" value="open case, state, prior evidence, drafts, approvals" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="900" y="1603" width="480" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn109" value="Known conversation -&gt; append as an update and skip the intent gate. New -&gt; create case + correlation ID (FR1)." style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="1380" y="1603" width="700" height="92" as="geometry"/></mxCell>
+        <mxCell id="Bn110" value="READ / WRITE BOUNDARY:  P1-P17 are all reads. Ariba, SAP S/4, SPVR, BIVS and the PA Allocation List are never written to - US-18 states the PO must not be
+modified automatically, and FR3 grants write access only to the group mailbox and the case store. Consequence (N-29): when a draft asks a PA or BP to correct
+a PO or approve a receipt, nothing in the solution observes that it happened. The only return channel is a reply landing back in the group mailbox." style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=0;fillColor=#ffffff;strokeColor=#b85450;dashed=1;fontColor=#b85450;fontStyle=2;fontSize=8;" vertex="1" parent="1"><mxGeometry x="30" y="1715" width="2140" height="90" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="C - To-Be Flow Mapping" id="pg3">
+    <mxGraphModel dx="1400" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2000" pageHeight="1550" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="Cn1" value="MAPPING TO THE CURRENT TO-BE PROCESS FLOW  -  what is preserved, what moved, and what was missing" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=0;fillColor=#3d6fa8;strokeColor=#1f4e79;fontColor=#ffffff;fontSize=10;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="30" y="20" width="1940" height="50" as="geometry"/></mxCell>
+        <mxCell id="Cn2" value="CURRENT TO-BE ELEMENT" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=0;fillColor=#3d6fa8;strokeColor=#1f4e79;fontColor=#ffffff;fontSize=10;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="30" y="85" width="400" height="36" as="geometry"/></mxCell>
+        <mxCell id="Cn3" value="REFINED EQUIVALENT" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=0;fillColor=#3d6fa8;strokeColor=#1f4e79;fontColor=#ffffff;fontSize=10;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="430" y="85" width="400" height="36" as="geometry"/></mxCell>
+        <mxCell id="Cn4" value="CHANGE" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=0;fillColor=#3d6fa8;strokeColor=#1f4e79;fontColor=#ffffff;fontSize=10;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="830" y="85" width="520" height="36" as="geometry"/></mxCell>
+        <mxCell id="Cn5" value="BASIS" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=0;fillColor=#3d6fa8;strokeColor=#1f4e79;fontColor=#ffffff;fontSize=10;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="1350" y="85" width="600" height="36" as="geometry"/></mxCell>
+        <mxCell id="Cn6" value="Group Mailbox - Payment status Query" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="30" y="121" width="400" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn7" value="INPUT zone + P17 correlation" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="430" y="121" width="400" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn8" value="Thread, not message, is the unit of work. A reply appends to an open case instead of opening a new one." style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="830" y="121" width="520" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn9" value="FR5 - correlate replies to the same conversation and case" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="1350" y="121" width="600" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn10" value="Does it have PO ID / Invoice ID / Supplier Name" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#f7f7f7;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="30" y="191" width="400" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn11" value="Band 1 identification rows + P1 / P2 / P3" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#f7f7f7;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="430" y="191" width="400" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn12" value="Each decision now names the pull it triggers, its key and its returned fields." style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#f7f7f7;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="830" y="191" width="520" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn13" value="FR8, FR9, EE-01..12" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#f7f7f7;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="1350" y="191" width="600" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn14" value="Get SAP Invoice ID  (lane 1 entry)" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="30" y="261" width="400" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn15" value="P7, demoted to secondary" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="430" y="261" width="400" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn16" value="REORDERED. The flow no longer enters through S/4. Ariba is queried first and S/4 corroborates." style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="830" y="261" width="520" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn17" value="Stage 1 decision 2 - Ariba is system of record" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="1350" y="261" width="600" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn18" value="Is Invoice ID follows the correct convention" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="30" y="331" width="400" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn19" value="P5 against the Rules Store" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="430" y="331" width="400" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn20" value="Unchanged in position. Flagged because the convention rules do not exist in any artifact." style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="830" y="331" width="520" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn21" value="FR9, gap G-07" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="1350" y="331" width="600" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn22" value="Is Invoice ID present in the S4 Hana (Payment Status)" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="30" y="401" width="400" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn23" value="Band 2 status branch, sourced from Ariba" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="430" y="401" width="400" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn24" value="REPLACED as the gating check. Branching is on Ariba invoice status." style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="830" y="401" width="520" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn25" value="decision 2; US-03 / US-04 / US-05 investigation orders" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="1350" y="401" width="600" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn26" value="Is the amount paid / Due Date passed" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="30" y="471" width="400" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn27" value="P6 + US-05 classification order" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="430" y="471" width="400" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn28" value="Extended. The To-Be flow has no branch for remittance-in-clearing or payment-scheduled; both are confirmed scenarios." style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="830" y="471" width="520" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn29" value="PO-02, DQ-15, FS-31" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="1350" y="471" width="600" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn30" value="Check if supplier is in SPVR / blocked in SPVR" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="30" y="541" width="400" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn31" value="P8, plus P9 and P10 added" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="430" y="541" width="400" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn32" value="Extended into the full overdue chain: block, then bank-detail change, then network presence." style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="830" y="541" width="520" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn33" value="US-06, PO-04, PO-05, PO-06" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="1350" y="541" width="600" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn34" value="Is Invoice ID present in Ariba / Already present in S4" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="30" y="611" width="400" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn35" value="Band 2 not-found path -&gt; P7" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="430" y="611" width="400" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn36" value="Retained as the out-of-scope determination route, now explicit about BCMS being undefined." style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="830" y="611" width="520" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn37" value="gap N-02, decision 5" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="1350" y="611" width="600" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn38" value="Status of Invoice -&gt; IR Object -&gt; IR Error" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="30" y="681" width="400" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn39" value="P11 + exception class routing" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="430" y="681" width="400" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn40" value="Extended. All coexisting exceptions are returned rather than one error." style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="830" y="681" width="520" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn41" value="US-04" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#ffffff;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="1350" y="681" width="600" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn42" value="Get PO Object / Receipt Object and compare" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#f7f7f7;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="30" y="751" width="400" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn43" value="P12 / P13 -&gt; Deterministic Evaluation Engine" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#f7f7f7;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="430" y="751" width="400" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn44" value="Comparison is explicitly deterministic arithmetic, never model inference." style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#f7f7f7;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="830" y="751" width="520" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn45" value="FR21, US-08..US-17" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#f7f7f7;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="1350" y="751" width="600" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn46" value="if receipt is uploaded / approved, Get on Behalf of" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="30" y="821" width="400" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn47" value="P13 + P14 added" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="430" y="821" width="400" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn48" value="Extended with PA availability and substitute-PA lookup, which the To-Be flow omits." style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="830" y="821" width="520" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn49" value="PO-09, US-14" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="1350" y="821" width="600" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn50" value="(absent)" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="30" y="891" width="400" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn51" value="Three-way match: invoice matches receipt, not PO" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="430" y="891" width="400" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn52" value="ADDED. A confirmed scenario with no path in the current To-Be diagram." style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="830" y="891" width="520" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn53" value="PO-18, US-18" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="1350" y="891" width="600" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn54" value="(absent)" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="30" y="961" width="400" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn55" value="Closed PO and duplicate-invoice rejection causes" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="430" y="961" width="400" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn56" value="ADDED. Two confirmed rejection causes with no path in the current To-Be diagram." style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="830" y="961" width="520" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn57" value="PO-25, PO-26" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="1350" y="961" width="600" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn58" value="Check for comments from BP / naming convention incorrect" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#f7f7f7;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="30" y="1031" width="400" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn59" value="Band 3 rejection RCA in US-03 order" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#f7f7f7;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="430" y="1031" width="400" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn60" value="Reordered into the stated five-cause decision order." style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#f7f7f7;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="830" y="1031" width="520" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn61" value="US-03" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#f7f7f7;strokeColor=#b3b3b3;fontSize=8;" vertex="1" parent="1"><mxGeometry x="1350" y="1031" width="600" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn62" value="Get PR Object for ITAR field -&gt; ITAR Field Value" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="30" y="1101" width="400" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn63" value="P15, evaluated before helpdesk assignment" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="430" y="1101" width="400" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn64" value="Position retained. Added the mandatory hold when the indicator is missing or ambiguous." style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="830" y="1101" width="520" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn65" value="US-02, gate G3" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="1350" y="1101" width="600" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn66" value="Draft the mail -&gt; TCS / US Helpdesk" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="30" y="1171" width="400" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn67" value="Band 4 + two-tier DraftPackage" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="430" y="1171" width="400" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn68" value="Helpdesk-only data moved OUT of the draft body into a review panel, so it cannot be sent by accident." style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="830" y="1171" width="520" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn69" value="scenario tab disclosure columns; FR3" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="1350" y="1171" width="600" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn70" value="(absent)" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="30" y="1241" width="400" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn71" value="Help Desk Review gate G1 with approve / edit / reject / more info" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="430" y="1241" width="400" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn72" value="ADDED. The To-Be flow ends at a drafted mail with no approval loop, no case states and no rework path." style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="830" y="1241" width="520" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn73" value="FR14, FR26, FR27" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="1350" y="1241" width="600" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn74" value="(absent)" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="30" y="1311" width="400" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn75" value="Missing-information return path to the requester" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="430" y="1311" width="400" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn76" value="ADDED. The To-Be flow cannot ask a supplier for a missing identifier." style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="830" y="1311" width="520" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn77" value="FR10, US-01" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="1350" y="1311" width="600" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn78" value="Unable to find in any system  (unlabelled return edge)" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="30" y="1381" width="400" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn79" value="Exception flow with a named destination" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="430" y="1381" width="400" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn80" value="Given a terminal state. In the current diagram this edge loops back with no end point." style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="830" y="1381" width="520" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn81" value="FR25, FR26" style="whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=6;spacingTop=2;rounded=0;fillColor=#fff4f4;strokeColor=#d79b9b;fontSize=8;fontColor=#a03535;" vertex="1" parent="1"><mxGeometry x="1350" y="1381" width="600" height="70" as="geometry"/></mxCell>
+        <mxCell id="Cn82" value="Rows shaded red are changes, additions or flagged gaps relative to the current To-Be flow. Eight confirmed scenarios and the entire
+approval loop had no path in the original diagram; one element (the S/4-first entry) is reordered as a direct consequence of
+Ariba being confirmed as system of record." style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;rounded=0;fillColor=#ffffff;strokeColor=#b85450;dashed=1;fontColor=#b85450;fontStyle=2;fontSize=8;" vertex="1" parent="1"><mxGeometry x="30" y="1466" width="1920" height="70" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
