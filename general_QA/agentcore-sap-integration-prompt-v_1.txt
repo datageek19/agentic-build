@@ -1,0 +1,600 @@
+# Deep Research Prompt: AWS AgentCore Integration with SAP
+
+You are a senior enterprise integration architect specializing in AWS agentic AI, Amazon Bedrock AgentCore, SAP S/4HANA, SAP Ariba, SAP supplier master data, and enterprise security.
+
+Analyze the attached AWS-based agentic solution diagram for a payment-mismatch investigation and resolution use case. Our team will develop the agentic solution, but we need a clear, implementation-ready understanding of how the AWS solution should integrate with the SAP landscape and how AgentCore components should be developed, tested, deployed, and operated.
+
+Use authoritative and current sources whenever possible, including AWS and SAP documentation, official architecture guidance, API documentation, security guidance, and relevant enterprise integration patterns. Clearly distinguish:
+
+- Confirmed facts from official documentation
+- Reasonable architectural recommendations
+- Assumptions requiring confirmation
+- Unknowns or decisions that must be made by stakeholders
+
+Do not invent details about our SAP environment. If the attached diagram does not provide enough information, identify the missing information and formulate specific questions for the SAP, security, infrastructure, and operations teams.
+
+## 1. Executive Summary
+
+Provide a concise summary of:
+
+- The recommended AgentCore–SAP integration approach
+- The major SAP integration points
+- The expected AWS, middleware, and SAP responsibilities
+- The recommended local-development and production-deployment model
+- The most important risks, dependencies, and stakeholder decisions
+
+## 2. Current-State Understanding
+
+Infer and document the current-state architecture from the attached diagram, including:
+
+- Agentic components and their responsibilities
+- AWS services currently shown or implied
+- SAP systems involved:
+  - SAP S/4HANA
+  - SAP Ariba
+  - SPVR or supplier master-data systems
+- Email or mailbox ingestion components
+- Middleware, API gateway, integration, or eventing components
+- Human helpdesk review and approval steps
+- Data stores, knowledge stores, audit stores, and observability components
+- System boundaries and trust boundaries
+
+For each inferred component, identify whether it is:
+
+1. Explicitly shown in the diagram  
+2. Implied by the workflow  
+3. Recommended but not yet confirmed  
+
+## 3. SAP Landscape Assessment
+
+Explain the SAP capabilities and integration mechanisms that may be relevant to this use case:
+
+- SAP S/4HANA APIs, OData services, SOAP services, RFC/BAPI, IDoc, events, and CDS-based interfaces
+- SAP Ariba APIs, integration interfaces, cXML, APIs, and event-driven options
+- Supplier master-data and SPVR access patterns
+- Purchase orders, invoices, goods receipts, payment status, vendor data, exception data, and related business objects
+- SAP Integration Suite, Cloud Integration, API Management, Event Mesh, or other middleware options
+- When to use synchronous APIs versus asynchronous messaging or batch extraction
+- Availability, rate limits, pagination, filtering, and versioning considerations
+- Whether a canonical enterprise data model should be introduced between AWS and SAP
+
+Do not assume that a particular SAP product, API, or connector is available. List the prerequisites that must be confirmed.
+
+## 4. AgentCore Integration Patterns with SAP
+
+Evaluate practical integration patterns for connecting AWS AgentCore-based agents with SAP. Include at least:
+
+### Pattern A: Direct API integration
+
+AgentCore tools call SAP APIs directly through secured AWS services.
+
+### Pattern B: Middleware-mediated integration
+
+AgentCore calls an enterprise integration layer such as SAP Integration Suite, API Gateway, or another approved middleware platform, which then communicates with SAP.
+
+### Pattern C: Event-driven integration
+
+SAP or middleware publishes business events to an event bus or queue, and AWS agents process the events asynchronously.
+
+### Pattern D: Data replication or read-optimized access
+
+Relevant SAP data is replicated or materialized into an AWS-accessible store for investigation and retrieval.
+
+For each pattern, compare:
+
+- Architecture
+- Best-fit use cases
+- Latency
+- Coupling
+- Security
+- Reliability
+- Transaction consistency
+- Operational complexity
+- Data freshness
+- Auditability
+- Scalability
+- Development effort
+- Production suitability
+- Key limitations
+
+Recommend a target pattern or hybrid pattern and explain why.
+
+## 5. Target Architecture
+
+Propose a high-level target architecture for the payment-mismatch solution. Include:
+
+- Mailbox ingestion
+- ITAR/non-ITAR classification, if applicable
+- AgentCore runtime and agent orchestration
+- Agent tools and tool permissions
+- API Gateway or equivalent API layer
+- SAP Integration Suite or other middleware
+- SAP S/4HANA integration
+- SAP Ariba integration
+- SPVR or supplier master-data integration
+- Event bus, queues, and dead-letter queues
+- Caching or read-optimized data stores
+- Secrets and key management
+- Audit and traceability storage
+- Monitoring, logging, alerting, and operational dashboards
+- Human-in-the-loop review
+- Response drafting and outbound communication
+- Network boundaries, VPC connectivity, private endpoints, and firewall controls
+
+Provide a Mermaid architecture diagram or another clearly rendered diagram. Clearly label:
+
+- AWS components
+- SAP components
+- Middleware components
+- External systems
+- Human users
+- Synchronous interfaces
+- Asynchronous interfaces
+- Trust boundaries
+
+## 6. Agent-to-SAP Interaction Model
+
+Describe precisely how each agent should interact with SAP and related systems.
+
+For every agent or workflow step, specify:
+
+- Business purpose
+- Input data
+- Output data
+- Read-only or write capability
+- SAP system accessed
+- API, adapter, or integration interface
+- Synchronous or asynchronous behavior
+- Expected response time
+- Authorization scope
+- Audit requirements
+- Failure behavior
+- Human approval requirement
+
+Pay particular attention to:
+
+- PO lookup and validation
+- Invoice and payment-status investigation
+- Supplier and vendor verification
+- Goods receipt or service-entry validation
+- Mismatch classification
+- Root-cause analysis
+- Resolution recommendation
+- Resolution execution
+- Draft response generation
+- Human approval before any write-back or external communication
+
+Recommend that agent tools use narrowly scoped, typed interfaces rather than allowing agents to construct arbitrary SAP queries or transactions.
+
+## 7. APIs, Adapters, Data Formats, and Contracts
+
+Create a draft inventory of integration touchpoints, including:
+
+| Capability | Source system | Target system | Interface | Data format | Operation | Frequency | Security | Owner |
+|---|---|---|---|---|---|---|---|---|
+
+Include candidate data contracts for:
+
+- Purchase order
+- Invoice
+- Payment status
+- Supplier or vendor
+- Goods receipt
+- Contract or purchasing reference
+- Mismatch case
+- Investigation result
+- Resolution recommendation
+- Audit event
+- Human approval
+
+For each contract, define:
+
+- Required and optional fields
+- Identifiers and correlation IDs
+- Timestamps and time zones
+- Currency and amount representation
+- Status and reason codes
+- Source-system references
+- Versioning strategy
+- Data classification
+- Validation rules
+- Error response structure
+- Idempotency requirements
+
+Do not present candidate fields as confirmed SAP fields. Clearly mark them as illustrative until validated against the actual SAP APIs and data model.
+
+## 8. Security, Authentication, Authorization, and Governance
+
+Explain the recommended security model for AgentCore-to-SAP integration, including:
+
+- IAM roles and least-privilege access
+- Workload identity and service-to-service authentication
+- OAuth 2.0, mTLS, certificates, SAML, or other relevant mechanisms
+- SAP technical users and communication users
+- Secrets Manager and key rotation
+- Network connectivity and private routing
+- VPC, VPN, Direct Connect, PrivateLink, proxies, and allowlists
+- API Gateway authorization and throttling
+- Tool-level authorization for agents
+- Separation between read-only investigation and write-capable operations
+- Human approval for consequential actions
+- ITAR, non-ITAR, export-control, and sensitive supplier-data boundaries
+- Data minimization and prompt/data redaction
+- Encryption in transit and at rest
+- Security logging and privileged-action monitoring
+- Separation of duties
+- Production access controls
+
+Identify which controls must be implemented in AWS, SAP, middleware, and the enterprise identity platform.
+
+## 9. Data Flow, Reliability, Latency, and Error Handling
+
+Describe the end-to-end data flow for:
+
+1. Email or case intake  
+2. Classification and routing  
+3. Agent investigation  
+4. SAP and supplier-data retrieval  
+5. Mismatch analysis  
+6. Resolution recommendation  
+7. Human review  
+8. SAP update or downstream action  
+9. Draft response and case closure  
+
+For each step, address:
+
+- Request and response flow
+- Correlation and trace IDs
+- Timeout behavior
+- Retry policy
+- Exponential backoff
+- Idempotency
+- Duplicate-event handling
+- Partial failure
+- Circuit breakers
+- Rate limiting
+- Dead-letter queues
+- Replay and recovery
+- Event ordering
+- Eventual consistency
+- SAP maintenance windows
+- Monitoring and alert thresholds
+- Escalation path
+
+Recommend which actions should be synchronous and which should be asynchronous.
+
+## 10. Development Model
+
+Define how the development team should build and test the solution.
+
+Compare:
+
+### Local development
+
+- Local agent and tool development
+- Mock SAP APIs
+- Contract testing
+- Local containers
+- Synthetic data
+- AWS service emulators, where appropriate
+- Secure remote access to approved development endpoints
+- Local debugging and tracing
+
+### Remote or cloud development
+
+- AWS development account
+- Shared development services
+- AgentCore development runtime
+- Development API Gateway
+- SAP sandbox or development system
+- Integration middleware development tenant
+- Centralized logging and tracing
+- Team collaboration and environment controls
+
+Recommend which components can run locally and which should run in AWS or an approved remote environment.
+
+Include:
+
+- Repository structure
+- Branching strategy
+- Infrastructure-as-code
+- Configuration management
+- Environment variables
+- Secrets handling
+- Mock and sandbox strategy
+- Unit testing
+- Integration testing
+- Contract testing
+- End-to-end testing
+- Security testing
+- Prompt and tool testing
+- Agent evaluation
+- Regression testing
+- Test-data management
+
+## 11. Environment and Deployment Strategy
+
+Define a recommended environment model:
+
+- Local
+- Development
+- System integration testing
+- QA
+- UAT
+- Production
+
+For each environment, specify:
+
+- AWS account or boundary
+- AgentCore runtime
+- SAP endpoint
+- Middleware tenant
+- Data classification
+- Network connectivity
+- Secrets and keys
+- Logging and monitoring
+- Deployment permissions
+- Test-data restrictions
+- Approval requirements
+
+Describe deployment strategies such as:
+
+- Blue/green deployment
+- Canary deployment
+- Rolling deployment
+- Versioned agent and tool releases
+- Feature flags
+- Prompt versioning
+- Backward-compatible API changes
+- Database or schema migration
+- Rollback and recovery
+
+Provide a high-level CI/CD pipeline covering:
+
+1. Source commit  
+2. Static analysis and security scanning  
+3. Unit tests  
+4. Contract tests  
+5. Agent evaluation tests  
+6. Build and package  
+7. Infrastructure validation  
+8. Deployment to development  
+9. Integration testing  
+10. Promotion to QA/UAT  
+11. Business approval  
+12. Production deployment  
+13. Post-deployment validation  
+14. Rollback, if required  
+
+## 12. Configuration and Secret Management
+
+Explain how to manage:
+
+- SAP endpoints
+- API versions
+- AgentCore runtime configuration
+- Model configuration
+- Prompt versions
+- Tool definitions
+- Feature flags
+- Queue names
+- Event topics
+- Environment-specific parameters
+- Certificates
+- OAuth credentials
+- SAP technical-user credentials
+- API keys
+- Encryption keys
+
+Clearly separate:
+
+- Source-controlled configuration
+- Environment-specific configuration
+- Secrets
+- Runtime-generated values
+
+## 13. Observability and Operations
+
+Define the required operational model, including:
+
+- Structured application logs
+- Agent reasoning or decision trace policy
+- Tool invocation logs
+- SAP request and response metadata
+- Correlation IDs
+- Distributed tracing
+- Metrics
+- Dashboards
+- Alerts
+- Cost monitoring
+- Agent quality metrics
+- SAP API failures
+- Queue depth
+- Retry counts
+- Dead-letter messages
+- Latency and throughput
+- Human-review backlog
+- Incident response
+- Runbooks
+- Disaster recovery
+- Business continuity
+- Audit retention
+
+Address how to record enough information for auditability without exposing sensitive data or unrestricted chain-of-thought content.
+
+## 14. Compliance, Audit, and Traceability
+
+Define the audit trail needed for:
+
+- Original email or case
+- Classification decision
+- Agent version
+- Prompt and configuration version
+- Tools invoked
+- SAP records retrieved
+- Decisions and recommendations
+- Human approvals or overrides
+- SAP updates
+- Final response
+- Timestamps
+- User and service identities
+- Correlation IDs
+- Data lineage
+
+Explain retention, immutability, access control, and investigation requirements.
+
+## 15. Roles and Responsibilities
+
+Create a RACI-style responsibility matrix covering:
+
+- SAP integration lead
+- Agentic AI development lead
+- AWS/cloud infrastructure representative
+- SAP S/4HANA owner
+- SAP Ariba owner
+- SPVR or supplier-data owner
+- Middleware/API integration owner
+- Security and identity owner
+- Compliance and risk owner
+- QA/testing representative
+- DevOps/platform owner
+- Operations/support owner
+- Business process owner
+- Helpdesk or payment operations representative
+
+Include responsibility for:
+
+- API discovery
+- Data contracts
+- Adapter development
+- Agent tools
+- Network connectivity
+- Identity and access
+- Test environments
+- CI/CD
+- Monitoring
+- UAT
+- Production support
+- Incident response
+- Change approval
+
+## 16. Milestones, Risks, and Decisions
+
+Propose a high-level implementation plan with milestones such as:
+
+1. Current-state discovery  
+2. SAP API and data-model validation  
+3. Integration-pattern decision  
+4. Security and network design  
+5. Data-contract definition  
+6. Mock and sandbox development  
+7. Agent tool development  
+8. AWS–SAP integration testing  
+9. End-to-end testing  
+10. UAT  
+11. Production readiness review  
+12. Pilot deployment  
+13. Production rollout  
+14. Hypercare and operational handoff  
+
+Identify key risks, including:
+
+- SAP API availability or limitations
+- Unclear ownership of SAP adapters
+- Network or firewall delays
+- Incomplete data contracts
+- Insufficient test data
+- Write-back permissions
+- Long SAP response times
+- Duplicate or inconsistent data
+- Agent hallucination or incorrect resolution recommendations
+- ITAR or sensitive-data exposure
+- Inadequate auditability
+- Environment drift
+- Lack of operational ownership
+- Dependency on middleware teams
+
+For each risk, provide impact, likelihood, mitigation, owner, and decision deadline.
+
+## 17. Stakeholder Questions and Required Decisions
+
+Prepare a concise question list for the next stakeholder workshop. Include questions about:
+
+- SAP systems and versions
+- Available APIs and integration products
+- Sandbox and test access
+- Authentication and connectivity
+- Read versus write operations
+- Data ownership
+- API limits and latency
+- Eventing capabilities
+- Middleware ownership
+- Security classification
+- ITAR/non-ITAR boundaries
+- Audit and retention
+- UAT ownership
+- Production support
+- Deployment approval
+- Service-level expectations
+
+Separate the questions into:
+
+- SAP questions
+- AWS/cloud questions
+- Security questions
+- Business-process questions
+- QA/testing questions
+- Operations questions
+
+## 18. Follow-Up Workshop Proposal
+
+Draft a follow-up meeting proposal containing:
+
+- Meeting title
+- Objective
+- Proposed duration
+- Recommended participants
+- Required pre-reading
+- Decisions to be made
+- Expected outputs
+- Action-item format
+- Proposed next steps
+
+Recommended participants:
+
+- SAP integration lead
+- SAP S/4HANA representative
+- SAP Ariba representative
+- SPVR or supplier-master-data owner
+- Agentic AI development lead
+- AWS/cloud infrastructure representative
+- Security and compliance owner
+- Middleware/API integration owner
+- QA/testing representative
+- DevOps/platform representative
+- Business process or payment operations owner
+
+## Required Final Deliverables
+
+Produce the following outputs:
+
+1. Executive summary  
+2. Current-state architecture interpretation  
+3. SAP landscape and integration assessment  
+4. Comparison of AgentCore–SAP integration patterns  
+5. Recommended target architecture  
+6. High-level architecture diagram  
+7. End-to-end data-flow description  
+8. Draft API and data-contract inventory  
+9. Security and governance model  
+10. Local-development versus cloud-development model  
+11. Environment and CI/CD plan  
+12. Deployment and rollback strategy  
+13. Monitoring, logging, and incident-response model  
+14. Roles and responsibility matrix  
+15. Milestone plan  
+16. Risk and dependency register  
+17. Stakeholder decision log  
+18. Follow-up workshop agenda and action-item template  
+
+Use precise enterprise architecture language. Keep confirmed facts, assumptions, recommendations, and open questions clearly separated. Do not claim that an integration pattern is production-ready until its SAP APIs, security model, network path, data contracts, operational ownership, and testing requirements have been validated.
