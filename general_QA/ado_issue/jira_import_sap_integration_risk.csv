@@ -1,0 +1,377 @@
+"Issue ID","Parent","Issue Type","Summary","Priority","Labels","Labels","Labels","Labels","Description"
+"1","","Epic","[Integration Risk] AWS AgentCore ↔ SAP (S/4HANA, Ariba, SPVR) integration not confirmed for Dev / UAT / Pre-prod / Prod — Payment Mismatch (Outlook + FootPrints)","Highest","integration-risk","leadership-visibility","uc-outlook-mailbox","uc-footprints","h2. Leadership summary
+
+*What:* The AWS agentic solution (Amazon Bedrock AgentCore, Bedrock, Step Functions, Lambda, Aurora) is designed. How it connects to SAP S/4HANA, SAP Ariba and SPVR / supplier master is NOT yet confirmed in any environment (Dev, UAT, Pre-prod, Prod).
+
+*Why it matters:* Until these integrations are confirmed we cannot build or test against real SAP data, estimate integration effort, or commit to UAT and go-live dates. Most answers sit with teams outside the project (SAP Basis / Integration, Ariba, Network, Security, Trade Controls).
+
+*Scope:* Both use cases: (1) Outlook group mailbox — supplier payment queries; (2) FootPrints — PO-mismatch tickets.
+
+*Current state:* Design complete. Development continues against mock SAP services only. Phase 1 reads SAP only; no SAP updates. Every outbound reply / ticket update is human-approved.
+
+*Ask:* Named owner and answer for each child item by <target date>.
+
+*Overall status:* RED — integration path unconfirmed (update weekly)
+
+h3. Integration confirmation status
+||System||Dev||UAT||Pre-prod||Prod||
+|SAP S/4HANA|Not confirmed|Not confirmed|Not confirmed|Not confirmed|
+|SAP Ariba|Not confirmed|Not confirmed|Not confirmed|Not confirmed|
+|SPVR / supplier master|Not confirmed|Not confirmed|Not confirmed|Not confirmed|
+|Network path / SAP API Management|Not confirmed|Not confirmed|Not confirmed|Not confirmed|
+|Microsoft 365 group mailbox (Outlook)|Not confirmed|Not confirmed|Not confirmed|Not confirmed|
+|FootPrints|Not confirmed|Not confirmed|Not confirmed|Not confirmed|
+|Region / ITAR boundary|Not decided|Not decided|Not decided|Not decided|
+
+h3. Which use case each item blocks
+||Item||Outlook mailbox||FootPrints||
+|Region / ITAR boundary|Yes|Yes|
+|Network path & integration layer|Yes|Yes|
+|S/4HANA APIs & users|Yes|If S/4 data needed|
+|Ariba API access|Yes|Yes|
+|SPVR / supplier master|Yes|Yes|
+|System-of-record matrix|Yes|Yes|
+|Mailbox access (Graph)|Yes|—|
+|FootPrints API & write-back|—|Yes|
+
+h3. Impact if unresolved
+* Dev: real SAP integration tests cannot start; work stays on mocks.
+* UAT / Pre-prod: cannot be scheduled without SAP QA endpoints, users and test data.
+* Prod: no reliable go-live date; risk of rework if the region / ITAR decision changes the design.
+
+h3. Decisions needed
+# Region / partition and ITAR data boundary (Trade Controls)
+# Integration pattern: SAP API Management vs direct private connectivity (SAP Integration + Network)
+# Phase 1 read-only scope toward SAP (business owners)
+
+h3. Definition of done
+* All child items closed with documented answers
+* Integration status table below is fully confirmed for Dev and UAT / Pre-prod; Prod is planned
+* Integration decision record approved by architecture / security
+
+h3. References
+Architecture report: AgentCore_SAP_Payment_Mismatch_Integration_Report.md · Landscapes: AgentCore_SAP_Environment_Landscapes.drawio (attach both)"
+"2","1","Story","Decide AWS region / partition and ITAR data boundary for the solution","Highest","integration-risk","uc-outlook-mailbox","uc-footprints","leadership-visibility","h3. Context
+The architecture can run in a commercial AWS Region or AWS GovCloud (US). Which one is required depends on whether ITAR-controlled data can appear in emails, tickets, attachments or SAP records. This decision must come before any environment holds real data. Per the current AWS region table, some AgentCore features used in the design (Memory, Policy) are not listed for GovCloud (US-West), so the decision also changes the design.
+
+*Use case(s) affected:* Both — Outlook group mailbox and FootPrints
+
+h3. Questions to answer
+# Can ITAR-controlled technical data enter the platform (email body, ticket text, attachments, SAP fields)?
+# Which AWS partition / Region is required for each environment?
+# Is the FootPrints scope note ('ITAR routing intentionally excluded') sufficient, or must ITAR data be filtered or blocked?
+# How should cases with unknown ITAR status be handled (proposed: stop and route to manual review)?
+
+h3. Per-environment answers
+||Environment||Region / partition||Approved by||Owner||Status||
+|Dev| | | |Not confirmed|
+|UAT| | | |Not confirmed|
+|Pre-prod| | | |Not confirmed|
+|Prod| | | |Not confirmed|
+
+h3. Acceptance criteria
+* Written determination from Trade Controls / Export Compliance
+* Region / partition recorded for Dev, UAT, Pre-prod, Prod
+* AgentCore feature availability (Runtime, Gateway, Identity, Memory, Policy, Evaluations) confirmed for the chosen Region
+* Bedrock model availability confirmed for the chosen Region
+
+*Suggested owner(s):* Trade Controls / Export Compliance; Cloud Platform
+*Parent:* SAP integration risk epic"
+"3","1","Story","Confirm network path and integration layer from AWS to SAP S/4HANA and SPVR per environment","Highest","integration-risk","uc-outlook-mailbox","uc-footprints","leadership-visibility","h3. Context
+The diagrams show 'approved API calls' to SAP but no network path, middleware or authentication. The proposed pattern is AWS Lambda tools → SAP API Management (SAP BTP Integration Suite + Cloud Connector) → S/4HANA, with direct private connectivity (Transit Gateway / Direct Connect / VPN) as a fallback. Neither option is confirmed to exist.
+
+*Use case(s) affected:* Both — Outlook group mailbox and FootPrints
+
+h3. Questions to answer
+# Does Boeing have SAP BTP Integration Suite / API Management in use, and who owns API proxies?
+# If not, what private network path exists from AWS VPCs to S/4HANA and SPVR?
+# Are IP allowlists, mutual TLS or proxy inspection required?
+# Are the endpoints different for each SAP tier (DEV / QAS / PRD)?
+
+h3. Per-environment answers
+||Environment||Integration path||Endpoint / host||Owner||Status||
+|Dev| | | |Not confirmed|
+|UAT| | | |Not confirmed|
+|Pre-prod| | | |Not confirmed|
+|Prod| | | |Not confirmed|
+
+h3. Acceptance criteria
+* Integration pattern decided and recorded (API Management vs direct private connectivity)
+* Endpoint and network path documented for each environment
+* Firewall / allowlist requests raised with owners
+* Connectivity smoke test passes from the Dev VPC to SAP DEV (read-only)
+
+*Suggested owner(s):* SAP Integration / Basis; Enterprise Network; Cloud Platform
+*Parent:* SAP integration risk epic"
+"4","1","Story","Confirm S/4HANA edition, available OData APIs and read-only technical users per SAP tier","High","integration-risk","uc-outlook-mailbox","uc-footprints","","h3. Context
+The investigation tools need read access to S/4HANA business objects. Candidate APIs from SAP documentation (availability in Boeing's edition is not confirmed): Purchase Order (API_PURCHASEORDER_PROCESS_SRV), Supplier Invoice (API_SUPPLIERINVOICE_PROCESS_SRV), goods receipt via Material Documents, payment / clearing status via Accounting Document – Read (API_OPLACCTGDOCITEMCUBE_SRV), and Business Partner / Supplier.
+
+*Use case(s) affected:* Both — Outlook group mailbox and FootPrints
+
+h3. Questions to answer
+# Which S/4HANA edition and release runs in each tier (on-premise, RISE private edition, public cloud)?
+# Which of the candidate OData services are active, or can be activated?
+# Can one read-only technical user per tier be created? What authorization roles apply?
+# Authentication: OAuth via API Management, X.509 or basic auth?
+
+h3. Per-environment answers
+||Environment||SAP system / client||Technical user / auth||Owner||Status||
+|Dev| | | |Not confirmed|
+|UAT| | | |Not confirmed|
+|Pre-prod| | | |Not confirmed|
+|Prod| | | |Not confirmed|
+
+h3. Acceptance criteria
+* Edition and release documented for each tier
+* List of active APIs per business object confirmed by SAP Basis
+* Read-only technical users requested or created for DEV and QAS, with PRD planned
+* API metadata ($metadata) captured from SAP DEV for mock and contract tests
+
+*Suggested owner(s):* SAP Basis; SAP Security; SAP functional (MM / FI)
+*Parent:* SAP integration risk epic"
+"5","1","Story","Confirm SAP Ariba API access per environment: realms, API apps, rate limits and fields","High","integration-risk","uc-outlook-mailbox","uc-footprints","","h3. Context
+Both use cases read Ariba purchase orders, invoices, invoice reconciliation (IR) and receipts. The candidate interface is the SAP Ariba Operational Reporting API for Procurement (view templates, sync and async). SAP has historically published low synchronous rate limits for this API, so the design caches snapshots. Current limits for Boeing's API applications are unknown.
+
+*Use case(s) affected:* Both — Outlook group mailbox and FootPrints
+
+h3. Questions to answer
+# Which Ariba realms map to Dev, UAT, Pre-prod and Prod? Is the test realm shared?
+# Can API applications (OAuth client credentials) be registered for each realm?
+# What are the current rate limits for those applications?
+# Are IR exception details (exception type, line, status) available in the view templates?
+
+h3. Per-environment answers
+||Environment||Ariba realm||API app / OAuth client||Owner||Status||
+|Dev| | | |Not confirmed|
+|UAT| | | |Not confirmed|
+|Pre-prod| | | |Not confirmed|
+|Prod| | | |Not confirmed|
+
+h3. Acceptance criteria
+* Realm mapping documented for each environment
+* API applications approved and credentials stored in AWS Secrets Manager
+* Rate limits documented and confirmed against the design call budget
+* Field coverage for PO, invoice, IR and receipt confirmed with one sample view template
+
+*Suggested owner(s):* SAP Ariba administrator; Procurement systems
+*Parent:* SAP integration risk epic"
+"6","1","Story","Identify SPVR / supplier master data source, interface and owner","High","integration-risk","uc-outlook-mailbox","uc-footprints","","h3. Context
+SPVR / supplier master data is required for supplier context (status, payment terms, remit-to). It does not appear in either solution diagram, and its system type is unknown. SAP's Ariba reporting API does not provide supplier data, so another source is needed.
+
+*Use case(s) affected:* Both — Outlook group mailbox and FootPrints
+
+h3. Questions to answer
+# What is SPVR (system, vendor, hosting) and who owns it?
+# Is supplier master data held in SPVR, S/4HANA Business Partner, or both? Which is authoritative?
+# What interface is available (API, database view, file), and in which environments?
+# Which fields are sensitive (bank details, tax IDs) and must be masked?
+
+h3. Per-environment answers
+||Environment||SPVR / supplier system||Interface / endpoint||Owner||Status||
+|Dev| | | |Not confirmed|
+|UAT| | | |Not confirmed|
+|Pre-prod| | | |Not confirmed|
+|Prod| | | |Not confirmed|
+
+h3. Acceptance criteria
+* SPVR system, owner and authoritative fields documented
+* Interface and environment endpoints confirmed, or a gap recorded
+* Sensitive-field handling agreed with Security
+
+*Suggested owner(s):* Supplier master data owner; Procurement systems
+*Parent:* SAP integration risk epic"
+"7","1","Story","Agree system-of-record matrix for PO, receipt, invoice, IR exception, payment status and supplier","High","integration-risk","uc-outlook-mailbox","uc-footprints","","h3. Context
+With both Ariba and S/4HANA in the landscape, the same object may exist in both systems. The agent must read each fact from the authoritative source, or it may give a wrong root cause.
+
+*Use case(s) affected:* Both — Outlook group mailbox and FootPrints
+
+h3. Questions to answer
+# For each object (PO, goods receipt, supplier invoice, IR exception, payment block, payment / clearing status, supplier), which system is authoritative?
+# How quickly does data replicate between Ariba and S/4HANA?
+# Is SAP BW needed at all, given that it may be loaded on a schedule?
+
+h3. Acceptance criteria
+* Signed-off matrix: object → system of record → API → freshness expectation
+* Tool scope for each use case updated to match
+
+*Suggested owner(s):* Accounts Payable and Procurement process owners; SAP functional
+*Parent:* SAP integration risk epic"
+"8","1","Story","Agree AWS ↔ SAP environment mapping, test identities and test data for Dev, UAT, Pre-prod","High","integration-risk","uc-outlook-mailbox","uc-footprints","","h3. Context
+Each AWS environment must connect only to its matching SAP tier, with its own credentials and identities. The proposal: Dev → SAP DEV / sandbox; UAT / Pre-prod → SAP QAS; Prod → SAP PRD. If SAP has only DEV and PRD, or has a separate pre-prod tier, the plan changes.
+
+*Use case(s) affected:* Both — Outlook group mailbox and FootPrints
+
+h3. Questions to answer
+# Which SAP tiers exist (DEV / QAS / pre-prod / PRD) for S/4HANA, Ariba and SPVR?
+# Is QAS data a copy of production? Is it masked?
+# Which test users (reviewers, QA) will exist in each environment?
+# Can we get 30–50 sanitized historical mismatch cases with known root causes (golden cases)?
+
+h3. Per-environment answers
+||Environment||SAP / Ariba / SPVR tier||Test data & identities||Owner||Status||
+|Dev| | | |Not confirmed|
+|UAT| | | |Not confirmed|
+|Pre-prod| | | |Not confirmed|
+|Prod| | | |Not confirmed|
+
+h3. Acceptance criteria
+* Environment mapping approved
+* Test data source and masking status documented
+* Test identities requested
+* Golden-case set agreed with QA and the business
+
+*Suggested owner(s):* QA lead; SAP Basis; business owners
+*Parent:* SAP integration risk epic"
+"9","1","Story","Confirm Phase 1 read-only scope for SAP and any Phase 2 SAP update candidates","Medium","integration-risk","uc-outlook-mailbox","uc-footprints","","h3. Context
+Neither diagram includes SAP writes, and the FootPrints scope leaves Ariba corrections out. Phase 1 writes only an Outlook reply or FootPrints update, after human approval. Any SAP update (for example, releasing a payment block) needs a separate decision covering approval rules, segregation of duties and SAP-side audit.
+
+*Use case(s) affected:* Both — Outlook group mailbox and FootPrints
+
+h3. Questions to answer
+# Do the business owners confirm Phase 1 is read-only toward SAP?
+# Which SAP updates, if any, are Phase 2 candidates?
+# Must SAP change logs show the human approver (user-level authentication) or is a technical user acceptable?
+
+h3. Acceptance criteria
+* Phase 1 read-only scope signed off
+* Phase 2 candidate list recorded (or 'none')
+* SAP Security view on technical user vs approver identity recorded
+
+*Suggested owner(s):* Business owners (AP / Procurement); SAP Security
+*Parent:* SAP integration risk epic"
+"10","1","Story","Confirm human review application: hosting, single sign-on and approver roles","Medium","integration-risk","uc-outlook-mailbox","uc-footprints","","h3. Context
+Every outbound action needs reviewer approval. The Outlook diagram refers to an internal application ('Email, AskBoeing'); the FootPrints diagram shows a Human Review Service. Hosting, identity provider and approval authority are not defined.
+
+*Use case(s) affected:* Both — Outlook group mailbox and FootPrints
+
+h3. Questions to answer
+# Is this an existing internal app (for example AskBoeing) or a new one?
+# Which identity provider and groups define reviewers per environment?
+# Who can approve which action (approval authority matrix)?
+
+h3. Per-environment answers
+||Environment||Review app instance||Reviewer group||Owner||Status||
+|Dev| | | |Not confirmed|
+|UAT| | | |Not confirmed|
+|Pre-prod| | | |Not confirmed|
+|Prod| | | |Not confirmed|
+
+h3. Acceptance criteria
+* Hosting and SSO approach decided
+* Reviewer groups for each environment requested
+* Approval authority matrix signed off
+
+*Suggested owner(s):* Business owners; Identity / IAM team
+*Parent:* SAP integration risk epic"
+"11","1","Story","Outlook use case: confirm Microsoft 365 group mailbox access via Microsoft Graph per environment","High","integration-risk","uc-outlook-mailbox","","","h3. Context
+Payment queries arrive in an M365 group mailbox. The solution polls it through Microsoft Graph and replies in the same thread after approval. App registration, permissions and test mailboxes are not confirmed.
+
+*Use case(s) affected:* Outlook group mailbox (payment queries)
+
+h3. Questions to answer
+# Which mailbox (or test mailbox) is used in each environment?
+# Can an app registration with mailbox-scoped read and send permissions be approved?
+# Are there retention, journaling or DLP rules that affect automated replies?
+
+h3. Per-environment answers
+||Environment||Mailbox||App registration / permissions||Owner||Status||
+|Dev| | | |Not confirmed|
+|UAT| | | |Not confirmed|
+|Pre-prod| | | |Not confirmed|
+|Prod| | | |Not confirmed|
+
+h3. Acceptance criteria
+* Mailboxes for each environment named
+* App registrations approved with least-privilege, mailbox-scoped access
+* Read and reply tested in Dev against a test mailbox
+
+*Suggested owner(s):* M365 / Messaging team; Identity team
+*Parent:* SAP integration risk epic"
+"12","1","Story","Outlook use case: confirm source of payment, block and release status (S/4HANA vs SAP BW)","High","integration-risk","uc-outlook-mailbox","","","h3. Context
+Supplier payment queries need current payment status. The Outlook design reads S/4HANA (payment / block status) and SAP BW ('secondary database'). BW may be loaded on a schedule and could give stale answers.
+
+*Use case(s) affected:* Outlook group mailbox (payment queries)
+
+h3. Questions to answer
+# Which S/4HANA object or API gives payment, block and clearing status reliably?
+# What is BW used for here, and how fresh is it?
+# Is non-PO invoice scope in or out for Phase 1?
+
+h3. Per-environment answers
+||Environment||Payment status source||Freshness||Owner||Status||
+|Dev| | | |Not confirmed|
+|UAT| | | |Not confirmed|
+|Pre-prod| | | |Not confirmed|
+|Prod| | | |Not confirmed|
+
+h3. Acceptance criteria
+* Payment status source agreed with AP and SAP FI
+* BW decision recorded (use / don't use, with freshness)
+* Non-PO scope decision recorded
+
+*Suggested owner(s):* Accounts Payable; SAP FI; SAP BW owner
+*Parent:* SAP integration risk epic"
+"13","1","Story","Outlook use case: confirm PR / ITAR indicator source for incoming payment queries","Medium","integration-risk","uc-outlook-mailbox","","","h3. Context
+The Outlook design includes a 'PR ITAR Context Tool' (PR linkage and ITAR indicator). Its source system and interface are not identified. It should run before any other SAP read and stop the case if ITAR status is unknown.
+
+*Use case(s) affected:* Outlook group mailbox (payment queries)
+
+h3. Questions to answer
+# Which system holds the PR / ITAR indicator?
+# What interface is available, and in which environments?
+# Who owns the ITAR rules applied?
+
+h3. Per-environment answers
+||Environment||Source system||Interface||Owner||Status||
+|Dev| | | |Not confirmed|
+|UAT| | | |Not confirmed|
+|Pre-prod| | | |Not confirmed|
+|Prod| | | |Not confirmed|
+
+h3. Acceptance criteria
+* Source and interface documented
+* Rule ownership confirmed with Trade Controls
+
+*Suggested owner(s):* Trade Controls; Procurement systems
+*Parent:* SAP integration risk epic"
+"14","1","Story","FootPrints use case: confirm FootPrints API access, attachments and write-back per environment","High","integration-risk","uc-footprints","","","h3. Context
+PO-mismatch tickets are polled from FootPrints, attachments are extracted, and approved resolutions are written back as comments or status updates. API access, test / UAT instances and write permissions are not confirmed.
+
+*Use case(s) affected:* FootPrints (PO-mismatch tickets)
+
+h3. Questions to answer
+# Is there a FootPrints API for queue polling, ticket history and attachments?
+# Do test and UAT instances exist? If not, what is the alternative?
+# Which service account and permissions are allowed for comments and status updates?
+
+h3. Per-environment answers
+||Environment||FootPrints instance||Service account / permissions||Owner||Status||
+|Dev| | | |Not confirmed|
+|UAT| | | |Not confirmed|
+|Pre-prod| | | |Not confirmed|
+|Prod| | | |Not confirmed|
+
+h3. Acceptance criteria
+* API and instances documented for each environment
+* Service account approved (read queue; write comment / status only)
+* Polling and write-back tested in Dev
+
+*Suggested owner(s):* FootPrints administrator; IT Service Management
+*Parent:* SAP integration risk epic"
+"15","1","Story","FootPrints use case: confirm whether S/4HANA or SPVR data is needed beyond Ariba","Medium","integration-risk","uc-footprints","","","h3. Context
+The FootPrints design uses Ariba-only tools (PO, invoice, IR exceptions, receipt). Some PO-mismatch root causes (goods receipt posting, supplier status, payment block) may live in S/4HANA or SPVR.
+
+*Use case(s) affected:* FootPrints (PO-mismatch tickets)
+
+h3. Questions to answer
+# Which mismatch types are in scope for Phase 1?
+# Can each one be diagnosed from Ariba alone?
+# If not, which S/4HANA or SPVR objects are required?
+
+h3. Acceptance criteria
+* In-scope mismatch types listed
+* Data source per mismatch type confirmed
+* Tool scope updated (Ariba-only, or Ariba plus S/4HANA / SPVR)
+
+*Suggested owner(s):* Procurement process owner; Ariba administrator
+*Parent:* SAP integration risk epic"
