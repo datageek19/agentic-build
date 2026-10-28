@@ -94,3 +94,149 @@ def profile_columns(frame):
             "Blank": len(frame) - len(filled),
             "Distinct nonblank values": filled.nunique(),
         })
+    return pd.DataFrame(rows)
+
+
+def classify(eligible):
+    out = eligible.copy()
+    for name in [TYPE, SUBTYPE, TITLE, DETAIL]:
+        out[name] = clean_text(out[name])
+    category = (out[TYPE].fillna("") + " " + out[SUBTYPE].fillna(""))
+    free_text = (out[TITLE].fillna("") + " " + out[DETAIL].fillna(""))
+    out["Category payment match"] = category.str.contains(CATEGORY_PAYMENT, na=False)
+    out["Text payment match"] = free_text.str.contains(TEXT_PAYMENT, na=False)
+    out["Payment-related"] = out["Category payment match"] | out["Text payment match"]
+    out["Payment evidence"] = "No keyword match"
+    out.loc[out["Category payment match"], "Payment evidence"] = "Category"
+    out.loc[out["Text payment match"], "Payment evidence"] = "Title or detail"
+    out.loc[out["Category payment match"] & out["Text payment match"], "Payment evidence"] = "Category and text"
+    if SUBMITTED in out:
+        out[SUBMITTED] = pd.to_datetime(out[SUBMITTED], errors="coerce")
+        out["Submitted month"] = out[SUBMITTED].dt.strftime("%Y-%m").fillna("Date missing")
+    if EDITED in out:
+        out[EDITED] = pd.to_datetime(out[EDITED], errors="coerce")
+    return out
+
+
+def counts(frame, column, base, top=None):
+    values = clean_text(frame[column]).fillna("(blank)")
+    result = values.value_counts(dropna=False).rename_axis(column).reset_index(name="Tickets")
+    result["% of selected tickets"] = result["Tickets"].map(lambda n: pct(n, base))
+    return result.head(top) if top else result
+
+
+def charts(tickets, payment):
+    chart_dir = OUTPUT_DIR / "charts"
+    chart_dir.mkdir(parents=True, exist_ok=True)
+
+    fig, ax = plt.subplots(figsize=(7, 4))
+    labels = ["Payment-related", "Other eligible tickets"]
+    values = [len(payment), len(tickets) - len(payment)]
+    ax.bar(labels, values, color=["#176B8A", "#9CA8B3"])
+    for i, value in enumerate(values):
+        ax.text(i, value, f"{value:,} ({pct(value, len(tickets)):.1f}%)", ha="center", va="bottom")
+    ax.set(title="Tickets in the eligible sample", ylabel="Tickets")
+    ax.set_ylim(0, max(values + [1]) * 1.15)
+    fig.tight_layout()
+    fig.savefig(chart_dir / "01_payment_share.png", dpi=160)
+    plt.close(fig)
+
+    if SUBMITTED in tickets and tickets[SUBMITTED].notna().any():
+        trend = (tickets.loc[tickets[SUBMITTED].notna()]
+                 .groupby("Submitted month")["Payment-related"].agg(["sum", "count"]).sort_index())
+        if not trend.empty:
+            fig, ax = plt.subplots(figsize=(8, 4))
+            ax.bar(trend.index, trend["sum"], label="Payment-related", color="#176B8A")
+            ax.bar(trend.index, trend["count"] - trend["sum"], bottom=trend["sum"],
+                   label="Other eligible tickets", color="#9CA8B3")
+            ax.set(title="Tickets by submission month", ylabel="Tickets", xlabel="Month")
+            ax.legend()
+            fig.tight_layout()
+            fig.savefig(chart_dir / "02_monthly_tickets.png", dpi=160)
+            plt.close(fig)
+
+    if len(payment) and STATUS in payment:
+        top = counts(payment, STATUS, len(payment), top=8).iloc[::-1]
+        fig, ax = plt.subplots(figsize=(8, 4))
+        ax.barh(top[STATUS], top["Tickets"], color="#176B8A")
+        ax.set(title="Payment-related tickets by status", xlabel="Tickets")
+        fig.tight_layout()
+        fig.savefig(chart_dir / "03_payment_status.png", dpi=160)
+        plt.close(fig)
+
+
+def main():
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    raw, eligible, flow = load_and_scope()
+    if eligible.empty:
+        raise ValueError("No rows passed the Ticket Number and Request Type/Sub-Type checks.")
+    tickets = classify(eligible)
+    payment = tickets.loc[tickets["Payment-related"]].copy()
+    duplicate_rows = int(tickets[TICKET].duplicated(keep=False).sum())
+    unique_tickets = tickets[TICKET].nunique()
+
+    metrics = pd.DataFrame([
+        ("Input rows", len(raw), "All rows in the source sheet"),
+        ("Eligible records", len(tickets), "Six-digit ID and populated Type and Sub-Type"),
+        ("Unique eligible ticket numbers", unique_tickets, "Duplicates are retained in record counts"),
+        ("Records with repeated ticket numbers", duplicate_rows, "Check whether export contains multiple updates"),
+        ("Payment-related records", len(payment), "Keyword match in Type, Sub-Type, Title, or Detail"),
+        ("Payment-related share of eligible records (%)", pct(len(payment), len(tickets)),
+         "Denominator: eligible records; keyword matches require review"),
+        ("Payment-related records with blank title", int(clean_text(payment[TITLE]).isna().sum()),
+         "Denominator: payment-related records"),
+        ("Payment-related records with blank detail", int(clean_text(payment[DETAIL]).isna().sum()),
+         "Denominator: payment-related records"),
+    ], columns=["Measure", "Value", "Definition"])
+
+    profile = profile_columns(eligible)
+    evidence = counts(payment, "Payment evidence", len(payment)) if len(payment) else pd.DataFrame()
+    with pd.ExcelWriter(OUTPUT_DIR / "footprints_payment_summary.xlsx", engine="openpyxl") as writer:
+        save_table(writer, "Overview", metrics)
+        save_table(writer, "Filtering", flow)
+        save_table(writer, "Column completeness", profile)
+        if len(payment):
+            save_table(writer, "Payment evidence", evidence)
+            for field, sheet in [(TYPE, "Payment request type"),
+                                 (SUBTYPE, "Payment subtype"),
+                                 (STATUS, "Payment status")]:
+                if field in payment:
+                    save_table(writer, sheet, counts(payment, field, len(payment), top=15))
+        if STATUS in tickets:
+            save_table(writer, "All eligible status", counts(tickets, STATUS, len(tickets)))
+        if SUBMITTED in tickets:
+            monthly = (tickets.groupby("Submitted month", dropna=False)["Payment-related"]
+                       .agg(Payment_related="sum", Eligible_records="count").reset_index())
+            monthly["Payment share %"] = monthly.apply(
+                lambda row: pct(row["Payment_related"], row["Eligible_records"]), axis=1)
+            save_table(writer, "Monthly trend", monthly)
+
+    charts(tickets, payment)
+    review_cols = [TICKET, TYPE, SUBTYPE, TITLE, DETAIL, "Payment evidence"]
+    review = tickets.loc[:, review_cols].copy()
+    review["Rule flag"] = tickets["Payment-related"].map({True: "Payment-related", False: "Other"})
+    review["Reviewer: payment-related? (Y-N)"] = ""
+    review.to_csv(OUTPUT_DIR / "classification_review.csv", index=False)
+
+    summary = [
+        "# FootPrints ticket overview", "",
+        f"- Source rows: **{len(raw):,}**; eligible records: **{len(tickets):,}**.",
+        f"- Payment-related keyword matches: **{len(payment):,}** "
+        f"({pct(len(payment), len(tickets)):.1f}% of eligible records).",
+        f"- Unique eligible ticket numbers: **{unique_tickets:,}**. "
+        f"Records with a repeated Ticket Number: **{duplicate_rows:,}**.",
+        "", f"The {EXPECTED_ELIGIBLE_ROWS:,}-record checkpoint is a validation aid; all figures above are calculated "
+        "from the selected workbook. The payment flag is a keyword screen, not a confirmed "
+        "business classification. Review flagged and unflagged records before using the share "
+        "to size the payment workflow.", "",
+        "Date Submitted to Last Edit is not a resolution-time measure. This analysis does not "
+        "infer automation success or SAP integration readiness from ticket text.",
+    ]
+    (OUTPUT_DIR / "business_summary.md").write_text("\n".join(summary), encoding="utf-8")
+    print(f"Source: {len(raw):,} rows; eligible: {len(tickets):,}; "
+          f"payment-related: {len(payment):,} ({pct(len(payment), len(tickets)):.1f}%).")
+    print(f"Results: {OUTPUT_DIR.resolve()}")
+
+
+if __name__ == "__main__":
+    main()
