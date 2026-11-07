@@ -1,0 +1,67 @@
+* golden prompt for paper note extraction
+
+Read the entire attached research paper—including its figures, tables, appendices, and supplementary material—and write a concise, technically faithful research note. Use my annotations to identify priority passages, but also capture unhighlighted material that is essential to understanding the paper.
+
+The note should let me understand the paper’s problem, setup, method, assumptions, contributions, evidence, and limitations without rereading the full paper. Do not invent missing details or use outside sources.
+
+WRITING AND ACCURACY
+- Write in clear, direct academic prose. Avoid generic openings, repeated summaries, filler transitions, and phrases such as “this paper provides valuable insights.” State the facts directly.
+- Attribute claims accurately. Distinguish what the authors claim from what their theorems prove and what their experiments show.
+- Preserve the paper’s notation, equations, optimization direction, distributions, conditioning, assumptions, and qualifications.
+- Cite important technical statements with page and section, plus an equation, theorem, figure, or table number when available.
+- Mark information the paper does not provide as [NOT REPORTED]. Mark genuine ambiguity or internal inconsistency as [UNCLEAR: reason].
+- Use annotations to guide emphasis. Mention an annotation only when it adds a point, question, or interpretation beyond the paper text.
+
+NOTE STRUCTURE
+
+## Paper and central idea
+Give the title and publication details if stated. In a few sentences, explain the problem, the central idea, how the method addresses the problem, and the main reported contribution.
+
+## Problem setup and objective
+Describe:
+- the task, environment, and available data or supervision;
+- the inputs, outputs, and decision variables;
+- the objective being optimized;
+- the assumptions that define the setting.
+
+Include the key notation in a compact table:
+
+| Symbol | Meaning and type | Role or restriction |
+|---|---|---|
+
+Include only symbols needed to understand the method and main results. Flag overloaded notation or notation that changes meaning.
+
+## Method
+Explain the method in the order it operates: data and inputs, learned components, training objectives, and inference or deployment. State what is learned, what is fixed, and how the components interact.
+
+Include the core equations needed to understand the method. Reproduce them faithfully in LaTeX, define their terms, state what is optimized, and cite each source. Include implementation details needed to understand or reproduce the approach when reported; do not guess at missing details.
+
+## Contributions and theoretical results
+List the authors’ main contributions. Explain what they claim is distinctive and how they position it against prior work, using only comparisons made in the paper.
+
+For each central theorem, proposition, definition, or bound, state:
+- its assumptions;
+- its exact conclusion;
+- what the result means for the method;
+- what it does not establish.
+
+Label each item as a definition, formal result, approximation, heuristic, or empirical claim. Keep proof intuition brief and include only steps needed to understand the result.
+
+## Experimental evidence and limitations
+Summarize the experiments that bear on the main claims. Give the setting or dataset, data or supervision type, important baselines, metric, and key result when reported. Prioritize claim-bearing experiments and ablations; do not list every experiment if it does not affect the paper’s main conclusions.
+
+Separate:
+- limitations the authors state;
+- limitations or open questions evident from the setup or results.
+
+Note missing experimental details, inconsistent results, and cases where evidence is narrower than the claim.
+
+## Relevance to my research
+My research concerns offline imitation learning with expert and suboptimal demonstrations, robustness to data quality and composition, vector-valued rewards or costs, demonstration ranking, representation learning, distributional methods, Pareto or stochastic-dominance objectives, and improvement beyond demonstrations.
+
+Briefly identify which paper ideas may be relevant, what assumptions would need to hold, and what new theory or experiments my setting would require. Keep this section separate from the paper’s established results. Do not imply that the paper supports an idea merely because the topics are similar.
+
+FINAL REVIEW
+Before returning the note, check that it covers the paper’s core problem, objective, method, assumptions, theoretical contributions, and evidence; that claims are accurately qualified and sourced; and that important unhighlighted material was not missed.
+
+Aim for 2–3 pages of notes. Preserve essential technical detail over a strict page limit; if more space is necessary for a faithful account, use it rather than omit a central assumption, result, or method component. Return the note only.
