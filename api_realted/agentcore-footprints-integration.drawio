@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" modified="2026-11-09T15:23:00.000Z" agent="OpenAI ChatGPT" version="24.7.17" type="device">
+  <diagram id="agentcore-footprints" name="AgentCore–FootPrints Integration">
+    <mxGraphModel dx="1260" dy="1040" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="1050" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="frame" value="" style="rounded=1;whiteSpace=wrap;html=1;arcSize=3;fillColor=#FFFFFF;strokeColor=#D6DAE0;strokeWidth=1.2;shadow=0;" vertex="1" parent="1">
+          <mxGeometry x="35" y="30" width="1030" height="960" as="geometry" />
+        </mxCell>
+        <mxCell id="agent" value="&lt;div style=&quot;text-align:center;font-family:Arial,Helvetica,sans-serif;&quot;&gt;&lt;div style=&quot;font-size:21px;line-height:1.5;&quot;&gt;&lt;b&gt;Amazon Bedrock AgentCore Agent&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;color:#70757C;font-size:16px;line-height:1.75;&quot;&gt;Payment Investigation Agent&lt;/div&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;fontSize=18;fontColor=#191919;" vertex="1" parent="1">
+          <mxGeometry x="120" y="75" width="860" height="125" as="geometry" />
+        </mxCell>
+        <mxCell id="gateway" value="&lt;div style=&quot;text-align:center;font-family:Arial,Helvetica,sans-serif;&quot;&gt;&lt;div style=&quot;font-size:21px;line-height:1.5;&quot;&gt;&lt;b&gt;AgentCore Gateway&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;color:#70757C;font-size:16px;line-height:1.75;&quot;&gt;Exposes ticket retrieval tools&lt;/div&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;align=center;verticalAlign=middle;spacingTop=18;spacingBottom=14;fillColor=#FFFFFF;strokeColor=#D6DAE0;strokeWidth=1.2;fontSize=18;fontColor=#191919;" vertex="1" parent="1">
+          <mxGeometry x="90" y="255" width="920" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="lambda" value="&lt;div style=&quot;text-align:center;font-family:Arial,Helvetica,sans-serif;&quot;&gt;&lt;div style=&quot;font-size:21px;line-height:1.5;&quot;&gt;&lt;b&gt;AWS Lambda – FootPrints SOAP Adapter&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;color:#70757C;font-size:16px;line-height:1.75;&quot;&gt;Builds SOAP requests, handles authentication, converts responses to JSON&lt;/div&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;align=center;verticalAlign=middle;spacingTop=18;spacingBottom=14;fillColor=#FFFFFF;strokeColor=#D6DAE0;strokeWidth=1.2;fontSize=18;fontColor=#191919;" vertex="1" parent="1">
+          <mxGeometry x="90" y="435" width="920" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="soap" value="&lt;div style=&quot;text-align:center;font-family:Arial,Helvetica,sans-serif;&quot;&gt;&lt;div style=&quot;font-size:21px;line-height:1.5;&quot;&gt;&lt;b&gt;BMC FootPrints Web Services API&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;color:#70757C;font-size:16px;line-height:1.75;&quot;&gt;search() / getIssueDetails()&lt;/div&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;align=center;verticalAlign=middle;spacingTop=18;spacingBottom=14;fillColor=#FFFFFF;strokeColor=#D6DAE0;strokeWidth=1.2;fontSize=18;fontColor=#191919;" vertex="1" parent="1">
+          <mxGeometry x="90" y="615" width="920" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="footprints" value="&lt;div style=&quot;text-align:center;font-family:Arial,Helvetica,sans-serif;&quot;&gt;&lt;div style=&quot;font-size:21px;line-height:1.5;&quot;&gt;&lt;b&gt;FootPrints Application / Ticket Database&lt;/b&gt;&lt;/div&gt;&lt;div style=&quot;color:#70757C;font-size:16px;line-height:1.75;&quot;&gt;Legacy procurement ticket records&lt;/div&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fillColor=none;strokeColor=none;fontSize=18;fontColor=#191919;" vertex="1" parent="1">
+          <mxGeometry x="120" y="805" width="860" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#9097A0;strokeWidth=1.8;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="agent" target="gateway">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#9097A0;strokeWidth=1.8;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="gateway" target="lambda">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#9097A0;strokeWidth=1.8;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="lambda" target="soap">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#9097A0;strokeWidth=1.8;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="soap" target="footprints">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="mcp_label" value="MCP tool invocation" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=14;fontColor=#737980;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="565" y="214" width="240" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="https_label" value="HTTPS / approved network connectivity" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=middle;fontFamily=Arial;fontSize=14;fontColor=#737980;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="565" y="574" width="360" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="doc_note" value="Proposed architecture — endpoint, permissions and network access require validation" style="text;html=1;whiteSpace=wrap;align=center;verticalAlign=middle;fontFamily=Arial;fontSize=12;fontColor=#84909C;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="180" y="940" width="740" height="24" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
