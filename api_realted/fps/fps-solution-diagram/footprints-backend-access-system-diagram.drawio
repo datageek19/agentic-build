@@ -1,0 +1,521 @@
+<mxfile host="app.diagrams.net" pages="2">
+  <diagram name="1 - Level 1 overview" id="pGLHZhsYLzSkurh8crzo">
+    <mxGraphModel dx="1992" dy="895" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1160" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="l1-txt-1" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=17;fontColor=#1F2933;spacing=2;" value="&lt;b&gt;BMC FootPrints (workspace 144) → AWS via read-only SQL (Kerberos) → AgentCore&lt;/b&gt;" vertex="1">
+          <mxGeometry height="26" width="1140" x="10" y="6" as="geometry" />
+        </mxCell>
+        <mxCell id="l1-grp-3" parent="1" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=1;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_corporate_data_center;strokeColor=#7D8998;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#5A6C86;dashed=0;" value="Boeing on-prem network" vertex="1">
+          <mxGeometry height="200" width="1130" x="10" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="l1-box-4" parent="l1-grp-3" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#5A6C86;fontColor=#1F2933;fontSize=12;align=center;verticalAlign=middle;spacing=4;" value="&lt;b&gt;FootPrints SQL Server&lt;/b&gt;&lt;br&gt;FootPrints DB · workspace 144 tables&lt;br&gt;MASTER144 (+ _DESCRIPTIONS, _HISTORY, …)&lt;br&gt;TDS 1433 + TLS · Windows auth" vertex="1">
+          <mxGeometry height="120" width="340" x="20" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="l1-box-5" parent="l1-grp-3" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#5A6C86;fontColor=#1F2933;fontSize=12;align=center;verticalAlign=middle;spacing=4;" value="&lt;b&gt;FootPrints app server&lt;/b&gt;&lt;br&gt;attachment files (not in SQL)&lt;br&gt;read-only SMB share, TCP 445" vertex="1">
+          <mxGeometry height="120" width="340" x="390" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="l1-box-6" parent="l1-grp-3" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#5A6C86;fontColor=#1F2933;fontSize=12;align=center;verticalAlign=middle;spacing=4;" value="&lt;b&gt;Active Directory (KDC) and DNS&lt;/b&gt;&lt;br&gt;svc-fp-ro-nonprod / svc-fp-ro-prd&lt;div&gt;&lt;br/&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="120" width="340" x="760" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="l1-v-7" parent="1" style="rounded=1;arcSize=30;html=1;whiteSpace=wrap;fillColor=#EEF1F4;strokeColor=#7D8998;fontSize=13;fontColor=#1F2933;" value="Direct Connect or VPN + Transit Gateway  ·  firewall allows only 1433 (SQL), 88 (Kerberos), 445 (attachments, optional), 53 (DNS)" vertex="1">
+          <mxGeometry height="44" width="1130" x="10" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="l1-grp-8" parent="1" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=1;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_aws_cloud_alt;strokeColor=#232F3E;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#232F3E;dashed=0;" value="AWS account, one per environment (Dev / UAT / Prod) — AWS GovCloud (US-West)" vertex="1">
+          <mxGeometry height="670" width="1130" x="10" y="365" as="geometry" />
+        </mxCell>
+        <mxCell id="l1-box-9" parent="l1-grp-8" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#5A6C86;fontColor=#1F2933;fontSize=12;align=center;verticalAlign=middle;spacing=4;" value="&lt;b&gt;Scheduler&lt;/b&gt;&lt;br&gt;EventBridge&lt;br&gt;every 5 min (tunable)" vertex="1">
+          <mxGeometry height="130" width="190" x="20" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="l1-box-10" parent="l1-grp-8" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#DCEBFB;strokeColor=#1F6FD1;fontColor=#1F2933;fontSize=12;align=center;verticalAlign=middle;spacing=4;strokeWidth=2;" value="&lt;b&gt;Ingestion Lambda (FootPrints client)&lt;/b&gt;&lt;br&gt;private subnets (VPC)&lt;br&gt;kinit (Kerberos) + ODBC Driver 18&lt;br&gt;Trusted_Connection, read-only SELECTs" vertex="1">
+          <mxGeometry height="130" width="330" x="240" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="l1-box-11" parent="l1-grp-8" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#5A6C86;fontColor=#1F2933;fontSize=12;align=center;verticalAlign=middle;spacing=4;" value="&lt;b&gt;Secrets Manager&lt;/b&gt;&lt;br&gt;service-account password&lt;br&gt;KMS key" vertex="1">
+          <mxGeometry height="130" width="240" x="600" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="l1-box-12" parent="l1-grp-8" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#5A6C86;fontColor=#1F2933;fontSize=12;align=center;verticalAlign=middle;spacing=4;" value="&lt;b&gt;Route 53 Resolver&lt;/b&gt;&lt;br&gt;outbound endpoint&lt;br&gt;to on-prem DNS" vertex="1">
+          <mxGeometry height="130" width="240" x="870" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="l1-box-13" parent="l1-grp-8" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#5A6C86;fontColor=#1F2933;fontSize=12;align=center;verticalAlign=middle;spacing=4;" value="&lt;b&gt;Amazon S3&lt;/b&gt;&lt;br&gt;ticket JSON + attachments&lt;br&gt;KMS, one bucket per env" vertex="1">
+          <mxGeometry height="110" width="250" x="20" y="255" as="geometry" />
+        </mxCell>
+        <mxCell id="l1-box-14" parent="l1-grp-8" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#5A6C86;fontColor=#1F2933;fontSize=12;align=center;verticalAlign=middle;spacing=4;" value="&lt;b&gt;DynamoDB&lt;/b&gt;&lt;div&gt;&lt;br/&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="110" width="250" x="300" y="255" as="geometry" />
+        </mxCell>
+        <mxCell id="l1-box-15" parent="l1-grp-8" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#5A6C86;fontColor=#1F2933;fontSize=12;align=center;verticalAlign=middle;spacing=4;" value="&lt;b&gt;Amazon SQS + DLQ&lt;/b&gt;&lt;br&gt;one message per&lt;br&gt;changed ticket" vertex="1">
+          <mxGeometry height="110" width="250" x="580" y="255" as="geometry" />
+        </mxCell>
+        <mxCell id="l1-box-16" parent="l1-grp-8" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#5A6C86;fontColor=#1F2933;fontSize=12;align=center;verticalAlign=middle;spacing=4;" value="&lt;b&gt;Step Functions&lt;/b&gt;&lt;br&gt;case workflow&lt;br&gt;PII mask, Guardrails" vertex="1">
+          <mxGeometry height="110" width="250" x="860" y="255" as="geometry" />
+        </mxCell>
+        <mxCell id="l1-grp-17" parent="l1-grp-8" style="rounded=1;arcSize=2;html=1;whiteSpace=wrap;container=1;collapsible=0;recursiveResize=0;pointerEvents=0;fillColor=none;strokeColor=#8C4FFF;dashed=1;verticalAlign=top;align=left;spacingLeft=8;spacingTop=2;fontSize=12;fontStyle=1;fontColor=#5A30B5;" value="Amazon Bedrock AgentCore" vertex="1">
+          <mxGeometry height="230" width="1090" x="20" y="415" as="geometry" />
+        </mxCell>
+        <mxCell id="l1-box-18" parent="l1-grp-17" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#5A6C86;fontColor=#1F2933;fontSize=12;align=center;verticalAlign=middle;spacing=4;" value="&lt;b&gt;AgentCore Gateway&lt;/b&gt;&lt;br&gt;Lambda tools:&lt;br&gt;get_ticket, get_attachment_text&lt;br&gt;query_cases (read-only)" vertex="1">
+          <mxGeometry height="150" width="330" x="20" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="l1-box-19" parent="l1-grp-17" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#F1EBFD;strokeColor=#8C4FFF;fontColor=#1F2933;fontSize=12;align=center;verticalAlign=middle;spacing=4;" value="&lt;b&gt;Classification agent&lt;/b&gt;&lt;br&gt;payment-related?&lt;br&gt;ITAR? with confidence" vertex="1">
+          <mxGeometry height="120" width="210" x="380" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="l1-box-20" parent="l1-grp-17" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#F1EBFD;strokeColor=#8C4FFF;fontColor=#1F2933;fontSize=12;align=center;verticalAlign=middle;spacing=4;" value="&lt;b&gt;Extraction agent&lt;/b&gt;&lt;br&gt;PO, invoice no., supplier,&lt;br&gt;transaction date, details" vertex="1">
+          <mxGeometry height="120" width="220" x="610" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="l1-box-21" parent="l1-grp-17" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#F1EBFD;strokeColor=#8C4FFF;fontColor=#1F2933;fontSize=12;align=center;verticalAlign=middle;spacing=4;" value="&lt;b&gt;Reporting agent&lt;/b&gt;&lt;br&gt;insight report&lt;br&gt;from Aurora" vertex="1">
+          <mxGeometry height="120" width="210" x="850" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="l1-e-23" edge="1" parent="1" source="l1-box-10" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5A6C86;strokeWidth=1.5;dashed=0;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#5A6C86;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;exitX=0.15;exitY=0;exitDx=0;exitDy=0;entryX=0.79;entryY=1;entryDx=0;entryDy=0;" target="l1-box-4" value="TDS 1433 + TLS (Kerberos)">
+          <mxGeometry relative="1" x="0.55" as="geometry" />
+        </mxCell>
+        <mxCell id="l1-e-25" edge="1" parent="1" source="l1-box-10" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5A6C86;strokeWidth=1.5;dashed=0;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#5A6C86;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;jumpStyle=arc;jumpSize=8;exitX=0.94;exitY=0;exitDx=0;exitDy=0;entryX=0.206;entryY=1;entryDx=0;entryDy=0;" target="l1-box-6" value="Kerberos 88 (AS / TGS)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="560" y="350" />
+              <mxPoint x="840" y="350" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l1-e-26" edge="1" parent="1" source="l1-box-12" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5A6C86;strokeWidth=1.5;dashed=0;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#5A6C86;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.68;entryY=1;entryDx=0;entryDy=0;" target="l1-box-6" value="DNS 53">
+          <mxGeometry relative="1" x="0.55" as="geometry" />
+        </mxCell>
+        <mxCell id="l1-e-27" edge="1" parent="1" source="l1-box-9" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5A6C86;strokeWidth=1.5;dashed=0;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#5A6C86;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;" target="l1-box-10" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l1-e-28" edge="1" parent="1" source="l1-box-10" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5A6C86;strokeWidth=1.5;dashed=0;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#5A6C86;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;" target="l1-box-11" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l1-e-29" edge="1" parent="1" source="l1-box-10" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5A6C86;strokeWidth=1.5;dashed=0;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#5A6C86;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="l1-box-13" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="415" y="590" />
+              <mxPoint x="155" y="590" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l1-e-30" edge="1" parent="1" source="l1-box-10" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5A6C86;strokeWidth=1.5;dashed=0;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#5A6C86;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="l1-box-14" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="415" y="590" />
+              <mxPoint x="435" y="590" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l1-e-31" edge="1" parent="1" source="l1-box-10" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5A6C86;strokeWidth=1.5;dashed=0;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#5A6C86;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="l1-box-15" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="415" y="590" />
+              <mxPoint x="715" y="590" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l1-e-32" edge="1" parent="1" source="l1-box-15" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5A6C86;strokeWidth=1.5;dashed=0;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#5A6C86;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;" target="l1-box-16" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l1-e-33" edge="1" parent="1" source="l1-box-16" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5A6C86;strokeWidth=1.5;dashed=0;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#5A6C86;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="l1-box-19" value="case ID">
+          <mxGeometry relative="1" x="0.3" as="geometry">
+            <Array as="points">
+              <mxPoint x="995" y="765" />
+              <mxPoint x="515" y="765" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l1-e-34" edge="1" parent="1" source="l1-box-19" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5A6C86;strokeWidth=1.5;dashed=0;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#5A6C86;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;" target="l1-box-20" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l1-e-35" edge="1" parent="1" source="l1-box-20" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5A6C86;strokeWidth=1.5;dashed=0;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#5A6C86;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;" target="l1-box-21" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l1-e-36" edge="1" parent="1" source="l1-box-19" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5A6C86;strokeWidth=1.5;dashed=0;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#5A6C86;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;" target="l1-box-18" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l1-e-37" edge="1" parent="1" source="l1-box-18" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#5A6C86;strokeWidth=1.5;dashed=0;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#5A6C86;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;exitX=0.3;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="l1-box-13" value="reads only">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="149" y="760" />
+              <mxPoint x="155" y="760" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="2 - Level 2 detailed architecture (per environment)" id="SHUU90z0w2bV1w5tq9AV">
+    <mxGraphModel dx="1653" dy="743" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2800" pageHeight="1960" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="l2-txt-1" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=22;fontColor=#1F2933;spacing=2;" value="&lt;b&gt;BMC FootPrints (on-premises SQL Server) → AWS read-only ticket ingestion with Kerberos → Bedrock AgentCore workflow — Level 2&lt;/b&gt;" vertex="1">
+          <mxGeometry height="34" width="2600" x="20" y="8" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-users-3" parent="1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#232F3D;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.users;" value="&lt;b&gt;FootPrints users / requesters&lt;/b&gt;&lt;br&gt;tickets created in workspace 144" vertex="1">
+          <mxGeometry height="44" width="44" x="70" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-grp-4" parent="1" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=1;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_corporate_data_center;strokeColor=#7D8998;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#5A6C86;dashed=0;" value="Boeing on-premises network — enterprise trust zone&amp;nbsp;" vertex="1">
+          <mxGeometry height="820" width="820" x="20" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-box-5" parent="l2-grp-4" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#F4F5F7;strokeColor=#7D8998;fontColor=#1F2933;fontSize=11;align=center;verticalAlign=middle;spacing=4;" value="&lt;b&gt;FootPrints web / app server&lt;/b&gt; (BMC FootPrints Service Core 11.6)" vertex="1">
+          <mxGeometry height="56" width="530" x="20" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-documents-6" parent="l2-grp-4" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#232F3D;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.documents;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;spacingLeft=4;" value="&lt;b&gt;Attachment store&lt;/b&gt;&lt;br&gt;files on the FootPrints&lt;br&gt;server; SQL keeps names" vertex="1">
+          <mxGeometry height="46" width="38" x="595" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-grp-7" parent="l2-grp-4" style="rounded=1;arcSize=2;html=1;whiteSpace=wrap;container=1;collapsible=0;recursiveResize=0;pointerEvents=0;fillColor=#FAFBFC;strokeColor=#5A6C86;dashed=0;verticalAlign=top;align=left;spacingLeft=8;spacingTop=2;fontSize=12;fontStyle=1;fontColor=#232F3E;" value="Microsoft SQL Server — FootPrints DB" vertex="1">
+          <mxGeometry height="490" width="530" x="20" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-box-8" parent="l2-grp-7" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#1F6FD1;fontColor=#1F2933;fontSize=11;align=center;verticalAlign=middle;spacing=4;" value="&lt;b&gt;SQL listener / instance&lt;/b&gt;&lt;br&gt;fpsql.boeing.com,1433" vertex="1">
+          <mxGeometry height="100" width="240" x="20" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-box-9" parent="l2-grp-7" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#1F6FD1;fontColor=#1F2933;fontSize=11;align=center;verticalAlign=middle;spacing=4;" value="&lt;b&gt;Database engine&lt;/b&gt;&lt;br&gt;Windows authentication (Kerberos)&lt;br&gt;SPN MSSQLSvc/fpsql.boeing.com:1433&lt;br&gt;login BOEING\svc-fp-ro-prd" vertex="1">
+          <mxGeometry height="100" width="235" x="280" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-generic_database-11" parent="l2-grp-7" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#232F3D;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.generic_database;" value="&lt;b&gt;FootPrints DB – workspace 144&lt;/b&gt;&lt;div&gt;&lt;br/&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="52" width="44" x="375" y="215" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-box-12" parent="l2-grp-7" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#FFF8E6;strokeColor=#E3A008;fontColor=#1F2933;fontSize=11;align=center;verticalAlign=middle;spacing=4;" value="&lt;b&gt;Read-only permission [Validate with DBA]&lt;/b&gt;&lt;br&gt;login from Windows · db user · GRANT SELECT on the five MASTER144* tables" vertex="1">
+          <mxGeometry height="100" width="495" x="20" y="370" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-grp-13" parent="l2-grp-4" style="rounded=1;arcSize=2;html=1;whiteSpace=wrap;container=1;collapsible=0;recursiveResize=0;pointerEvents=0;fillColor=#FAFBFC;strokeColor=#5A6C86;dashed=0;verticalAlign=top;align=left;spacingLeft=8;spacingTop=2;fontSize=12;fontStyle=1;fontColor=#232F3E;" value="Active Directory&amp;nbsp;" vertex="1">
+          <mxGeometry height="490" width="230" x="575" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-traditional_server-14" parent="l2-grp-13" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#232F3D;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.traditional_server;" value="&lt;b&gt;AD DS domain controllers&lt;/b&gt;" vertex="1">
+          <mxGeometry height="48" width="40" x="95" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="kZa-5ALUkA3SCYDRBSkS-1" edge="1" parent="l2-grp-13" source="l2-role-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;defaultLabelBackgroundColor=page;labelPadding=0 4;" target="l2-box-16" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-role-15" parent="l2-grp-13" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#DD344C;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.role;" value="&lt;b&gt;Read-only service accounts&lt;/b&gt;&lt;br&gt;svc-fp-ro-nonprod&amp;nbsp;&lt;br&gt;svc-fp-ro-prd&lt;div&gt;&lt;br/&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="44" width="44" x="93" y="190" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-box-16" parent="l2-grp-13" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#F4F5F7;strokeColor=#7D8998;fontColor=#1F2933;fontSize=11;align=center;verticalAlign=middle;spacing=4;" value="&lt;b&gt;Enterprise PKI&lt;/b&gt;&lt;br&gt;SQL Server&amp;nbsp;" vertex="1">
+          <mxGeometry height="66" width="200" x="15" y="330" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-box-17" parent="l2-grp-13" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#F4F5F7;strokeColor=#7D8998;fontColor=#1F2933;fontSize=11;align=center;verticalAlign=middle;spacing=4;" value="&lt;b&gt;Internal DNS&lt;/b&gt;&lt;br&gt;A / SRV records (_kerberos)" vertex="1">
+          <mxGeometry height="56" width="200" x="15" y="415" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-generic_firewall-18" parent="l2-grp-4" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#232F3D;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.generic_firewall;" value="&lt;b&gt;Boeing firewall&lt;/b&gt;" vertex="1">
+          <mxGeometry height="48" width="48" x="605" y="680" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-customer_gateway-19" parent="l2-grp-4" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#8C4FFF;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.customer_gateway;" value="&lt;b&gt;WAN edge / DX router&lt;/b&gt;&lt;br&gt;customer gateway" vertex="1">
+          <mxGeometry height="48" width="48" x="725" y="680" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-txt-24" parent="l2-grp-4" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=11;fontColor=#5A6C86;spacing=2;" value="&lt;b&gt;Existing ticket path (unchanged):&lt;/b&gt; requesters → FootPrints web UI / email-to-ticket → FootPrints app → SQL Server." vertex="1">
+          <mxGeometry height="30" width="780" x="30" y="780" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-grp-25" parent="1" style="rounded=1;arcSize=2;html=1;whiteSpace=wrap;container=1;collapsible=0;recursiveResize=0;pointerEvents=0;fillColor=#F7F4FF;strokeColor=#8C4FFF;dashed=0;verticalAlign=top;align=left;spacingLeft=8;spacingTop=2;fontSize=12;fontStyle=1;fontColor=#5A30B5;" value="Hybrid connectivity [Validate: existing circuits]" vertex="1">
+          <mxGeometry height="360" width="175" x="860" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-direct_connect-26" parent="l2-grp-25" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#8C4FFF;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.direct_connect;" value="&lt;b&gt;AWS Direct Connect&lt;/b&gt;&lt;br&gt;private / transit VIF&lt;br&gt;→ Direct Connect gateway" vertex="1">
+          <mxGeometry height="52" width="52" x="61" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-grp-29" parent="1" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=1;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_aws_cloud_alt;strokeColor=#232F3E;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#232F3E;dashed=0;" value="AWS GovCloud (US-West)&amp;nbsp;" vertex="1">
+          <mxGeometry height="1470" width="1730" x="1055" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-grp-30" parent="l2-grp-29" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=1;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_account;strokeColor=#CD2264;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#CD2264;dashed=0;" value="Network hub account (shared networking)" vertex="1">
+          <mxGeometry height="540" width="305" x="20" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-transit_gateway-31" parent="l2-grp-30" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#8C4FFF;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.transit_gateway;" value="&lt;b&gt;AWS Transit Gateway&lt;/b&gt;&lt;div&gt;&lt;br/&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="52" width="52" x="125" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-route_53-32" parent="l2-grp-30" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#8C4FFF;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.route_53;" value="&lt;b&gt;Route 53 Resolver&lt;/b&gt;&lt;br&gt;outbound endpoint&amp;nbsp;" vertex="1">
+          <mxGeometry height="52" width="52" x="125" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-grp-34" parent="l2-grp-29" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=1;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_account;strokeColor=#CD2264;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#CD2264;dashed=0;" value="Workload account — PROD   (Dev and UAT accounts are identical; see page 3)" vertex="1">
+          <mxGeometry height="1400" width="1370" x="340" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-grp-35" parent="l2-grp-34" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=1;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_vpc2;strokeColor=#8C4FFF;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#8C4FFF;dashed=0;" value="VPC vpc-fp-ingest-prd — private only" vertex="1">
+          <mxGeometry height="810" width="760" x="20" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-grp-36" parent="l2-grp-35" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=1;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_security_group;strokeColor=#00A4A6;fillColor=#E6F6F7;verticalAlign=top;align=left;spacingLeft=30;fontColor=#147EBA;dashed=0;" value="Private subnets" vertex="1">
+          <mxGeometry height="600" width="720" x="20" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-grp-37" parent="l2-grp-36" style="rounded=1;arcSize=2;html=1;whiteSpace=wrap;container=1;collapsible=0;recursiveResize=0;pointerEvents=0;fillColor=#EEF5FD;strokeColor=#1F6FD1;dashed=0;verticalAlign=top;align=left;spacingLeft=8;spacingTop=2;fontSize=12;fontStyle=1;fontColor=#1F6FD1;" value="FootPrints client tier — the only components with a network route and a credential to FootPrints" vertex="1">
+          <mxGeometry height="385" width="680" x="20" y="35" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-lambda-38" parent="l2-grp-37" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;" value="&lt;b&gt;fp-sync&lt;/b&gt; (SQL client – poller)&lt;br&gt;container: ODBC Driver 18 + krb5&lt;br&gt;reserved concurrency = 1&lt;br&gt;kinit → read-only SELECTs  ②–⑩" vertex="1">
+          <mxGeometry height="52" width="52" x="105" y="45" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-lambda-39" parent="l2-grp-37" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;" value="&lt;b&gt;fp-fetch&lt;/b&gt; (attachments + hand-off)&lt;br&gt;SMB 445 read (if enabled)&lt;br&gt;SQS trigger, max concurrency 2&lt;br&gt;⑪–⑭" vertex="1">
+          <mxGeometry height="52" width="52" x="105" y="195" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-box-40" parent="l2-grp-37" style="rounded=1;arcSize=6;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#1F6FD1;fontColor=#1F2933;fontSize=10;align=center;verticalAlign=middle;spacing=4;" value="&lt;b&gt;sg-fp-client&lt;/b&gt; (both Lambdas)&lt;br&gt;egress TCP 1433 → SQL listener / replicas&lt;br&gt;egress TCP+UDP 88 → DCs&lt;br&gt;egress TCP 445 → file server (opt.)&lt;br&gt;egress TCP 443 → VPC-endpoint SG · no inbound" vertex="1">
+          <mxGeometry height="100" width="320" x="345" y="270" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-endpoints-41" parent="l2-grp-36" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#8C4FFF;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.endpoints;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;spacingLeft=6;" value="&lt;b&gt;VPC endpoints&lt;/b&gt;&lt;br&gt;interface: secretsmanager, kms,&lt;br&gt;sqs, states, logs, monitoring,&lt;br&gt;sts, bedrock-agentcore&lt;br&gt;gateway: s3, dynamodb" vertex="1">
+          <mxGeometry height="46" width="46" x="35" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-lambda-42" parent="l2-grp-36" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;spacingLeft=6;" value="&lt;b&gt;Gateway tool Lambdas&lt;/b&gt;&lt;br&gt;get_ticket · get_attachment_text&lt;br&gt;query_cases (read-only)" vertex="1">
+          <mxGeometry height="52" width="52" x="285" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-aurora-43" parent="l2-grp-36" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#C925D1;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.aurora;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;spacingLeft=6;" value="&lt;b&gt;Aurora PostgreSQL&lt;/b&gt;&lt;br&gt;cases · extraction ·&lt;br&gt;audit (existing)" vertex="1">
+          <mxGeometry height="52" width="52" x="520" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-eventbridge-45" parent="l2-grp-34" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#E7157B;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.eventbridge;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;spacingLeft=6;" value="&lt;b&gt;EventBridge Scheduler&lt;/b&gt;&lt;br&gt;rate(5 minutes) → fp-sync (async)&lt;br&gt;retry 0, max event age 60 s  ①" vertex="1">
+          <mxGeometry height="52" width="52" x="820" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-secrets_manager-46" parent="l2-grp-34" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#DD344C;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.secrets_manager;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;spacingLeft=6;" value="&lt;b&gt;Secrets Manager&lt;/b&gt;  fp/svc-fp-ro-prd&lt;br&gt;{realm, username, password}, CMK&lt;br&gt;rotation: AD-team process  ③" vertex="1">
+          <mxGeometry height="52" width="52" x="820" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-dynamodb-47" parent="l2-grp-34" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#C925D1;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.dynamodb;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;spacingLeft=6;" value="&lt;b&gt;DynamoDB&lt;/b&gt;&lt;br&gt;fp_checkpoint: rowversion watermark + lease  ② ⑩&lt;br&gt;fp_ledger: mrID#rowversion → status  ⑨ ⑬" vertex="1">
+          <mxGeometry height="52" width="52" x="820" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-sqs-48" parent="l2-grp-34" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#E7157B;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.sqs;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;spacingLeft=6;" value="&lt;b&gt;SQS fp-ticket-queue + DLQ&lt;/b&gt;&lt;br&gt;one message per changed ticket&lt;br&gt;maxReceiveCount 5 → DLQ  ⑨ ⑪" vertex="1">
+          <mxGeometry height="52" width="52" x="820" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-s3-49" parent="l2-grp-34" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#7AA116;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.s3;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;spacingLeft=6;" value="&lt;b&gt;S3 fp-raw-prd&lt;/b&gt; (versioned, SSE-KMS)&lt;br&gt;tickets/144/{mrID}/{rowversion}/ticket.json,&lt;br&gt;descriptions, history, attachments/, manifest  ⑨ ⑫" vertex="1">
+          <mxGeometry height="52" width="52" x="820" y="460" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-guardduty-50" parent="l2-grp-34" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#DD344C;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.guardduty;" value="&lt;b&gt;GuardDuty Malware&lt;br&gt;Protection for S3&lt;/b&gt;&lt;br&gt;tags scan result  ⑮" vertex="1">
+          <mxGeometry height="52" width="52" x="1255" y="460" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-key_management_service-51" parent="l2-grp-34" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#DD344C;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.key_management_service;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;spacingLeft=6;" value="&lt;b&gt;KMS customer-managed keys&lt;/b&gt;&lt;br&gt;secret · S3 · SQS · DynamoDB · ITAR key" vertex="1">
+          <mxGeometry height="52" width="52" x="820" y="560" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-step_functions-52" parent="l2-grp-34" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#E7157B;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.step_functions;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;spacingLeft=6;" value="&lt;b&gt;Step Functions&lt;/b&gt; case-workflow&lt;br&gt;(Standard) name = fp144-mrID-rowversion&lt;br&gt;Retry / Catch  ⑭–⑰" vertex="1">
+          <mxGeometry height="52" width="52" x="820" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-lambda-53" parent="l2-grp-34" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;spacingLeft=6;" value="&lt;b&gt;preprocess Lambda&lt;/b&gt;&lt;br&gt;attachment text, PII mask,&lt;br&gt;Guardrails  ⑮" vertex="1">
+          <mxGeometry height="52" width="52" x="820" y="780" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-grp-54" parent="l2-grp-34" style="rounded=1;arcSize=2;html=1;whiteSpace=wrap;container=1;collapsible=0;recursiveResize=0;pointerEvents=0;fillColor=#EFFAF8;strokeColor=#01A88D;dashed=0;verticalAlign=top;align=left;spacingLeft=8;spacingTop=2;fontSize=12;fontStyle=1;fontColor=#00756A;" value="Amazon Bedrock AgentCore — Runtime in VPC mode, private endpoints; agents read tickets only through Gateway tools" vertex="1">
+          <mxGeometry height="200" width="1335" x="20" y="890" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-bedrock_agentcore-55" parent="l2-grp-54" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#01A88D;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.bedrock_agentcore;" value="&lt;b&gt;Classification agent&lt;/b&gt;&lt;br&gt;payment-related? ITAR?&lt;br&gt;confidence  ⑯" vertex="1">
+          <mxGeometry height="52" width="52" x="85" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-bedrock_agentcore-56" parent="l2-grp-54" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#01A88D;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.bedrock_agentcore;" value="&lt;b&gt;Extraction agent&lt;/b&gt;&lt;br&gt;PO, invoice no., supplier,&lt;br&gt;transaction date, details  ⑰" vertex="1">
+          <mxGeometry height="52" width="52" x="345" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-bedrock_agentcore-57" parent="l2-grp-54" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#01A88D;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.bedrock_agentcore;" value="&lt;b&gt;Reporting agent&lt;/b&gt;&lt;br&gt;consolidated analysis&lt;br&gt;and insights  ⑱" vertex="1">
+          <mxGeometry height="52" width="52" x="605" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-bedrock_agentcore-58" parent="l2-grp-54" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#01A88D;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.bedrock_agentcore;" value="&lt;b&gt;AgentCore Gateway&lt;/b&gt;&lt;br&gt;MCP tools → Lambda targets&lt;br&gt;(read-only)" vertex="1">
+          <mxGeometry height="52" width="52" x="935" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-bedrock-59" parent="l2-grp-54" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#01A88D;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.bedrock;" value="&lt;b&gt;Bedrock models&lt;/b&gt;&lt;br&gt;+ Guardrails&lt;br&gt;(approved list only)" vertex="1">
+          <mxGeometry height="52" width="52" x="1205" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-grp-60" parent="l2-grp-34" style="rounded=1;arcSize=2;html=1;whiteSpace=wrap;container=1;collapsible=0;recursiveResize=0;pointerEvents=0;fillColor=#FDF2F8;strokeColor=#E7157B;dashed=0;verticalAlign=top;align=left;spacingLeft=8;spacingTop=2;fontSize=12;fontStyle=1;fontColor=#A3115B;" value="Observability and audit" vertex="1">
+          <mxGeometry height="170" width="640" x="20" y="1130" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-cloudwatch_2-61" parent="l2-grp-60" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#E7157B;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cloudwatch_2;" value="&lt;b&gt;CloudWatch&lt;/b&gt;&lt;br&gt;logs, metrics,&lt;br&gt;alarms" vertex="1">
+          <mxGeometry height="52" width="52" x="35" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-xray-62" parent="l2-grp-60" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#C925D1;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.xray;" value="&lt;b&gt;X-Ray / ADOT&lt;/b&gt;&lt;br&gt;trace mrID →&lt;br&gt;caseId → agent" vertex="1">
+          <mxGeometry height="52" width="52" x="185" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-cloudtrail-63" parent="l2-grp-60" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#E7157B;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cloudtrail;" value="&lt;b&gt;CloudTrail&lt;/b&gt;&lt;br&gt;Secrets / KMS /&lt;br&gt;S3 data events" vertex="1">
+          <mxGeometry height="52" width="52" x="335" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-alarm-64" parent="l2-grp-60" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.alarm;" value="&lt;b&gt;Alarms → on-call&lt;/b&gt;&lt;br&gt;(SNS / ITSM)" vertex="1">
+          <mxGeometry height="46" width="46" x="495" y="43" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-e-74" edge="1" parent="1" source="l2-users-3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7D8998;strokeWidth=1.5;dashed=1;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#7D8998;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;" target="l2-box-5" value="HTTPS (existing)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-e-75" edge="1" parent="1" source="l2-box-5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7D8998;strokeWidth=1.5;dashed=1;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#7D8998;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;jumpStyle=arc;jumpSize=8;exitX=0.85;exitY=1;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" target="l2-box-9" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-e-76" edge="1" parent="1" source="l2-box-5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7D8998;strokeWidth=1.5;dashed=1;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#7D8998;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="l2-documents-6" value="stores files">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-e-77" edge="1" parent="1" source="l2-box-8" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1F6FD1;strokeWidth=2;dashed=0;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#1F6FD1;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;" target="l2-box-9" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-e-78" edge="1" parent="1" source="l2-box-9" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1F6FD1;strokeWidth=1.5;dashed=0;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#1F6FD1;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="l2-generic_database-11" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-e-80" edge="1" parent="1" source="l2-role-15" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#E3A008;strokeWidth=1.5;dashed=1;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#E3A008;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;jumpStyle=arc;jumpSize=8;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.75;entryDx=0;entryDy=0;" target="l2-box-9" value="Windows login">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="605" y="542" />
+              <mxPoint x="605" y="465" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l2-e-81" edge="1" parent="1" source="l2-lambda-38" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1F6FD1;strokeWidth=2.5;dashed=0;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#1F6FD1;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;jumpStyle=arc;jumpSize=8;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="l2-transit_gateway-31" value="⑤ ⑥ Kerberos 88 · ⑦ ⑧ TDS 1433 over TLS">
+          <mxGeometry relative="1" x="0.55" as="geometry">
+            <Array as="points">
+              <mxPoint x="1425" y="346" />
+              <mxPoint x="1425" y="236" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l2-e-82" edge="1" parent="1" source="l2-lambda-39" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1F6FD1;strokeWidth=2;dashed=1;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#1F6FD1;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;jumpStyle=arc;jumpSize=8;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.75;entryDx=0;entryDy=0;" target="l2-transit_gateway-31" value="⑫ SMB 445 (Kerberos)">
+          <mxGeometry relative="1" x="-0.2" as="geometry">
+            <Array as="points">
+              <mxPoint x="1405" y="496" />
+              <mxPoint x="1405" y="249" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l2-e-83" edge="1" parent="1" source="l2-transit_gateway-31" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1F6FD1;strokeWidth=2.5;dashed=0;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#1F6FD1;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;jumpStyle=arc;jumpSize=8;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="l2-direct_connect-26" value="DX gateway attachment">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1100" y="236" />
+              <mxPoint x="1100" y="650" />
+              <mxPoint x="947" y="650" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l2-e-85" edge="1" parent="1" source="l2-direct_connect-26" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1F6FD1;strokeWidth=2.5;dashed=0;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#1F6FD1;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="l2-customer_gateway-19" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="880" y="736" />
+              <mxPoint x="880" y="904" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l2-e-87" edge="1" parent="1" source="l2-customer_gateway-19" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1F6FD1;strokeWidth=2.5;dashed=0;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#1F6FD1;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;" target="l2-generic_firewall-18" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-e-88" edge="1" parent="1" source="l2-generic_firewall-18" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1F6FD1;strokeWidth=2.5;dashed=0;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#1F6FD1;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;jumpStyle=arc;jumpSize=8;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="l2-box-8" value="TCP 1433 → listener">
+          <mxGeometry relative="1" x="-0.8" as="geometry">
+            <Array as="points">
+              <mxPoint x="580" y="904" />
+              <mxPoint x="580" y="375" />
+              <mxPoint x="180" y="375" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l2-e-89" edge="1" parent="1" source="l2-generic_firewall-18" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7B4FD0;strokeWidth=2;dashed=0;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#7B4FD0;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;jumpStyle=arc;jumpSize=8;exitX=0.25;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="l2-traditional_server-14" value="TCP/UDP 88 → KDC">
+          <mxGeometry relative="1" x="-0.15" as="geometry">
+            <Array as="points">
+              <mxPoint x="637" y="850" />
+              <mxPoint x="600" y="850" />
+              <mxPoint x="600" y="414" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l2-e-90" edge="1" parent="1" source="l2-generic_firewall-18" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1F6FD1;strokeWidth=1.5;dashed=1;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#1F6FD1;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;jumpStyle=arc;jumpSize=8;exitX=0.75;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="l2-documents-6" value="TCP 445 (opt.)">
+          <mxGeometry relative="1" x="0.6" as="geometry">
+            <Array as="points">
+              <mxPoint x="661" y="840" />
+              <mxPoint x="832" y="840" />
+              <mxPoint x="832" y="264" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l2-e-91" edge="1" parent="1" source="l2-grp-35" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#D86613;strokeWidth=1.5;dashed=1;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#D86613;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;jumpStyle=arc;jumpSize=8;exitX=0;exitY=0.33;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="l2-route_53-32" value="④ VPC DNS → Resolver rule">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-e-92" edge="1" parent="1" source="l2-route_53-32" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#D86613;strokeWidth=1.5;dashed=1;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#D86613;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;jumpStyle=arc;jumpSize=8;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="l2-box-17" value="④ DNS UDP/TCP 53 via TGW + DX/VPN">
+          <mxGeometry relative="1" x="-0.55" as="geometry">
+            <Array as="points">
+              <mxPoint x="850" y="456" />
+              <mxPoint x="850" y="773" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l2-e-93" edge="1" parent="1" source="l2-eventbridge-45" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#232F3E;strokeWidth=1.5;dashed=0;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#232F3E;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;jumpStyle=arc;jumpSize=8;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="l2-lambda-38" value="① invoke (async)">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1586" y="226" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l2-e-94" edge="1" parent="1" source="l2-lambda-38" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#232F3E;strokeWidth=1.5;dashed=0;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#232F3E;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;jumpStyle=arc;jumpSize=8;exitX=1;exitY=0.115;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="l2-secrets_manager-46" value="③ GetSecretValue (VPCE)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-e-95" edge="1" parent="1" source="l2-lambda-38" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#232F3E;strokeWidth=1.5;dashed=0;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#232F3E;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;jumpStyle=arc;jumpSize=8;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="l2-dynamodb-47" value="② lease · ⑩ commit watermark">
+          <mxGeometry relative="1" x="-0.35" as="geometry">
+            <Array as="points">
+              <mxPoint x="2185" y="346" />
+              <mxPoint x="2185" y="426" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l2-e-96" edge="1" parent="1" source="l2-lambda-38" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#232F3E;strokeWidth=1.5;dashed=0;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#232F3E;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;jumpStyle=arc;jumpSize=8;exitX=1;exitY=0.85;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="l2-sqs-48" value="⑨ snapshot + ledger + SendMessage">
+          <mxGeometry relative="1" x="-0.35" as="geometry">
+            <Array as="points">
+              <mxPoint x="2195" y="364" />
+              <mxPoint x="2195" y="526" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l2-e-97" edge="1" parent="1" source="l2-sqs-48" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#232F3E;strokeWidth=1.5;dashed=0;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#232F3E;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;jumpStyle=arc;jumpSize=8;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=1;entryY=0.75;entryDx=0;entryDy=0;" target="l2-lambda-39" value="⑪ event source mapping">
+          <mxGeometry relative="1" x="0.1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1700" y="539" />
+              <mxPoint x="1700" y="509" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l2-e-98" edge="1" parent="1" source="l2-lambda-39" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#232F3E;strokeWidth=1.5;dashed=0;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#232F3E;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;jumpStyle=arc;jumpSize=8;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="l2-s3-49" value="⑫ attachments + manifest">
+          <mxGeometry relative="1" x="0.3" as="geometry">
+            <Array as="points">
+              <mxPoint x="1760" y="483" />
+              <mxPoint x="1760" y="470" />
+              <mxPoint x="2175" y="470" />
+              <mxPoint x="2175" y="626" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l2-e-99" edge="1" parent="1" source="l2-lambda-39" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#01A88D;strokeWidth=2;dashed=0;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#01A88D;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;jumpStyle=arc;jumpSize=8;exitX=1;exitY=0.95;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" target="l2-step_functions-52" value="⑭ StartExecution(name = fp144-mrID-rv)">
+          <mxGeometry relative="1" x="0.45" as="geometry">
+            <Array as="points">
+              <mxPoint x="1720" y="519" />
+              <mxPoint x="1720" y="670" />
+              <mxPoint x="2165" y="670" />
+              <mxPoint x="2165" y="813" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l2-e-100" edge="1" parent="1" source="l2-s3-49" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#D13212;strokeWidth=1.5;dashed=1;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#D13212;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;jumpStyle=arc;jumpSize=8;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="l2-guardduty-50" value="scan on upload">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2241" y="590" />
+              <mxPoint x="2676" y="590" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l2-e-101" edge="1" parent="1" source="l2-step_functions-52" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#01A88D;strokeWidth=2;dashed=0;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#01A88D;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="l2-lambda-53" value="⑮">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-e-102" edge="1" parent="1" source="l2-step_functions-52" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#01A88D;strokeWidth=2;dashed=0;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#01A88D;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;jumpStyle=arc;jumpSize=8;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="l2-bedrock_agentcore-55" value="⑯ InvokeAgentRuntime (session = caseId)">
+          <mxGeometry relative="1" x="0.5" as="geometry">
+            <Array as="points">
+              <mxPoint x="2190" y="839" />
+              <mxPoint x="2190" y="1062" />
+              <mxPoint x="1526" y="1062" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l2-e-103" edge="1" parent="1" source="l2-step_functions-52" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#232F3E;strokeWidth=1.5;dashed=0;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#232F3E;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;jumpStyle=arc;jumpSize=8;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;" target="l2-aurora-43" value="persist status">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1994" y="826" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l2-e-104" edge="1" parent="1" source="l2-bedrock_agentcore-55" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#01A88D;strokeWidth=2;dashed=0;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#01A88D;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;" target="l2-bedrock_agentcore-56" value="⑰ payment-related">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-e-105" edge="1" parent="1" source="l2-bedrock_agentcore-56" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#01A88D;strokeWidth=2;dashed=0;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#01A88D;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;" target="l2-bedrock_agentcore-57" value="⑱ batch / schedule">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-e-106" edge="1" parent="1" source="l2-bedrock_agentcore-57" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#01A88D;strokeWidth=1.5;dashed=0;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#01A88D;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;" target="l2-bedrock_agentcore-58" value="MCP tool calls (all agents)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-e-107" edge="1" parent="1" source="l2-bedrock_agentcore-58" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#01A88D;strokeWidth=1.5;dashed=0;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#01A88D;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;jumpStyle=arc;jumpSize=8;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="l2-lambda-42" value="Lambda targets">
+          <mxGeometry relative="1" x="0.3" as="geometry">
+            <Array as="points">
+              <mxPoint x="2376" y="1015" />
+              <mxPoint x="1746" y="1015" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="l2-e-108" edge="1" parent="1" source="l2-bedrock_agentcore-58" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#01A88D;strokeWidth=1.2;dashed=1;endArrow=none;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#01A88D;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;" target="l2-bedrock-59" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l2-e-109" edge="1" parent="1" source="l2-lambda-42" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#232F3E;strokeWidth=1.5;dashed=0;endArrow=block;endFill=1;startArrow=none;startFill=1;fontSize=10;fontColor=#232F3E;labelBackgroundColor=#FFFFFF;align=center;verticalAlign=middle;jumpStyle=arc;jumpSize=8;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=1;entryDx=0;entryDy=0;" target="l2-aurora-43" value="read">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1759" y="760" />
+              <mxPoint x="1968" y="760" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
